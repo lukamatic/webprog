@@ -12,7 +12,7 @@ public class Restaurant {
    /** @pdOid a000cf3f-6c49-4b87-a71d-0c818214296d */
    private int id;
    /** @pdOid 67d67c3d-ee23-4510-b14a-c725c25e96a3 */
-   private int name;
+   private String name;
    /** @pdOid 27fc90ef-3a48-4627-9b57-f73eca97e7d1 */
    private RestaurantType restaurantType;
    /** @pdOid 21eef617-72dc-4b61-82ed-f0d6fe365f1f */
@@ -25,4 +25,73 @@ public class Restaurant {
    /** @pdRoleInfo migr=no name=Location assc=association4 mult=1..1 */
    private Location location;
 
+	public Restaurant(int id, String name, RestaurantType restaurantType, ArrayList<Integer> articles, boolean isOpen,
+			String logoPath, Location location) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.restaurantType = restaurantType;
+		this.articles = articles;
+		this.isOpen = isOpen;
+		this.logoPath = logoPath;
+		this.location = location;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public RestaurantType getRestaurantType() {
+		return restaurantType;
+	}
+
+	public void setRestaurantType(RestaurantType restaurantType) {
+		this.restaurantType = restaurantType;
+	}
+
+	public ArrayList<Integer> getArticles() {
+		return articles;
+	}
+
+	public void setArticles(ArrayList<Integer> articles) {
+		this.articles = articles;
+	}
+
+	public boolean isOpen() {
+		return isOpen;
+	}
+
+	public void setOpen(boolean isOpen) {
+		this.isOpen = isOpen;
+	}
+
+	public String getLogoPath() {
+		return logoPath;
+	}
+
+	public void setLogoPath(String logoPath) {
+		this.logoPath = logoPath;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	
 }

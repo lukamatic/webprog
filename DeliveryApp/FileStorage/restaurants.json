@@ -1,0 +1,1 @@
+[{"id":0,"name":"res1","restaurantType":"CHINESE","articles":[],"isOpen":true,"logoPath":"logo1","location":{"latitude":0.0,"longitude":0.0}},{"id":1,"name":"res2","restaurantType":"ITALIAN","articles":[],"isOpen":false,"logoPath":"logo2","location":{"latitude":0.0,"longitude":0.0}}]
