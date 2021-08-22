@@ -5,7 +5,8 @@ const Signup = { template: '<signup></signup>' };
 const router = new VueRouter({
   mode: 'hash',
   routes: [
-    { path: '/', component: Restaurants },
+    { path: '/', redirect: '/restaurants' },
+    { path: '/restaurants', component: Restaurants },
     { path: '/login', component: Login },
     { path: '/signup', component: Signup },
   ],

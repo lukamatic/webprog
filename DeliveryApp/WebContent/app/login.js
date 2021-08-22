@@ -3,8 +3,9 @@ Vue.component('login', {
     return {};
   },
   template: ` 
-<div>
-	login page
-</div>		  
+    <div>
+      <navbar path="login"></navbar> 
+      login page
+    </div>	  
 `,
 });

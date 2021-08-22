@@ -2,9 +2,11 @@ Vue.component('restaurants', {
   data: function () {
     return {};
   },
-  template: ` 
-<div>
-	restaurants page
-</div>		  
+  template: `
+  <div>
+    <navbar path="restaurants"></navbar>
+    restaurants page
+  </div>
 `,
+  methods: {},
 });

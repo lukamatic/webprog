@@ -3,8 +3,9 @@ Vue.component('signup', {
     return {};
   },
   template: ` 
-<div>
-	signup page
-</div>		  
+    <div>
+      <navbar path="signup"></navbar>
+      signup page
+    </div>		  
 `,
 });
