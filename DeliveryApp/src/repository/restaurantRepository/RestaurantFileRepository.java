@@ -8,6 +8,8 @@ package repository.restaurantRepository;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -60,8 +62,8 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
         FileWriter fileWriter = null;
 
         try {
-            System.out.println(Paths.get(path).toAbsolutePath().toString());
-            fileWriter = new FileWriter(path);
+            //System.out.println(Paths.get(path).toAbsolutePath().toString());
+            fileWriter = new FileWriter(path, StandardCharsets.UTF_8);
             fileWriter.write(json);
             fileWriter.flush();
             fileWriter.close();

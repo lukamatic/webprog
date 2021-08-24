@@ -52,8 +52,5 @@ Vue.component('navbar', {
       $cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
       location.reload();
     },
-  },
-  mounted: function () {
-    console.log(this.path);
-  },
+  }
 });
