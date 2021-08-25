@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -17,7 +18,7 @@ import model.Location;
 import model.Restaurant;
 import model.RestaurantType;
 import repository.restaurantRepository.RestaurantFileRepository;
-import services.RestaurantService;
+import services.RestaurantsService;
 
 @Path("/restaurants")
 public class RestaurantsController {
@@ -27,18 +28,18 @@ public class RestaurantsController {
 	@Context
 	ServletContext context;
 
-	private RestaurantService restaurantService;
+	private RestaurantsService restaurantsService;
 
 	@PostConstruct
 	public void init() {
 		if (context.getAttribute("restaurantService") == null)
-			context.setAttribute("restaurantService", new RestaurantService());
+			context.setAttribute("restaurantService", new RestaurantsService());
 		
-		restaurantService = (RestaurantService)context.getAttribute("restaurantService");
+		restaurantsService = (RestaurantsService)context.getAttribute("restaurantService");
 	}
 
 	@GET
-	@Path("/all")
+	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Restaurant> getAll() {
 		RestaurantFileRepository rfr = new RestaurantFileRepository();
@@ -65,6 +66,43 @@ public class RestaurantsController {
 		
 		rfr.writeToFile(rs);
 		
-		return restaurantService.getAll();
+		return restaurantsService.getAll();
+	}
+
+	@GET
+	@Path("/search")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Restaurant> search(@QueryParam("name") String name,
+										@QueryParam("type") String type, 
+										@QueryParam("location") String location,
+										@QueryParam("from") Double from, 
+										@QueryParam("to") Double to) {
+		ArrayList<Restaurant> restaurants = restaurantsService.getAll();
+		
+		if (name != null && name != "") {
+			restaurantsService.filterByName(restaurants, name);
+		}
+		
+		if (type != null && type != "") {
+			restaurantsService.filterByType(restaurants, type);
+		}
+		
+		if (location != null && location != "") {
+			restaurantsService.filterByLocation(restaurants, location);
+		}
+		
+		if (from != null || to != null) {
+			if (from == null) {
+				from = 0.0;
+			}
+			
+			if (to == null) {
+				to = 5.0;
+			}
+			
+			restaurantsService.filterByAverageRating(restaurants, from, to);
+		}
+		
+		return restaurants;
 	}
 }

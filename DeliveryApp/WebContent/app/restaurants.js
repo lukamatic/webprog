@@ -3,13 +3,13 @@ Vue.component('restaurants', {
     return {
       restaurants: null,
       isSearchDivHidden: true,
+      searchParameters: {},
     };
   },
   template: `
   <div>
-    <navbar path="restaurants"></navbar>
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
-    <div
+      <div
         class="
           d-flex
           flex-column
@@ -41,55 +41,91 @@ Vue.component('restaurants', {
               ✕
             </button>
           </div>
-          <div class="d-flex flex-row align-items-center flex-wrap">
-            <label class="pt-3" for="name"><h5>Restaurant name:</h5></label>
-            <input
-              class="ml-2"
-              name="name"
-              id="name"
-              placeholder="restaurant name"
-            />
-          </div>
-          <div class="d-flex flex-row align-items-center flex-wrap">
-            <label class="pt-3" for="type"><h5>Restaurant type:</h5></label>
-            <select class="ml-2" name="type" id="type">
-              <option value="grill">Grill</option>
-              <option value="italian">Italian</option>
-              <option value="chinese">Chinese</option>
-              <option value="vegan">Vegan</option>
-            </select>
-          </div>
-          <div class="d-flex flex-row align-items-center flex-wrap">
-            <label class="pt-3" for="location"><h5>Location:</h5></label>
-            <input
-              class="ml-2"
-              name="location"
-              id="location"
-              placeholder="city or country name"
-            />
-          </div>
-          <div class="d-flex flex-row align-items-center flex-wrap">
-            <label class="pt-3" for="from"><h5>Average rating:</h5></label>
-            <label class="ml-4 pt-2" for="from">from:</label>
-            <input
-              class="ml-2"
-              name="from"
-              id="from"
-              type="number"
-              min="0"
-              max="5"
-            />
-            <label class="ml-2 pt-2" for="to">to:</label>
-            <input
-              class="ml-2"
-              name="to"
-              id="to"
-              type="number"
-              min="0"
-              max="5"
-            />
-            <button class="btn btn-dark ml-5">Search</button>
-          </div>
+          <table>
+            <tr>
+              <td>
+                <label class="pt-3" for="name"><h5>Restaurant name:</h5></label>
+              </td>
+              <td>
+                <input
+                  class="ml-2"
+                  name="name"
+                  id="name"
+                  placeholder="restaurant name"
+                  v-model="searchParameters.name"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="pt-3" for="type"><h5>Restaurant type:</h5></label>
+              </td>
+              <td>
+                <select
+                  class="ml-2"
+                  name="type"
+                  id="type"
+                  v-model="searchParameters.type"
+                >
+                  <option value="grill">Grill</option>
+                  <option value="italian">Italian</option>
+                  <option value="chinese">Chinese</option>
+                  <option value="vegan">Vegan</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="pt-3" for="location"><h5>Location:</h5></label>
+              </td>
+              <td>
+                <input
+                  class="ml-2"
+                  name="location"
+                  id="location"
+                  placeholder="city or country name"
+                  v-model="searchParameters.location"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="pt-3" for="from"><h5>Average rating:</h5></label>
+              </td>
+              <td>
+                <label class="ml-4 pt-2" for="from">from:</label>
+                <input
+                  class="ml-2"
+                  name="from"
+                  id="from"
+                  type="number"
+                  min="0"
+                  max="5"
+                  v-model="searchParameters.from"
+                />
+                <label class="ml-2 pt-2" for="to">to:</label>
+                <input
+                  class="ml-2"
+                  name="to"
+                  id="to"
+                  type="number"
+                  min="0"
+                  max="5"
+                  v-model="searchParameters.to"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="text-center">
+                <button
+                  class="btn btn-dark"
+                  v-on:click="search(searchParameters)"
+                >
+                  Search
+                </button>
+              </td>
+            </tr>
+          </table>
         </div>
         <div class="d-flex flex-row flex-wrap w-100 justify-content-center">
           <div class="mt-4 mx-3">
@@ -152,12 +188,7 @@ Vue.component('restaurants', {
           border border-dark
         "
       >
-        <img
-          class="m-3"
-          src=""
-          width="200"
-          height="200"
-        />
+        <img class="m-3" src="" width="200" height="200" />
         <div class="flex-column flex-fill mx-3">
           <div
             class="
@@ -184,7 +215,7 @@ Vue.component('restaurants', {
   </div>
 `,
   mounted() {
-    axios.get('/DeliveryApp/rest/restaurants/all').then((response) => {
+    axios.get('/DeliveryApp/rest/restaurants').then((response) => {
       this.restaurants = response.data;
       console.log(this.restaurants);
     });
@@ -192,6 +223,44 @@ Vue.component('restaurants', {
   filters: {
     formatAddress: (address) => {
       return address.street + ' ' + address.streetNumber + ', ' + address.city + ', ' + address.country;
+    },
+  },
+  methods: {
+    search: function(searchParameters) {
+      if (!isNaN(searchParameters.from)) {
+        console.log("invalid params");
+        //TODO: display error to user
+      }
+      if (!isNaN(searchParameters.to)) {
+        console.log("invalid params");
+        //TODO: display error to user
+      }
+
+      var params = "";
+
+      if (searchParameters.name) {
+        params = params.concat("name=" + searchParameters.name);
+      }
+
+      if (searchParameters.type) {
+        params = params.concat("&type=" + searchParameters.type);
+      }
+
+      if (searchParameters.location) {
+        params = params.concat("&location=" + searchParameters.location);
+      }
+
+      if (searchParameters.from) {
+        params = params.concat("&from=" + searchParameters.from);
+      }
+
+      if (searchParameters.to) {
+        params = params.concat("&to=" + searchParameters.from);
+      }
+
+      axios.get("/DeliveryApp/rest/restaurants/search?" + params).then((response) => {
+        this.restaurants = response.data;
+      });
     },
   },
 });
