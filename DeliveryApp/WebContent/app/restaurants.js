@@ -11,6 +11,7 @@ Vue.component('restaurants', {
   },
   template: `
   <div>
+  	<navbar path="restaurants"></navbar> 
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
       <div
         class="
@@ -70,6 +71,7 @@ Vue.component('restaurants', {
                   id="type"
                   v-model="searchParameters.type"
                 >
+                  <option value="any">Any</option>
                   <option value="grill">Grill</option>
                   <option value="italian">Italian</option>
                   <option value="chinese">Chinese</option>
@@ -172,7 +174,7 @@ Vue.component('restaurants', {
                 v-on:change="filter"
                 v-model="filterOptions.type"
               >
-                <option value="all">All</option>
+                <option value="any">Any</option>
                 <option value="grill">Grill</option>
                 <option value="italian">Italian</option>
                 <option value="chinese">Chinese</option>
@@ -341,8 +343,6 @@ Vue.component('restaurants', {
       );
 
       switch (this.filterOptions.type) {
-        case "all":
-          break;
         case "grill":
           this.displayedRestaurants = this.displayedRestaurants.filter(
             (r) => r.restaurantType == "GRILL"

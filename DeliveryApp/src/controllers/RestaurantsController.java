@@ -42,6 +42,7 @@ public class RestaurantsController {
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Restaurant> getAll() {
+		/*
 		RestaurantFileRepository rfr = new RestaurantFileRepository();
 		
 		rfr.delete(0);
@@ -65,6 +66,7 @@ public class RestaurantsController {
 		rs.add(r4);
 		
 		rfr.writeToFile(rs);
+		*/
 		
 		return restaurantsService.getAll();
 	}

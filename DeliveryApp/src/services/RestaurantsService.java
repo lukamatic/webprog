@@ -37,6 +37,10 @@ public class RestaurantsService {
 	public ArrayList<Restaurant> filterByType(ArrayList<Restaurant> restaurants, String type) throws BadRequestException {
 		type = type.toLowerCase();
 		
+		if (type.equals("any")) {
+			return restaurants;
+		}
+		
 		RestaurantType restaurantType = getTypeFromTypeString(type);
 		
 		for (int i = 0; i < restaurants.size(); i++) {
