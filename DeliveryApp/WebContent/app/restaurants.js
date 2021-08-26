@@ -2,8 +2,11 @@ Vue.component('restaurants', {
   data: function () {
     return {
       restaurants: null,
+      displayedRestaurants: null,
       isSearchDivHidden: true,
       searchParameters: {},
+      sortOptions: { condition: "", order: "asc" },
+      filterOptions: { type: "all", open: false },
     };
   },
   template: `
@@ -131,7 +134,13 @@ Vue.component('restaurants', {
           <div class="mt-4 mx-3">
             <div>
               <label for="condition"><h5>Sort restaurants by:</h5></label>
-              <select class="ml-2" name="condition" id="cars">
+              <select
+                class="ml-2"
+                name="condition"
+                id="condition"
+                v-on:change="sort"
+                v-model="sortOptions.condition"
+              >
                 <option value="name">Name</option>
                 <option value="location">Location</option>
                 <option value="rating">Average rating</option>
@@ -139,7 +148,13 @@ Vue.component('restaurants', {
             </div>
             <div>
               <label for="order"><h5>Sort order:</h5></label>
-              <select class="ml-2" name="order" id="cars">
+              <select
+                class="ml-2"
+                name="order"
+                id="cars"
+                v-on:change="sort"
+                v-model="sortOptions.order"
+              >
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
@@ -150,7 +165,14 @@ Vue.component('restaurants', {
               <label for="typeFilter"
                 ><h5>Filter by restaurant type:</h5></label
               >
-              <select class="ml-2" name="typeFilter" id="typeFilter">
+              <select
+                class="ml-2"
+                name="typeFilter"
+                id="typeFilter"
+                v-on:change="filterByType"
+                v-model="filterOptions.type"
+              >
+                <option value="all">All</option>
                 <option value="grill">Grill</option>
                 <option value="italian">Italian</option>
                 <option value="chinese">Chinese</option>
@@ -161,9 +183,10 @@ Vue.component('restaurants', {
               <h5>
                 <input
                   type="checkbox"
-                  id="subscribeNews"
-                  name="subscribe"
-                  value="newsletter"
+                  id="openFilter"
+                  name="openFilter"
+                  v-on:change="filterByOpen"
+                  v-model="filterOptions.open"
                 />
                 <label for="openFilter" class="ml-1"
                   >Show only open restaurants</label
@@ -174,7 +197,7 @@ Vue.component('restaurants', {
         </div>
       </div>
       <div
-        v-for="restaurant in restaurants"
+        v-for="restaurant in displayedRestaurants"
         :key="restaurant.id"
         class="
           d-flex
@@ -217,7 +240,7 @@ Vue.component('restaurants', {
   mounted() {
     axios.get('/DeliveryApp/rest/restaurants').then((response) => {
       this.restaurants = response.data;
-      console.log(this.restaurants);
+      this.displayedRestaurants = this.restaurants;
     });
   },
   filters: {
@@ -227,15 +250,6 @@ Vue.component('restaurants', {
   },
   methods: {
     search: function(searchParameters) {
-      if (!isNaN(searchParameters.from)) {
-        console.log("invalid params");
-        //TODO: display error to user
-      }
-      if (!isNaN(searchParameters.to)) {
-        console.log("invalid params");
-        //TODO: display error to user
-      }
-
       var params = "";
 
       if (searchParameters.name) {
@@ -260,7 +274,98 @@ Vue.component('restaurants', {
 
       axios.get("/DeliveryApp/rest/restaurants/search?" + params).then((response) => {
         this.restaurants = response.data;
+        this.displayedRestaurants = this.restaurants;
       });
+    },
+    sort: function () {
+      if (this.sortOptions.condition) {
+        switch (this.sortOptions.condition) {
+          case "name":
+            this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+              this.sortByName(a, b, this.sortOptions.order)
+            );
+            break;
+          case "location":
+            this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+              this.sortByLocation(a, b, this.sortOptions.order)
+            );
+            break;
+        }
+      }
+    },
+    sortByName: function (a, b, order) {
+      const nameA = a.name.toUpperCase();
+      const nameB = b.name.toUpperCase();
+
+      if (order == "asc") {
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+      } else {
+        if (nameA < nameB) {
+          return 1;
+        }
+        if (nameA > nameB) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+    sortByLocation: function (a, b, order) {
+      const locationA = this.$options.filters.formatAddress(a.location.address).toUpperCase();
+      const locationB = this.$options.filters.formatAddress(b.location.address).toUpperCase();
+
+      if (order == "asc") {
+        if (locationA < locationB) {
+          return -1;
+        }
+        if (locationA > locationB) {
+          return 1;
+        }
+      } else {
+        if (locationA < locationB) {
+          return 1;
+        }
+        if (locationA > locationB) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+    filterByType: function () {
+      switch (this.filterOptions.type) {
+        case "all":
+          this.displayedRestaurants = this.restaurants;
+          break;
+        case "grill":
+          this.displayedRestaurants = this.restaurants.filter(
+            (r) => r.restaurantType == "GRILL"
+          );
+          break;
+        case "italian":
+          this.displayedRestaurants = this.restaurants.filter(
+            (r) => r.restaurantType == "ITALIAN"
+          );
+          break;
+        case "chinese":
+          this.displayedRestaurants = this.restaurants.filter(
+            (r) => r.restaurantType == "CHINESE"
+          );
+          break;
+        case "vegan":
+          this.displayedRestaurants = this.restaurants.filter(
+            (r) => r.restaurantType == "VEGAN"
+          );
+          break;
+      }
+    },
+    filterByOpen: function () {
+      this.displayedRestaurants = this.restaurants.filter((r) =>
+        this.filterOptions.open ? r.open : true
+      );
     },
   },
 });
