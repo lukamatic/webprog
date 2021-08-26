@@ -4,9 +4,9 @@ Vue.component('restaurants', {
       restaurants: null,
       displayedRestaurants: null,
       isSearchDivHidden: true,
-      searchParameters: {},
+      searchParameters: { type: "any" },
       sortOptions: { condition: "", order: "asc" },
-      filterOptions: { type: "all", open: false },
+      filterOptions: { type: "any", open: false },
     };
   },
   template: `
