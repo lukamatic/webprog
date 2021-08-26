@@ -169,7 +169,7 @@ Vue.component('restaurants', {
                 class="ml-2"
                 name="typeFilter"
                 id="typeFilter"
-                v-on:change="filterByType"
+                v-on:change="filter"
                 v-model="filterOptions.type"
               >
                 <option value="all">All</option>
@@ -185,7 +185,7 @@ Vue.component('restaurants', {
                   type="checkbox"
                   id="openFilter"
                   name="openFilter"
-                  v-on:change="filterByOpen"
+                  v-on:change="filter"
                   v-model="filterOptions.open"
                 />
                 <label for="openFilter" class="ml-1"
@@ -335,37 +335,35 @@ Vue.component('restaurants', {
       }
       return 0;
     },
-    filterByType: function () {
+    filter: function () {
+      this.displayedRestaurants = this.restaurants.filter((r) =>
+        this.filterOptions.open ? r.open : true
+      );
+
       switch (this.filterOptions.type) {
         case "all":
-          this.displayedRestaurants = this.restaurants;
           break;
         case "grill":
-          this.displayedRestaurants = this.restaurants.filter(
+          this.displayedRestaurants = this.displayedRestaurants.filter(
             (r) => r.restaurantType == "GRILL"
           );
           break;
         case "italian":
-          this.displayedRestaurants = this.restaurants.filter(
+          this.displayedRestaurants = this.displayedRestaurants.filter(
             (r) => r.restaurantType == "ITALIAN"
           );
           break;
         case "chinese":
-          this.displayedRestaurants = this.restaurants.filter(
+          this.displayedRestaurants = this.displayedRestaurants.filter(
             (r) => r.restaurantType == "CHINESE"
           );
           break;
         case "vegan":
-          this.displayedRestaurants = this.restaurants.filter(
+          this.displayedRestaurants = this.displayedRestaurants.filter(
             (r) => r.restaurantType == "VEGAN"
           );
           break;
       }
-    },
-    filterByOpen: function () {
-      this.displayedRestaurants = this.restaurants.filter((r) =>
-        this.filterOptions.open ? r.open : true
-      );
     },
   },
 });
