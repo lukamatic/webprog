@@ -5,7 +5,6 @@
  ***********************************************************************/
 package model;
 
-/** @pdOid fdca2bbd-5ad0-4531-b536-51faaa20350a */
 public enum OrderStatus {
    PROCESSING,
    IN_PREPARATION,
