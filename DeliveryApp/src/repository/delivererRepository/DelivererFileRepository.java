@@ -5,7 +5,16 @@
  ***********************************************************************/
 package repository.delivererRepository;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import model.Deliverer;
 import repository.IFileRepository;
@@ -13,7 +22,7 @@ import repository.IFileRepository;
 /** @pdOid 818576d7-14b1-4a5e-94aa-35890e8e03b9 */
 public class DelivererFileRepository implements IDelivererRepository, IFileRepository<Deliverer> {
    /** @pdOid 0b56c35b-ba31-486a-a1c8-bedf6f712a9b */
-   private String path;
+	private String path = "FileStorage/deliverers.json";
 
 	@Override
 	public Deliverer getById(String key) {
@@ -23,8 +32,7 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	
 	@Override
 	public ArrayList<Deliverer> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return readFromFile();
 	}
 	
 	@Override
@@ -47,14 +55,38 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	
 	@Override
 	public boolean writeToFile(ArrayList<Deliverer> values) {
-		// TODO Auto-generated method stub
-		return false;
+		Gson gson = new Gson();
+        String json = gson.toJson(values);
+
+        FileWriter fileWriter = null;
+
+        try {
+            fileWriter = new FileWriter(path, StandardCharsets.UTF_8);
+            fileWriter.write(json);
+            fileWriter.flush();
+            fileWriter.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return false;
 	}
 	
 	@Override
 	public ArrayList<Deliverer> readFromFile() {
-		// TODO Auto-generated method stub
-		return null;
+		Gson gson = new Gson();
+
+        try {
+            String json = new String(Files.readAllBytes(Paths.get(path)));
+
+            Type listType = new TypeToken<ArrayList<Deliverer>>(){}.getType();
+            return gson.fromJson(json, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
 	}
 
 }

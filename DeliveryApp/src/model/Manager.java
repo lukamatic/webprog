@@ -5,14 +5,12 @@
  ***********************************************************************/
 package model;
 
-import java.util.Date;
-
 public class Manager extends User {
 	private int restaurantId;
 
-	public Manager(String username, String password, String firstName, String lastName, Gender gender, Date dateOfBirth,
-			Role role, boolean isDeleted, int restaurantId) {
-		super(username, password, firstName, lastName, gender, dateOfBirth, role, isDeleted);
+	public Manager(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+			Role role, boolean isBlocked,  boolean isDeleted, int restaurantId) {
+		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.restaurantId = restaurantId;
 	}
 

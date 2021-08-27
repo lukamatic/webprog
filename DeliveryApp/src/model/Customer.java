@@ -6,18 +6,18 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Customer extends User {
 	private ArrayList<Integer> orders;
 	private double points;
+	private boolean isSuspicious;
    
 	private Cart cart;
 	private CustomerType customerType;
 
-	public Customer(String username, String password, String firstName, String lastName, Gender gender, Date dateOfBirth,
-			Role role, boolean isDeleted, ArrayList<Integer> orders, double points, Cart cart, CustomerType customerType) {
-		super(username, password, firstName, lastName, gender, dateOfBirth, role, isDeleted);
+	public Customer(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+			Role role, boolean isBlocked, boolean isDeleted, ArrayList<Integer> orders, double points, boolean isSuspicious, Cart cart, CustomerType customerType) {
+		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.orders = orders;
 		this.points = points;
 		this.cart = cart;
@@ -54,5 +54,13 @@ public class Customer extends User {
 
 	public void setCustomerType(CustomerType customerType) {
 		this.customerType = customerType;
+	}
+
+	public boolean isSuspicious() {
+		return isSuspicious;
+	}
+
+	public void setSuspicious(boolean isSuspicious) {
+		this.isSuspicious = isSuspicious;
 	}
 }

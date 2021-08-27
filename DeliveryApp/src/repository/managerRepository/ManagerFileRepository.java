@@ -5,7 +5,16 @@
  ***********************************************************************/
 package repository.managerRepository;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import model.Manager;
 import repository.IFileRepository;
@@ -13,7 +22,7 @@ import repository.IFileRepository;
 /** @pdOid 3788b6b5-fbdd-42aa-9273-55fa10a5def7 */
 public class ManagerFileRepository implements IManagerRepository, IFileRepository<Manager> {
    /** @pdOid 4eeac8d7-3c0c-46ef-aa3b-5e24ffa6ba28 */
-   private String path;
+	private String path = "FileStorage/managers.json";
 
 	@Override
 	public Manager getById(String key) {
@@ -23,8 +32,7 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	
 	@Override
 	public ArrayList<Manager> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return readFromFile();
 	}
 	
 	@Override
@@ -47,14 +55,38 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	
 	@Override
 	public boolean writeToFile(ArrayList<Manager> values) {
-		// TODO Auto-generated method stub
-		return false;
+		Gson gson = new Gson();
+        String json = gson.toJson(values);
+
+        FileWriter fileWriter = null;
+
+        try {
+            fileWriter = new FileWriter(path, StandardCharsets.UTF_8);
+            fileWriter.write(json);
+            fileWriter.flush();
+            fileWriter.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return false;
 	}
 	
 	@Override
 	public ArrayList<Manager> readFromFile() {
-		// TODO Auto-generated method stub
-		return null;
+		Gson gson = new Gson();
+
+        try {
+            String json = new String(Files.readAllBytes(Paths.get(path)));
+
+            Type listType = new TypeToken<ArrayList<Manager>>(){}.getType();
+            return gson.fromJson(json, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
 	}
 
 }

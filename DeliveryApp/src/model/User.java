@@ -5,21 +5,22 @@
  ***********************************************************************/
 package model;
 
-import java.util.Date;
-
 public class User {
+	private int id;
 	private String username;
 	private String password;
 	private String firstName;
 	private String lastName;
 	private Gender gender;
-	private Date dateOfBirth;
+	private long dateOfBirth;
 	private Role role;
+	private boolean isBlocked;
 	private boolean isDeleted;
    
-	public User(String username, String password, String firstName, String lastName, Gender gender, Date dateOfBirth,
-			Role role, boolean isDeleted) {
+	public User(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+			Role role, boolean isBlocked, boolean isDeleted) {
 		super();
+		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;
@@ -27,7 +28,16 @@ public class User {
 		this.gender = gender;
 		this.dateOfBirth = dateOfBirth;
 		this.role = role;
+		this.isBlocked = isBlocked;
 		this.isDeleted = isDeleted;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -70,11 +80,11 @@ public class User {
 		this.gender = gender;
 	}
 
-	public Date getDateOfBirth() {
+	public long getDateOfBirth() {
 		return dateOfBirth;
 	}
 
-	public void setDateOfBirth(Date dateOfBirth) {
+	public void setDateOfBirth(long dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
 
@@ -84,6 +94,14 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public boolean isBlocked() {
+		return isBlocked;
+	}
+
+	public void setBlocked(boolean isBlocked) {
+		this.isBlocked = isBlocked;
 	}
 
 	public boolean isDeleted() {
