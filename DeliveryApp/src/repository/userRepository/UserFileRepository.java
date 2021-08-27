@@ -25,7 +25,7 @@ public class UserFileRepository implements IUserRepository, IFileRepository<User
    private String path = "FileStorage/users.json";
 
 	@Override
-	public User getById(String key) {
+	public User getById(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,7 +48,7 @@ public class UserFileRepository implements IUserRepository, IFileRepository<User
 	}
 	
 	@Override
-	public Boolean delete(String key) {
+	public Boolean delete(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -25,7 +25,7 @@ public class AdminFileRepository implements IAdminRepository, IFileRepository<Ad
 	private String path = "FileStorage/admins.json";
 
 	@Override
-	public Admin getById(String key) {
+	public Admin getById(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,7 +48,7 @@ public class AdminFileRepository implements IAdminRepository, IFileRepository<Ad
 	}
 	
 	@Override
-	public Boolean delete(String key) {
+	public Boolean delete(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -9,5 +9,5 @@ import model.Customer;
 import repository.IRepository;
 
 /** @pdOid ae10ebcb-1fa3-4672-93a1-56cf21bef034 */
-public interface ICustomerRepository extends IRepository<String, Customer> {
+public interface ICustomerRepository extends IRepository<Integer, Customer> {
 }

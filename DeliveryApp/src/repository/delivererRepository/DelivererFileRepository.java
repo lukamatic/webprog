@@ -25,7 +25,7 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	private String path = "FileStorage/deliverers.json";
 
 	@Override
-	public Deliverer getById(String key) {
+	public Deliverer getById(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,7 +48,7 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	}
 	
 	@Override
-	public Boolean delete(String key) {
+	public Boolean delete(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

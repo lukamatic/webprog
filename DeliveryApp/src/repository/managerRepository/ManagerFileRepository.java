@@ -25,7 +25,7 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	private String path = "FileStorage/managers.json";
 
 	@Override
-	public Manager getById(String key) {
+	public Manager getById(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,7 +48,7 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	}
 	
 	@Override
-	public Boolean delete(String key) {
+	public Boolean delete(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

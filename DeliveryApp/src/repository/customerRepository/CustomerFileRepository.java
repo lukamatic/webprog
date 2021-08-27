@@ -25,7 +25,7 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 	private String path = "FileStorage/customers.json";
 
 	@Override
-	public Customer getById(String key) {
+	public Customer getById(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -48,7 +48,7 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 	}
 	
 	@Override
-	public Boolean delete(String key) {
+	public Boolean delete(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
 	}
