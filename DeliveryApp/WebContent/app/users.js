@@ -6,7 +6,7 @@ Vue.component('users', {
       isSearchDivHidden: true,
       searchParameters: {},
       sortOptions: { condition: "", order: "asc" },
-      filterOptions: { role: "any", suspicious: false },
+      filterOptions: { role: "any", customerType: "any", suspicious: false },
     };
   },
   template: ` 
@@ -152,6 +152,23 @@ Vue.component('users', {
               </select>
             </div>
             <div>
+              <label for="customerTypeFilter"
+                ><h5>Filter by customer type:</h5></label
+              >
+              <select
+                class="ml-2"
+                name="customerTypeFilter"
+                id="customerTypeFilter"
+                v-on:change="filter"
+                v-model="filterOptions.customerType"
+              >>
+                <option value="any">Any</option>
+                <option value="bronze">Bronze</option>
+                <option value="silver">Silver</option>
+                <option value="gold">Gold</option>
+              </select>
+            </div>
+            <div>
               <h5>
                 <input
                   type="checkbox"
@@ -238,8 +255,6 @@ Vue.component('users', {
   },
   methods: {
 	sort: function () {
-      console.log(this.sortOptions);
-
       if (this.sortOptions.condition) {
         switch (this.sortOptions.condition) {
           case "firstName":
@@ -255,6 +270,11 @@ Vue.component('users', {
           case "username":
             this.displayedUsers = this.displayedUsers.sort((a, b) =>
               this.sortByUsername(a, b, this.sortOptions.order)
+            );
+            break;
+          case "points":
+            this.displayedUsers = this.displayedUsers.sort((a, b) =>
+              this.sortByPoints(a, b, this.sortOptions.order)
             );
             break;
         }
@@ -323,10 +343,39 @@ Vue.component('users', {
       }
       return 0;
     },
+    sortByPoints: function (a, b, order) {
+      const pointsA = a.points;
+      const pointsB = b.points;
+
+      if (order == "asc") {
+        if (pointsA < pointsB) {
+          return 1;
+        }
+        if (pointsA > pointsB) {
+          return -1;
+        }
+      } else {
+        if (pointsA < pointsB) {
+          return -1;
+        }
+        if (pointsA > pointsB) {
+          return 1;
+        }
+      }
+      if (a.role == 'CUSTOMER' && b.role != 'CUSTOMER') {
+      	return -1;
+      }
+      if (a.role != 'CUSTOMER' && b.role == 'CUSTOMER') {
+      	return 1;
+      }
+      return 0;
+    },
     filter: function () {
       this.displayedUsers = this.users.filter((u) =>
         this.filterOptions.suspicious ? u.suspicious : true
       );
+      
+      this.sort();
 
       switch (this.filterOptions.role) {
         case "admin":
@@ -347,6 +396,24 @@ Vue.component('users', {
         case "deliverer":
           this.displayedUsers = this.displayedUsers.filter(
             (u) => u.role == "DELIVERER"
+          );
+          break;
+      }
+      
+      switch (this.filterOptions.customerType) {
+        case "bronze":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.customerType ? u.customerType.customerTypeName == "BRONZE" : false
+          );
+          break;
+        case "silver":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.customerType ? u.customerType.customerTypeName == "SILVER" : false
+          );
+          break;
+        case "gold":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.customerType ? u.customerType.customerTypeName == "GOLD" : false
           );
           break;
       }

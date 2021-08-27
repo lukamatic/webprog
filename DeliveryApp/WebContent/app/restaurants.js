@@ -341,6 +341,8 @@ Vue.component('restaurants', {
       this.displayedRestaurants = this.restaurants.filter((r) =>
         this.filterOptions.open ? r.open : true
       );
+      
+      this.sort();
 
       switch (this.filterOptions.type) {
         case "grill":
