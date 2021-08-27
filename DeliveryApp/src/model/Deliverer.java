@@ -11,7 +11,7 @@ public class Deliverer extends User {
 	private ArrayList<Integer> ordersToDeliver;
 
 	public Deliverer(int id, String username, String password, String firstName, String lastName, Gender gender,
-			long dateOfBirth, Role role, boolean isBlocked,  boolean isDeleted, ArrayList<Integer> ordersToDeliver) {
+			long dateOfBirth, Role role, boolean isBlocked, boolean isDeleted, ArrayList<Integer> ordersToDeliver) {
 		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.ordersToDeliver = ordersToDeliver;
 	}
