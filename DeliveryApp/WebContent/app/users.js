@@ -85,7 +85,7 @@ Vue.component('users', {
                   name="username"
                   id="username"
                   placeholder="username"
-                  v-model="searchParameters.user"
+                  v-model="searchParameters.username"
                 />
               </td>
             </tr>
@@ -254,6 +254,26 @@ Vue.component('users', {
     },
   },
   methods: {
+    search: function(searchParameters) {
+      var params = "";
+
+      if (searchParameters.firstName) {
+        params = params.concat("firstName=" + searchParameters.firstName);
+      }
+
+      if (searchParameters.lastName) {
+        params = params.concat("&lastName=" + searchParameters.lastName);
+      }
+
+      if (searchParameters.username) {
+        params = params.concat("&username=" + searchParameters.username);
+      }
+
+      axios.get("/DeliveryApp/rest/users/search?" + params).then((response) => {
+        this.users = response.data;
+        this.displayedUsers = this.users;
+      });
+    },
 	sort: function () {
       if (this.sortOptions.condition) {
         switch (this.sortOptions.condition) {

@@ -11,7 +11,9 @@ import model.CustomerTypeName;
 import model.Deliverer;
 import model.Gender;
 import model.Manager;
+import model.Restaurant;
 import model.Role;
+import model.User;
 import repository.adminRepository.AdminFileRepository;
 import repository.adminRepository.IAdminRepository;
 import repository.customerRepository.CustomerFileRepository;
@@ -41,6 +43,45 @@ public class UsersService {
 		users.addAll(managerRepository.getAll());
 		users.addAll(customerRepository.getAll());
 		users.addAll(delivererRepository.getAll());
+		
+		return users;
+	}
+	
+	public ArrayList<Object> filterByFirstName(ArrayList<Object> users, String firstName) {
+		firstName = firstName.toLowerCase();
+		
+		for (int i = 0; i < users.size(); i++) {
+			if (!((User)users.get(i)).getFirstName().toLowerCase().contains(firstName)) {
+				users.remove(i);
+				i--;
+			}
+		}
+		
+		return users;
+	}
+	
+	public ArrayList<Object> filterByLastName(ArrayList<Object> users, String lastName) {
+		lastName = lastName.toLowerCase();
+		
+		for (int i = 0; i < users.size(); i++) {
+			if (!((User)users.get(i)).getLastName().toLowerCase().contains(lastName)) {
+				users.remove(i);
+				i--;
+			}
+		}
+		
+		return users;
+	}
+	
+	public ArrayList<Object> filterByUsername(ArrayList<Object> users, String username) {
+		username = username.toLowerCase();
+		
+		for (int i = 0; i < users.size(); i++) {
+			if (!((User)users.get(i)).getUsername().toLowerCase().contains(username)) {
+				users.remove(i);
+				i--;
+			}
+		}
 		
 		return users;
 	}
