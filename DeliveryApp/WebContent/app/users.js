@@ -6,13 +6,168 @@ Vue.component('users', {
       isSearchDivHidden: true,
       searchParameters: {},
       sortOptions: { condition: "", order: "asc" },
-      filterOptions: { type: "all", open: false },
+      filterOptions: { role: "any", suspicious: false },
     };
   },
   template: ` 
 	
   <div>
+  	<navbar path="users"></navbar>
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
+      <div
+        class="
+          d-flex
+          flex-column
+          align-items-center
+          border border-dark
+          w-50
+          mt-4
+          p-4
+          bg-white
+        "
+      >
+        <button
+          class="btn btn-dark w-75"
+          v-on:click="isSearchDivHidden = false"
+          :hidden="!isSearchDivHidden"
+        >
+          Search for user
+        </button>
+        <div
+          class="bg-light border boreder-dark w-100 p-3"
+          :hidden="isSearchDivHidden"
+        >
+          <div class="d-flex flex-row justify-content-between">
+            <h4>Search for user:</h4>
+            <button
+              class="btn btn-dark"
+              v-on:click="isSearchDivHidden = true"
+            >
+              ✕
+            </button>
+          </div>
+          <table>
+            <tr>
+              <td>
+                <label class="pt-3" for="firstName"><h5>First name:</h5></label>
+              </td>
+              <td>
+                <input
+                  class="ml-2"
+                  name="firstName"
+                  id="firstName"
+                  placeholder="first name"
+                  v-model="searchParameters.firstName"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="pt-3" for="lastName"><h5>Last name:</h5></label>
+              </td>
+              <td>
+                <input
+                  class="ml-2"
+                  name="lastName"
+                  id="lastName"
+                  placeholder="last name"
+                  v-model="searchParameters.lastName"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="pt-3" for="username"><h5>Username:</h5></label>
+              </td>
+              <td>
+                <input
+                  class="ml-2"
+                  name="username"
+                  id="username"
+                  placeholder="username"
+                  v-model="searchParameters.user"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="text-center">
+                <button
+                  class="btn btn-dark"
+                  v-on:click="search(searchParameters)"
+                >
+                  Search
+                </button>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="d-flex flex-row flex-wrap w-100 justify-content-center">
+          <div class="mt-4 mx-3">
+            <div>
+              <label for="condition"><h5>Sort users by:</h5></label>
+              <select
+                class="ml-2"
+                name="condition"
+                id="condition"
+                v-on:change="sort"
+                v-model="sortOptions.condition"
+              >
+                <option value="firstName">First name</option>
+                <option value="lastName">Last name</option>
+                <option value="username">Username</option>
+                <option value="points">Points</option>
+              </select>
+            </div>
+            <div>
+              <label for="order"><h5>Sort order:</h5></label>
+              <select
+                class="ml-2"
+                name="order"
+                id="cars"
+                v-on:change="sort"
+                v-model="sortOptions.order"
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </div>
+          <div class="mt-4 mx-3">
+            <div>
+              <label for="roleFilter"
+                ><h5>Filter by user role:</h5></label
+              >
+              <select
+                class="ml-2"
+                name="roleFilter"
+                id="roleFilter"
+                v-on:change="filter"
+                v-model="filterOptions.role"
+              >>
+                <option value="any">Any</option>
+                <option value="admin">Admin</option>
+                <option value="manager">Manager</option>
+                <option value="customer">Customer</option>
+                <option value="deliverer">Deliverer</option>
+              </select>
+            </div>
+            <div>
+              <h5>
+                <input
+                  type="checkbox"
+                  id="suspiciousFilter"
+                  name="suspiciousFilter"
+                  v-on:change="filter"
+                  v-model="filterOptions.suspicious"
+                />
+                <label for="suspiciousFilter" class="ml-1"
+                  >Show only suspicious users</label
+                >
+              </h5>
+            </div>
+          </div>
+        </div>
+      </div>
       <div
         v-for="user in displayedUsers"
         :key="user.id"
@@ -42,7 +197,7 @@ Vue.component('users', {
         <div v-if="user.role != 'ADMIN'" class="flex-column">
           <div v-if="user.suspicious">
             <button
-              class="btn btn-danger font-weight-bold mt-3 mr-3"
+              class="btn btn-danger mt-3 mr-3"
               style="width: 120px; pointer-events: none"
             >
               Suspicious
@@ -50,7 +205,7 @@ Vue.component('users', {
           </div>
           <div>
             <button
-              class="btn btn-dark font-weight-bold my-2 mr-3"
+              class="btn btn-dark my-2 mr-3"
               style="width: 120px"
             >
               Block
@@ -58,7 +213,7 @@ Vue.component('users', {
           </div>
           <div>
             <button
-              class="btn btn-dark font-weight-bold mb-2 mr-3"
+              class="btn btn-dark mb-2 mr-3"
               style="width: 120px"
             >
               Delete
@@ -81,4 +236,121 @@ Vue.component('users', {
       return parsed.format(format);
     },
   },
+  methods: {
+	sort: function () {
+      console.log(this.sortOptions);
+
+      if (this.sortOptions.condition) {
+        switch (this.sortOptions.condition) {
+          case "firstName":
+            this.displayedUsers = this.displayedUsers.sort((a, b) =>
+              this.sortByFirstName(a, b, this.sortOptions.order)
+            );
+            break;
+          case "lastName":
+            this.displayedUsers = this.displayedUsers.sort((a, b) =>
+              this.sortByLastName(a, b, this.sortOptions.order)
+            );
+            break;
+          case "username":
+            this.displayedUsers = this.displayedUsers.sort((a, b) =>
+              this.sortByUsername(a, b, this.sortOptions.order)
+            );
+            break;
+        }
+      }
+    },
+    sortByFirstName: function (a, b, order) {
+      const firstNameA = a.firstName.toUpperCase();
+      const firstNameB = b.firstName.toUpperCase();
+
+      if (order == "asc") {
+        if (firstNameA < firstNameB) {
+          return -1;
+        }
+        if (firstNameA > firstNameB) {
+          return 1;
+        }
+      } else {
+        if (firstNameA < firstNameB) {
+          return 1;
+        }
+        if (firstNameA > firstNameB) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+    sortByLastName: function (a, b, order) {
+      const lastNameA = a.lastName.toUpperCase();
+      const lastNameB = b.lastName.toUpperCase();
+
+      if (order == "asc") {
+        if (lastNameA < lastNameB) {
+          return -1;
+        }
+        if (lastNameA > lastNameB) {
+          return 1;
+        }
+      } else {
+        if (lastNameA < lastNameB) {
+          return 1;
+        }
+        if (lastNameA > lastNameB) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+    sortByUsername: function (a, b, order) {
+      const usernameA = a.username.toUpperCase();
+      const usernameB = b.username.toUpperCase();
+
+      if (order == "asc") {
+        if (usernameA < usernameB) {
+          return -1;
+        }
+        if (usernameA > usernameB) {
+          return 1;
+        }
+      } else {
+        if (usernameA < usernameB) {
+          return 1;
+        }
+        if (usernameA > usernameB) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+    filter: function () {
+      this.displayedUsers = this.users.filter((u) =>
+        this.filterOptions.suspicious ? u.suspicious : true
+      );
+
+      switch (this.filterOptions.role) {
+        case "admin":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.role == "ADMIN"
+          );
+          break;
+        case "manager":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.role == "MANAGER"
+          );
+          break;
+        case "customer":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.role == "CUSTOMER"
+          );
+          break;
+        case "deliverer":
+          this.displayedUsers = this.displayedUsers.filter(
+            (u) => u.role == "DELIVERER"
+          );
+          break;
+      }
+    },
+  
+  }
 });
