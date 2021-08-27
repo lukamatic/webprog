@@ -6,18 +6,13 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import model.Address;
-import model.Location;
 import model.Restaurant;
-import model.RestaurantType;
-import repository.restaurantRepository.RestaurantFileRepository;
 import services.RestaurantsService;
 
 @Path("/restaurants")
