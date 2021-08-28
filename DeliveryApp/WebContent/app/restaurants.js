@@ -18,11 +18,11 @@ Vue.component('restaurants', {
           d-flex
           flex-column
           align-items-center
-          border border-dark
           w-50
           p-4
           mt-4
           bg-white
+          shadow-lg
         "
       >
         <button
@@ -210,7 +210,7 @@ Vue.component('restaurants', {
           w-75
           mt-4
           bg-white
-          border border-dark
+          shadow
         "
       >
         <img class="m-3" src="" width="200" height="200" />

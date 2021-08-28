@@ -16,6 +16,9 @@ public class User {
 	private Role role;
 	private boolean isBlocked;
 	private boolean isDeleted;
+	
+	public User() {
+	}
    
 	public User(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
 			Role role, boolean isBlocked, boolean isDeleted) {

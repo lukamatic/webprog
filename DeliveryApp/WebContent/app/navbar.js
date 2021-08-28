@@ -25,16 +25,16 @@ Vue.component('navbar', {
                 <li :class="[this.path == 'signup' ? activeItemClass : inactiveItemClass]"  v-if="!$cookies.get('role')">
                     <a class="nav-link" href="#/signup">Sign Up</a>
                 </li>
-                <li :class="[this.path == 'users' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'admin'">
+                <li :class="[this.path == 'users' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'ADMIN'">
                     <a class="nav-link" href="#/users">Users</a>
                 </li>
-                <li :class="[this.path == 'restaurant' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'manager'">
+                <li :class="[this.path == 'restaurant' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'MANAGER'">
                     <a class="nav-link" href="#/restaurant">My restaurant</a>
                 </li>
-                <li :class="[this.path == 'customer-orders' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'customer'">
+                <li :class="[this.path == 'customer-orders' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'CUSTOMER'">
                     <a class="nav-link" href="#/customer-orders">My orders</a>
                 </li>
-                <li :class="[this.path == 'orders' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'deliverer'">
+                <li :class="[this.path == 'orders' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'DELIVERER'">
                     <a class="nav-link" href="#/orders">Orders</a>
                 </li>
                 <li :class="[this.path == 'profile' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role')">
@@ -49,8 +49,13 @@ Vue.component('navbar', {
 `,
   methods: {
     logOut() {
-      $cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
-      location.reload();
+      const vm = this;
+  	  axios.post('/DeliveryApp/rest/auth/logout', {
+	  })
+	  .then(function (response) {
+      	vm.$cookies.keys().forEach((cookie) => this.$cookies.remove(cookie));
+      	router.push("login");
+	  })
     },
   }
 });

@@ -22,6 +22,8 @@ import repository.delivererRepository.DelivererFileRepository;
 import repository.delivererRepository.IDelivererRepository;
 import repository.managerRepository.IManagerRepository;
 import repository.managerRepository.ManagerFileRepository;
+import repository.userRepository.IUserRepository;
+import repository.userRepository.UserFileRepository;
 
 public class UsersService {
 	private IAdminRepository adminRepository;
@@ -45,6 +47,16 @@ public class UsersService {
 		users.addAll(delivererRepository.getAll());
 		
 		return users;
+	}
+
+	public User getByUsername(String username) {
+		ArrayList<Object> users = getAll();
+		for (Object user : users) {
+			if (((User)user).getUsername().equals(username)) {
+				return (User)user;
+			}
+		}
+		return null;
 	}
 	
 	public ArrayList<Object> filterByFirstName(ArrayList<Object> users, String firstName) {
