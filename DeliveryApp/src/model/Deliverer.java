@@ -7,9 +7,20 @@ package model;
 
 import java.util.ArrayList;
 
-/** @pdOid 8a5f0f79-a919-4a56-89d5-cff8bf07384c */
 public class Deliverer extends User {
-   /** @pdOid 6690668a-df4f-4239-ac9e-8c890e326a31 */
-   private ArrayList<Integer> ordersToDeliver;
+	private ArrayList<Integer> ordersToDeliver;
 
+	public Deliverer(int id, String username, String password, String firstName, String lastName, Gender gender,
+			long dateOfBirth, Role role, boolean isBlocked, boolean isDeleted, ArrayList<Integer> ordersToDeliver) {
+		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
+		this.ordersToDeliver = ordersToDeliver;
+	}
+
+	public ArrayList<Integer> getOrdersToDeliver() {
+		return ordersToDeliver;
+	}
+
+	public void setOrdersToDeliver(ArrayList<Integer> ordersToDeliver) {
+		this.ordersToDeliver = ordersToDeliver;
+	}
 }

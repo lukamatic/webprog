@@ -5,9 +5,20 @@
  ***********************************************************************/
 package model;
 
-/** @pdOid 428b9d89-0949-4a1c-b7b7-73411af62dae */
 public class Manager extends User {
-   /** @pdOid e7cb3211-1817-450a-9eb1-acacc0aab780 */
-   private int restaurantId;
+	private int restaurantId;
 
+	public Manager(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+			Role role, boolean isBlocked, boolean isDeleted, int restaurantId) {
+		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
+		this.restaurantId = restaurantId;
+	}
+
+	public int getRestaurantId() {
+		return restaurantId;
+	}
+
+	public void setRestaurantId(int restaurantId) {
+		this.restaurantId = restaurantId;
+	}
 }

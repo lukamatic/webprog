@@ -5,23 +5,110 @@
  ***********************************************************************/
 package model;
 
-import java.util.Date;
-
-/** @pdOid 62d3bdbb-8584-4eb2-98ff-351eb26e51c6 */
 public class User {
-   /** @pdOid 5619f018-2def-4ae0-81df-b5c40e5bcaa1 */
-   private String username;
-   /** @pdOid 5c311e54-dfe9-490f-b08c-1aaa1d629a7b */
-   private String password;
-   /** @pdOid 483a3e91-9c01-4825-99d6-33ce7bab92c0 */
-   private String firstName;
-   /** @pdOid 36830333-af71-44c4-8438-7d22c6ada2ae */
-   private String lastName;
-   /** @pdOid abfb6d26-e448-48c8-bfef-d77ece53a936 */
-   private Gender gender;
-   /** @pdOid 4e0c9454-3cff-4732-8029-34e7efb0723e */
-   private Date dateOfBirth;
-   /** @pdOid 3bbe1cfb-99f7-441a-9dd1-048c8875a312 */
-   private Role role;
+	private int id;
+	private String username;
+	private String password;
+	private String firstName;
+	private String lastName;
+	private Gender gender;
+	private long dateOfBirth;
+	private Role role;
+	private boolean isBlocked;
+	private boolean isDeleted;
+   
+	public User(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+			Role role, boolean isBlocked, boolean isDeleted) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.gender = gender;
+		this.dateOfBirth = dateOfBirth;
+		this.role = role;
+		this.isBlocked = isBlocked;
+		this.isDeleted = isDeleted;
+	}
 
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public void setGender(Gender gender) {
+		this.gender = gender;
+	}
+
+	public long getDateOfBirth() {
+		return dateOfBirth;
+	}
+
+	public void setDateOfBirth(long dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public boolean isBlocked() {
+		return isBlocked;
+	}
+
+	public void setBlocked(boolean isBlocked) {
+		this.isBlocked = isBlocked;
+	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 }

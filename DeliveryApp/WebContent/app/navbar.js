@@ -17,7 +17,7 @@ Vue.component('navbar', {
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li :class="[this.path == 'restaurants' ? activeItemClass : inactiveItemClass]">
-                    <a class="nav-link" href="#/restaurants">Restaurants<span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="#/restaurants">Restaurants</a>
                 </li>
                 <li :class="[this.path == 'login' ? activeItemClass : inactiveItemClass]"  v-if="!$cookies.get('role')">
                     <a class="nav-link" href="#/login">Log In</a>

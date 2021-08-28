@@ -5,6 +5,11 @@
  ***********************************************************************/
 package model;
 
-/** @pdOid 4c5632e7-1b73-4359-8b63-71729bc75c41 */
 public class Admin extends User {
+
+	public Admin(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+			Role role, boolean isBlocked, boolean isDeleted) {
+		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
+	}
+	
 }
