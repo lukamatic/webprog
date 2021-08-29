@@ -14,16 +14,21 @@ Vue.component('users', {
   <div>
   	<navbar path="users"></navbar>
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
+      <div class="d-flex w-100 justify-content-end mt-2 mr-5">
+        <button
+          class="btn btn-dark mr-5"
+          v-on:click="createNewUser">Create new user</button>
+      </div>
       <div
         class="
           d-flex
           flex-column
           align-items-center
-          border border-dark
           w-50
-          mt-4
+          mt-2
           p-4
           bg-white
+          shadow-lg
         "
       >
         <button
@@ -197,7 +202,7 @@ Vue.component('users', {
           w-75
           mt-4
           bg-white
-          border border-dark
+          box-shadow
         "
       >
         <div class="flex-column flex-fill mx-3">
@@ -438,6 +443,8 @@ Vue.component('users', {
           break;
       }
     },
-  
+  	createNewUser: function() {
+  	  router.push('newUser');
+  	}
   }
 });
