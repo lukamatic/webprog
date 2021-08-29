@@ -10,6 +10,12 @@ import java.util.ArrayList;
 public class Deliverer extends User {
 	private ArrayList<Integer> ordersToDeliver;
 
+	public Deliverer(User user) {
+		super(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getGender(),
+				user.getDateOfBirth(), user.getRole(), user.isBlocked(), user.isDeleted());
+		this.ordersToDeliver = new ArrayList<Integer>();
+	}
+
 	public Deliverer(String username, String password, String firstName, String lastName, Gender gender,
 			long dateOfBirth, Role role, boolean isBlocked, boolean isDeleted, ArrayList<Integer> ordersToDeliver) {
 		super(username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);

@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import model.Deliverer;
+import model.Manager;
 import repository.IFileRepository;
 
 /** @pdOid 818576d7-14b1-4a5e-94aa-35890e8e03b9 */
@@ -37,8 +38,10 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	
 	@Override
 	public Deliverer save(Deliverer value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Deliverer> deliverers = getAll();
+		deliverers.add(value);
+		writeToFile(deliverers);
+		return value;
 	}
 	
 	@Override

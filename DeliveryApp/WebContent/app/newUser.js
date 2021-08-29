@@ -139,7 +139,16 @@ Vue.component('new-user', {
 	    });
     },
     createDeliverer: function() {
-      //TODO
+    	const vm = this;
+	  	axios.post('/DeliveryApp/rest/deliverers/create', this.newUser)
+	    .then(function (response) {
+			router.push('users');
+	  	  }
+	    )
+	    .catch(function (error) {
+	      vm.errorText = error.response.data;
+	      vm.isErrorLabelVisible = true;
+	    });
     }
   }
 });
