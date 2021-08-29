@@ -19,11 +19,10 @@ public class User {
 	
 	public User() {
 	}
-   
-	public User(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+	   
+	public User(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
 			Role role, boolean isBlocked, boolean isDeleted) {
 		super();
-		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.firstName = firstName;

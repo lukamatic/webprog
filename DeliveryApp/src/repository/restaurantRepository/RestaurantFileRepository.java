@@ -37,13 +37,13 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 	}
 	
 	@Override
-	public Boolean save(Restaurant value) {
+	public Restaurant save(Restaurant value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Restaurant value) {
+	public Restaurant update(Restaurant value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

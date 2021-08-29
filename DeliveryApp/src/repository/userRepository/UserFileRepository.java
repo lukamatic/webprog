@@ -36,13 +36,13 @@ public class UserFileRepository implements IUserRepository, IFileRepository<User
 	}
 	
 	@Override
-	public Boolean save(User value) {
+	public User save(User value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(User value) {
+	public User update(User value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

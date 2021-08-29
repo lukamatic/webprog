@@ -28,13 +28,13 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	}
 	
 	@Override
-	public Boolean save(Article value) {
+	public Article save(Article value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Article value) {
+	public Article update(Article value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

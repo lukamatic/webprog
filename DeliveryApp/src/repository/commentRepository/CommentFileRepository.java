@@ -28,13 +28,13 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 	}
 	
 	@Override
-	public Boolean save(Comment value) {
+	public Comment save(Comment value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Comment value) {
+	public Comment update(Comment value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

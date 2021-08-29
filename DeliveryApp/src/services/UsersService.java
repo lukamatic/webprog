@@ -1,18 +1,9 @@
 package services;
 
 import java.util.ArrayList;
-import java.util.Date;
 
-import model.Admin;
-import model.Cart;
-import model.Customer;
-import model.CustomerType;
-import model.CustomerTypeName;
-import model.Deliverer;
-import model.Gender;
+import exceptions.BadRequestException;
 import model.Manager;
-import model.Restaurant;
-import model.Role;
 import model.User;
 import repository.adminRepository.AdminFileRepository;
 import repository.adminRepository.IAdminRepository;
@@ -22,8 +13,6 @@ import repository.delivererRepository.DelivererFileRepository;
 import repository.delivererRepository.IDelivererRepository;
 import repository.managerRepository.IManagerRepository;
 import repository.managerRepository.ManagerFileRepository;
-import repository.userRepository.IUserRepository;
-import repository.userRepository.UserFileRepository;
 
 public class UsersService {
 	private IAdminRepository adminRepository;
@@ -51,11 +40,13 @@ public class UsersService {
 
 	public User getByUsername(String username) {
 		ArrayList<Object> users = getAll();
+		
 		for (Object user : users) {
 			if (((User)user).getUsername().equals(username)) {
 				return (User)user;
 			}
 		}
+		
 		return null;
 	}
 	
@@ -96,5 +87,35 @@ public class UsersService {
 		}
 		
 		return users;
+	}
+	
+	public void validateUsername(String username) {
+		if (getByUsername(username) != null) {
+			throw new BadRequestException("Username already taken.");
+		}
+	}
+	
+	public int calculateId() {
+		ArrayList<Object> users = getAll();
+		
+		if (users.size() == 0) {
+			return 0;
+		}
+		
+		return getMaxId(users) + 1;
+	}
+	
+	private int getMaxId(ArrayList<Object> users) {
+		int maxId = ((User)users.get(0)).getId();
+		
+		for (Object user : users) {
+			int id = ((User)user).getId();
+			
+			if (id > maxId) {
+				maxId = id;
+			}
+		}
+		
+		return maxId;
 	}
 }

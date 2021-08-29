@@ -8,9 +8,15 @@ package model;
 public class Manager extends User {
 	private int restaurantId;
 
-	public Manager(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+	public Manager(User user) {
+		super(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), user.getGender(),
+				user.getDateOfBirth(), user.getRole(), user.isBlocked(), user.isDeleted());
+		this.restaurantId = -1;
+	}
+
+	public Manager(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
 			Role role, boolean isBlocked, boolean isDeleted, int restaurantId) {
-		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
+		super(username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.restaurantId = restaurantId;
 	}
 

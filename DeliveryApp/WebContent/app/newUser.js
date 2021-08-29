@@ -1,6 +1,7 @@
 Vue.component('new-user', {
   data: function () {
     return {
+      dateOfBirth: null,
       newUser: {
 	      firstName: "",
 	      lastName: "",
@@ -39,15 +40,15 @@ Vue.component('new-user', {
                                 <h5>Date of birth:</h5>
                             </label></td>
                         <td><input type="date" name="dateOfBirth" id="dateOfBirth" placeholder="date of birth"
-                                class="ml-2 input-size" v-model="newUser.dateOfBirth"></td>
+                                class="ml-2 input-size" v-model="dateOfBirth"></td>
                     </tr>
                     <tr>
                         <td><label for="role" class="mx-3 mt-2">
                                 <h5>Role:</h5>
                             </label></td>
                         <td><select name="role" id="role" class="ml-2 input-size" v-model="newUser.role">
-                                <option value="manager">Manager</option>
-                                <option value="deliverer">Deliverer</option>
+                                <option value="MANAGER">Manager</option>
+                                <option value="DELIVERER">Deliverer</option>
                             </select></td>
                     </tr>
                     <tr>
@@ -55,9 +56,9 @@ Vue.component('new-user', {
                                 <h5>Gender:</h5>
                             </label></td>
                         <td><select name="gender" id="gender" class="ml-2 input-size" v-model="newUser.gender">
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
+                                <option value="MALE">Male</option>
+                                <option value="FEMALE">Female</option>
+                                <option value="OTHER">Other</option>
                             </select></td>
                     </tr>
                     <tr>
@@ -70,13 +71,13 @@ Vue.component('new-user', {
                         <td><label for="password" class="mx-3 mt-2">
                                 <h5>Password:</h5>
                             </label></td>
-                        <td><input name="password" id="password" placeholder="password" class="ml-2 input-size" v-model="newUser.password"></td>
+                        <td><input type="password" name="password" id="password" placeholder="password" class="ml-2 input-size" v-model="newUser.password"></td>
                     </tr>
                     <tr>
                         <td><label for="passwordConfirmation" class="mx-3 mt-2">
                                 <h5>Confirm password:</h5>
                             </label></td>
-                        <td><input name="passwordConfirmation" id="passwordConfirmation" placeholder="confirm password"
+                        <td><input type="password" name="passwordConfirmation" id="passwordConfirmation" placeholder="confirm password"
                                 class="ml-2 input-size" v-model="passwordConfirmation"></td>
                     </tr>
                     <tr>
@@ -94,8 +95,13 @@ Vue.component('new-user', {
 `,
   methods: {
     createAccount: function() {
+      this.newUser.dateOfBirth = moment(this.dateOfBirth).format("x");
       if (this.validateInput()) {
-      	this.register();
+        if (this.newUser.role == "MANAGER") {
+          this.createManager();
+        } else if (this.newUser.role == "DELIVERER") {
+          this.createDeliverer();
+        }
       }
     },
     validateInput: function() {
@@ -120,8 +126,20 @@ Vue.component('new-user', {
       this.isErrorLabelVisible = false;
       return true;
     },
-    register: function() {
-    	
-    }    
+    createManager: function() {
+    	const vm = this;
+	  	axios.post('/DeliveryApp/rest/managers/create', this.newUser)
+	    .then(function (response) {
+			router.push('users');
+	  	  }
+	    )
+	    .catch(function (error) {
+	      vm.errorText = error.response.data;
+	      vm.isErrorLabelVisible = true;
+	    });
+    },
+    createDeliverer: function() {
+      //TODO
+    }
   }
 });

@@ -28,13 +28,13 @@ public class OrderFileRepository implements IOrderRepository, IFileRepository<Or
 	}
 	
 	@Override
-	public Boolean save(Order value) {
+	public Order save(Order value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Order value) {
+	public Order update(Order value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

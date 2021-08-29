@@ -36,13 +36,15 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	}
 	
 	@Override
-	public Boolean save(Manager value) {
-		// TODO Auto-generated method stub
-		return null;
+	public Manager save(Manager value) {
+		ArrayList<Manager> managers = getAll();
+		managers.add(value);
+		writeToFile(managers);
+		return value;
 	}
 	
 	@Override
-	public Boolean update(Manager value) {
+	public Manager update(Manager value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -88,5 +90,4 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
         
         return null;
 	}
-
 }

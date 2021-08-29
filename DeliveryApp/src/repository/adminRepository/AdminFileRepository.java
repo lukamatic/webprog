@@ -36,13 +36,13 @@ public class AdminFileRepository implements IAdminRepository, IFileRepository<Ad
 	}
 	
 	@Override
-	public Boolean save(Admin value) {
+	public Admin save(Admin value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Admin value) {
+	public Admin update(Admin value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

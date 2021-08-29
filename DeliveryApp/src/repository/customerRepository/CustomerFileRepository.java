@@ -36,13 +36,13 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 	}
 	
 	@Override
-	public Boolean save(Customer value) {
+	public Customer save(Customer value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Customer value) {
+	public Customer update(Customer value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

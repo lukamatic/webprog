@@ -15,9 +15,9 @@ public class Customer extends User {
 	private Cart cart;
 	private CustomerType customerType;
 
-	public Customer(int id, String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
+	public Customer(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
 			Role role, boolean isBlocked, boolean isDeleted, ArrayList<Integer> orders, double points, boolean isSuspicious, Cart cart, CustomerType customerType) {
-		super(id, username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
+		super(username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.orders = orders;
 		this.points = points;
 		this.cart = cart;

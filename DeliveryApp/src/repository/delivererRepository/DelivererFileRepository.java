@@ -36,13 +36,13 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	}
 	
 	@Override
-	public Boolean save(Deliverer value) {
+	public Deliverer save(Deliverer value) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
-	public Boolean update(Deliverer value) {
+	public Deliverer update(Deliverer value) {
 		// TODO Auto-generated method stub
 		return null;
 	}

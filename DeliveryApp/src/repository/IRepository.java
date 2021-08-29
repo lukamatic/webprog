@@ -15,10 +15,10 @@ public interface IRepository <TKey,TValue> {
    ArrayList<TValue> getAll();
    /** @param value
     * @pdOid 40343b2b-6049-472d-aad5-b530c86e863b */
-   Boolean save(TValue value);
+   TValue save(TValue value);
    /** @param value
     * @pdOid 780a56ac-0bf1-42d5-a66b-2dab2c8d4806 */
-   Boolean update(TValue value);
+   TValue update(TValue value);
    /** @param key
     * @pdOid 2e40230f-ca81-439c-85c0-8f26a41b4315 */
    Boolean delete(TKey key);
