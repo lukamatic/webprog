@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 
 import model.Customer;
+import model.Manager;
 import repository.customerRepository.CustomerFileRepository;
 import repository.customerRepository.ICustomerRepository;
 
@@ -16,5 +17,4 @@ public class CustomersService {
 	public ArrayList<Customer> getAll() {
 		return customerRepository.getAll();
 	}
-
 }

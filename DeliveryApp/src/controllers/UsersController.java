@@ -7,7 +7,9 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -73,5 +75,19 @@ public class UsersController {
 		}
 		
 		return users;
+	}
+
+	@PATCH
+	@Path("{id}/block")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User block(@PathParam("id") int id) {
+		return usersService.block(id);
+	}
+
+	@PATCH
+	@Path("{id}/unblock")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User unblock(@PathParam("id") int id) {
+		return usersService.unblock(id);
 	}
 }

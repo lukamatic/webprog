@@ -3,6 +3,8 @@ package services;
 import java.util.ArrayList;
 
 import exceptions.BadRequestException;
+import model.Customer;
+import model.Deliverer;
 import model.Manager;
 import model.User;
 import repository.adminRepository.AdminFileRepository;
@@ -36,6 +38,18 @@ public class UsersService {
 		users.addAll(delivererRepository.getAll());
 		
 		return users;
+	}
+
+	public User getById(int id) {
+		ArrayList<Object> users = getAll();
+		
+		for (Object user : users) {
+			if (((User)user).getId() == id) {
+				return (User)user;
+			}
+		}
+		
+		return null;
 	}
 
 	public User getByUsername(String username) {
@@ -117,5 +131,47 @@ public class UsersService {
 		}
 		
 		return maxId;
+	}
+	
+	public User block(int id) {
+		User user = getById(id);
+		
+		switch (user.getRole()) {
+		case MANAGER:
+			Manager manager = managerRepository.getById(id);
+			manager.setBlocked(true);
+			return (User)managerRepository.update(manager);
+		case DELIVERER:
+			Deliverer deliverer = delivererRepository.getById(id);
+			deliverer.setBlocked(true);
+			return (User)delivererRepository.update(deliverer);
+		case CUSTOMER:
+			Customer customer = customerRepository.getById(id);
+			customer.setBlocked(true);
+			return (User)customerRepository.update(customer);
+		default:
+			return null;
+		}
+	}
+	
+	public User unblock(int id) {
+		User user = getById(id);
+		
+		switch (user.getRole()) {
+		case MANAGER:
+			Manager manager = managerRepository.getById(id);
+			manager.setBlocked(false);
+			return (User)managerRepository.update(manager);
+		case DELIVERER:
+			Deliverer deliverer = delivererRepository.getById(id);
+			deliverer.setBlocked(false);
+			return (User)delivererRepository.update(deliverer);
+		case CUSTOMER:
+			Customer customer = customerRepository.getById(id);
+			customer.setBlocked(false);
+			return (User)customerRepository.update(customer);
+		default:
+			return null;
+		}
 	}
 }

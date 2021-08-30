@@ -17,6 +17,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import model.Admin;
+import model.Manager;
+import model.User;
 import repository.IFileRepository;
 
 /** @pdOid d7a2b040-ccde-4a9c-adda-bb8bb698a7de */
@@ -26,7 +28,14 @@ public class AdminFileRepository implements IAdminRepository, IFileRepository<Ad
 
 	@Override
 	public Admin getById(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Admin> admins = getAll();
+		
+		for (Admin admin : admins) {
+			if (admin.getId() == key) {
+				return admin;
+			}
+		}
+		
 		return null;
 	}
 	
@@ -43,8 +52,16 @@ public class AdminFileRepository implements IAdminRepository, IFileRepository<Ad
 	
 	@Override
 	public Admin update(Admin value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Admin> admins = getAll();
+
+		for (int i = 0; i < admins.size(); i++) {
+			if (admins.get(i).getId() == value.getId()) {
+				admins.set(i, value);
+			}
+		}
+		
+		writeToFile(admins);
+		return value;
 	}
 	
 	@Override

@@ -229,8 +229,18 @@ Vue.component('users', {
             <button
               class="btn btn-dark my-2 mr-3"
               style="width: 120px"
+              v-if="!user.blocked"
+              v-on:click="block(user.id)"
             >
               Block
+            </button>
+            <button
+              class="btn btn-light border-dark my-2 mr-3"
+              style="width: 120px"
+              v-if="user.blocked"
+              v-on:click="unblock(user.id)"
+            >
+              Unblock
             </button>
           </div>
           <div>
@@ -445,6 +455,30 @@ Vue.component('users', {
     },
   	createNewUser: function() {
   	  router.push('newUser');
+  	},
+  	block: function(id) {
+    	const vm = this;
+	  	axios.patch('/DeliveryApp/rest/users/' + id + '/block')
+	    .then(function (response) {
+			const index = vm.displayedUsers.findIndex((u) => u.id == id);
+			vm.displayedUsers[index].blocked = true;
+	  	  }
+	    )
+	    .catch(function (error) {
+	      console.log(error);
+	    });
+  	},
+  	unblock: function(id) {
+    	const vm = this;
+	  	axios.patch('/DeliveryApp/rest/users/' + id + '/unblock')
+	    .then(function (response) {
+			const index = vm.displayedUsers.findIndex((u) => u.id == id);
+			vm.displayedUsers[index].blocked = false;
+	  	  }
+	    )
+	    .catch(function (error) {
+	      console.log(error);
+	    });
   	}
   }
 });

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import model.Admin;
 import model.Manager;
 import repository.IFileRepository;
 
@@ -26,7 +27,14 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 
 	@Override
 	public Manager getById(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Manager> managers = getAll();
+		
+		for (Manager manager : managers) {
+			if (manager.getId() == key) {
+				return manager;
+			}
+		}
+		
 		return null;
 	}
 	
@@ -45,8 +53,16 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	
 	@Override
 	public Manager update(Manager value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Manager> managers = getAll();
+
+		for (int i = 0; i < managers.size(); i++) {
+			if (managers.get(i).getId() == value.getId()) {
+				managers.set(i, value);
+			}
+		}
+		
+		writeToFile(managers);
+		return value;
 	}
 	
 	@Override

@@ -16,8 +16,9 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import model.Admin;
 import model.Deliverer;
-import model.Manager;
+import model.Deliverer;
 import repository.IFileRepository;
 
 /** @pdOid 818576d7-14b1-4a5e-94aa-35890e8e03b9 */
@@ -27,7 +28,14 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 
 	@Override
 	public Deliverer getById(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Deliverer> deliverers = getAll();
+		
+		for (Deliverer deliverer : deliverers) {
+			if (deliverer.getId() == key) {
+				return deliverer;
+			}
+		}
+		
 		return null;
 	}
 	
@@ -46,8 +54,16 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	
 	@Override
 	public Deliverer update(Deliverer value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Deliverer> deliverers = getAll();
+
+		for (int i = 0; i < deliverers.size(); i++) {
+			if (deliverers.get(i).getId() == value.getId()) {
+				deliverers.set(i, value);
+			}
+		}
+		
+		writeToFile(deliverers);
+		return value;
 	}
 	
 	@Override
