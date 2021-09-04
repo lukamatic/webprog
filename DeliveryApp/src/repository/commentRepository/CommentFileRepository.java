@@ -57,4 +57,10 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 		return null;
 	}
 
+	@Override
+	public ArrayList<Comment> getByRestaurantId(int restaurantId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

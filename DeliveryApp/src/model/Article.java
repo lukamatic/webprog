@@ -13,11 +13,12 @@ public class Article {
    private int restaurantId;
    private String description;
    private String imagePath;
+   private boolean isDeleted;
    
    private ArticleSize articleSize;
 
 	public Article(int id, String name, double price, ArticleType articleType, int restaurantId, String description,
-			String imagePath, ArticleSize articleSize) {
+			String imagePath, boolean isDeleted, ArticleSize articleSize) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -26,6 +27,7 @@ public class Article {
 		this.restaurantId = restaurantId;
 		this.description = description;
 		this.imagePath = imagePath;
+		this.isDeleted = isDeleted;
 		this.articleSize = articleSize;
 	}
 
@@ -85,6 +87,14 @@ public class Article {
 		this.imagePath = imagePath;
 	}
 
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+
 	public ArticleSize getArticleSize() {
 		return articleSize;
 	}
@@ -92,5 +102,8 @@ public class Article {
 	public void setArticleSize(ArticleSize articleSize) {
 		this.articleSize = articleSize;
 	}
+
+	
+	
 	
 }
