@@ -21,6 +21,10 @@ public class RestaurantsService {
 		return restaurantRepository.getAll();
 	}
 	
+	public Restaurant getById(Integer key) {
+		return restaurantRepository.getById(key);
+	}
+	
 	public ArrayList<Restaurant> filterByName(ArrayList<Restaurant> restaurants, String name) {
 		name = name.toLowerCase();
 		

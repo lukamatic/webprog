@@ -1,6 +1,4 @@
-/controllers/
-/services/
-/repository/
 /model/
-/webApplicationExceptions/
-/exceptions/
+/controllers/
+/repository/
+/services/

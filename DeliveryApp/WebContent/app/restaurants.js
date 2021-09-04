@@ -212,8 +212,9 @@ Vue.component('restaurants', {
           bg-white
           shadow
         "
+        v-on:click="choose(restaurant.id)"
       >
-        <img class="m-3" src="" width="200" height="200" />
+        <img class="m-3" src="" width="200" height="200"/>
         <div class="flex-column flex-fill mx-3">
           <div
             class="
@@ -233,7 +234,7 @@ Vue.component('restaurants', {
           <h5 style="min-width: 300px">
             Address: {{ restaurant.location.address | formatAddress }}
           </h5>
-          <h5>Average rating: {{ restaurant.averageRating }}</h5>
+           <h5>Average rating: {{ restaurant.averageRating }}</h5>
         </div>
       </div>
     </div>
@@ -366,6 +367,14 @@ Vue.component('restaurants', {
           );
           break;
       }
+      
+    },
+    choose: function (restaurantId) {
+    	this.$root.$emit('chosenRestaurantId', restaurantId, 2);
+    	router.push("restaurant");
+      	//axios.get("/DeliveryApp/rest/restaurants/" + restaurantId).then((response) => {
+        //router.push("restaurant");
+      //});
     },
   },
 });

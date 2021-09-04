@@ -7,12 +7,20 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import model.Address;
+import model.Article;
+import model.ArticleSize;
+import model.ArticleType;
+import model.Location;
 import model.Restaurant;
+import model.RestaurantType;
+import model.Unit;
 import services.RestaurantsService;
 
 @Path("/restaurants")
@@ -64,6 +72,19 @@ public class RestaurantsController {
 		*/
 		
 		return restaurantsService.getAll();
+	}
+	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Restaurant getById(@PathParam("id") int id) {
+		/*Article a1 = new Article(1, "Pastrmka", 460.00, ArticleType.FOOD, id, "Pecena pastrmka sa posluzena sa krompir salatom i tzatziki sosom.", "", new ArticleSize(500, Unit.GRAMS));
+		ArrayList articles = new ArrayList<Article>();
+		articles.add(a1);
+		Restaurant r = new Restaurant(id, "Restoran Ana", RestaurantType.CHINESE, articles , true,"" , new Location(10, 40, new Address("Bulevar Patrijarha Pavla ", "38a", "Novi Sad", "Srbija", "21203")) );
+		
+		return r;*/
+		return restaurantsService.getById(id);
 	}
 
 	@GET
