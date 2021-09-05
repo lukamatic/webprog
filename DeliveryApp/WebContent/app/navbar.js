@@ -31,6 +31,9 @@ Vue.component('navbar', {
                 <li :class="[this.path == 'restaurant' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'MANAGER'">
                     <a class="nav-link" href="#/manager-restaurant">My restaurant</a>
                 </li>
+                <li :class="[this.path == 'cart' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'CUSTOMER'">
+                    <a class="nav-link" href="#/cart">Cart</a>
+                </li>
                 <li :class="[this.path == 'customer-orders' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'CUSTOMER'">
                     <a class="nav-link" href="#/customer-orders">My orders</a>
                 </li>

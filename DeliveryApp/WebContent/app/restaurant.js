@@ -336,34 +336,6 @@ Vue.component('restaurant', {
 	  	this.selectedItemCount = 1;
 	  }
     },
-    search: function(searchParameters) {
-      var params = "";
-
-      if (searchParameters.name) {
-        params = params.concat("name=" + searchParameters.name);
-      }
-
-      if (searchParameters.type) {
-        params = params.concat("&type=" + searchParameters.type);
-      }
-
-      if (searchParameters.location) {
-        params = params.concat("&location=" + searchParameters.location);
-      }
-
-      if (searchParameters.from) {
-        params = params.concat("&from=" + searchParameters.from);
-      }
-
-      if (searchParameters.to) {
-        params = params.concat("&to=" + searchParameters.from);
-      }
-
-      axios.get("/DeliveryApp/rest/restaurants/search?" + params).then((response) => {
-        this.restaurants = response.data;
-        this.displayedRestaurants = this.restaurants;
-      });
-    },
   },
 });
   	
