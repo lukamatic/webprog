@@ -5,9 +5,20 @@
  ***********************************************************************/
 package repository.commentRepository;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import model.Comment;
+import model.CommentStatus;
+import model.Restaurant;
 import repository.IFileRepository;
 
 /** @pdOid b5246ae6-ba49-4734-a349-3cfb0e1f7ba5 */
@@ -47,20 +58,75 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 
 	@Override
 	public boolean writeToFile(ArrayList<Comment> values) {
-		// TODO Auto-generated method stub
-		return false;
+		Gson gson = new Gson();
+        String json = gson.toJson(values);
+
+        FileWriter fileWriter = null;
+
+        try {
+            //System.out.println(Paths.get(path).toAbsolutePath().toString());
+            fileWriter = new FileWriter(path, StandardCharsets.UTF_8);
+            fileWriter.write(json);
+            fileWriter.flush();
+            fileWriter.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return false;
 	}
 
 	@Override
 	public ArrayList<Comment> readFromFile() {
-		// TODO Auto-generated method stub
-		return null;
+		Gson gson = new Gson();
+
+        try {
+            String json = new String(Files.readAllBytes(Paths.get(path)));
+
+            Type listType = new TypeToken<ArrayList<Restaurant>>(){}.getType();
+            return gson.fromJson(json, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+	}
+
+	
+	
+
+	@Override
+	public ArrayList<Comment> getAllByRestaurantId(int restaurantId) {
+		Comment c1 = new Comment(1, 0, "Odlicna hrana i brza dostava, sve je ostalo toplo :)\n Porucicemo ponovo.", 5.00, CommentStatus.APPROVED);
+		Comment c2 = new Comment(1, 1, "okej hrana", 3.00, CommentStatus.APPROVED);
+		Comment c3 = new Comment(0, 0, "Sve super, ali visoke cene dostave. ", 4.00, CommentStatus.PENDING);
+		Comment c4 = new Comment(1, 0, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 5.00, CommentStatus.APPROVED);
+		Comment c5 = new Comment(0, 0, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", 4.00, CommentStatus.PENDING);
+		ArrayList<Comment> allComments = new ArrayList<Comment>();// = this.readFromFile();
+		allComments.add(c1);
+		allComments.add(c2);
+		allComments.add(c3);
+		allComments.add(c4);
+		allComments.add(c5);
+		this.writeToFile(allComments);
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		for (Comment c : allComments) {
+			if (c.getRestaurantId() == restaurantId)
+				comments.add(c); 
+		}
+		return comments;
 	}
 
 	@Override
-	public ArrayList<Comment> getByRestaurantId(int restaurantId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Comment> getApprovedByRestaurantId(int restaurantId) {
+		ArrayList<Comment> allComments = this.getAllByRestaurantId(restaurantId);//this.readFromFile();
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		for (Comment c : allComments) {
+			if (c.getRestaurantId() == restaurantId && c.getStatus() == CommentStatus.APPROVED)
+				comments.add(c); 
+		}
+		return comments;
 	}
 
 }

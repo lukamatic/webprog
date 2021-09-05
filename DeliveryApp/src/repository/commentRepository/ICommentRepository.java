@@ -12,5 +12,6 @@ import repository.IRepository;
 
 /** @pdOid 8a72e1e2-35cc-4280-9671-5b696567343b */
 public interface ICommentRepository extends IRepository<Integer, Comment> {
-	ArrayList<Comment> getByRestaurantId(int restaurantId);
+	ArrayList<Comment> getAllByRestaurantId(int restaurantId);
+	ArrayList<Comment> getApprovedByRestaurantId(int restaurantId);
 }

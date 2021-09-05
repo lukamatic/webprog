@@ -3,11 +3,7 @@ Vue.component('restaurant', {
     return {
       restaurant: "",
       address: "",
-      displayedRestaurants: null,
-      isSearchDivHidden: true,
-      searchParameters: { type: "any" },
-      sortOptions: { condition: "", order: "asc" },
-      filterOptions: { type: "any", open: false },
+	  comments: "",
     };
   },
   template: `
@@ -265,67 +261,22 @@ Vue.component('restaurant', {
                                 <div class="d-flex flex-wrap ">
 
                                     <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                        style="min-height: 150px; min-width: 600px; width: 900px">
+                                        style="min-height: 150px; min-width: 600px; width: 900px" 
+                                        v-for="comment in comments" :key="comment.text">
                                         <div class="m-2  pl-3 d-flex flex-column">
                                             <div class="d-flex flex-row justify-content-between">
                                                 <div class="d-flex flex-column align-items-start ">
-                                                    <h5 class="">Username</h5>
-                                                    <p><span>3</span><span style='font-size:18px;'>&starf;</span></p>
-                                                </div>
-                                                <div class="d-flex flex-column align-items-end m-3">
-                                                    <h6>21.08.2021.</h6>
+                                                    <h5 class="">{{ comment.customerId }}</h5>
+                                                    <p>{{ comment.rating }}<span style='font-size:18px;'>&starf;</span></p>
                                                 </div>
                                             </div>
-                                            <p class="pr-2">Lorem ipsum dolor sit amet, consectetur
-                                                adipiscing elit,
-                                                sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliquaed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliqua. Lorem ipsum dolor sit amet, consectetur
-                                                adipiscing elit,
-                                                sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliquaed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliqua. Lorem ipsum dolor sit amet, consectetur
-                                                adipiscing elit,
-                                                sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliquaed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliqua.</p>
+                                            <p class="pr-2">{{ comment.text }}</p>
                                         </div>
                                     </div>
 
-
-
-
-
-                                    <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                        style="min-height: 150px; min-width: 600px; width: 900px;">
-                                        <div class="m-2  pl-3 d-flex flex-column">
-                                            <div class="d-flex flex-row justify-content-between">
-                                                <div class="d-flex flex-column align-items-start ">
-                                                    <h5 class="">Username</h5>
-                                                    <p><span>5</span><span style='font-size:18px;'>&starf;</span></p>
-                                                </div>
-                                                <div class="d-flex flex-column align-items-end m-3">
-                                                    <h6>21.08.2021.</h6>
-                                                </div>
-                                            </div>
-                                            <p class="pr-2">Lorem ipsum dolor sit amet, consectetur
-                                                adipiscing elit,
-                                                sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliquaed do eiusmod tempor incididunt ut labore et dolore magna
-                                                aliqua.
-                                            </p>
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                        style="min-height: 150px; min-width: 600px; width: 900px;">
-
-                                    </div>
                                 </div>
                             </div>
+                            
                         </div>
 
 
@@ -335,7 +286,7 @@ Vue.component('restaurant', {
                     
                     
                     
-                    </div>
+                </div>
                 
           </div>
             
@@ -347,14 +298,27 @@ Vue.component('restaurant', {
 `,
   mounted() {
   	let restaurantId = 0;
+  	//restaurantId = this.$route.query.id;
   	this.$root.$on('chosenRestaurantId', (id) => {restaurantId = id;});
+  	//this.$on('chosenRestaurantId', (id) => {restaurantId = id;});
     axios.get('/DeliveryApp/rest/restaurants/' + restaurantId).then((response) => {
       this.restaurant = response.data;
       if(this.restaurant.location && this.restaurant.location.address){
       	this.address = this.restaurant.location.address;
       }
-      
+     
+    });/*
+    axios.get('/DeliveryApp/rest/restaurants/' + this.$route.query.id).than(response => {
+    	
+    })*/
+    
+     
+    axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
+      this.comments = response.data;
     });
+      
+       
+    
   },
   filters: {
     formatAddressStreet: (address) => {
