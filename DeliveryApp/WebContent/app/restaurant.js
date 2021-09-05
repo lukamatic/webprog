@@ -104,9 +104,9 @@ Vue.component('restaurant', {
 
                                                 <img :src="f.imagePath" width="190" height="190">
 
-                                                <div class="m-2  pl-3 d-flex flex-column">
+                                                <div class="m-2  pl-3 d-flex flex-column flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">
-                                                        <div class="d-flex flex-column align-items-start ">
+                                                        <div class=" flex-fill d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ f.name }}</h5>
                                                             <p><span v-if="f.articleSize">{{f.articleSize.ammount}}{{ f.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
@@ -114,13 +114,13 @@ Vue.component('restaurant', {
                                                             <h5>{{ parseFloat(f.price).toFixed(2) }} RSD</h5>
                                                         </div>
                                                     </div>
-                                                    <div >
+                                                    <div class="flex-fill">
                                                     	<p class="pr-2">{{f.description}}</p>
                                                     </div>
                                                     
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
-                                                        <div>
+                                                        <div  v-if="$cookies.get('role') == 'CUSTOMER'">
                                                             <span><button type="button"
                                                                     class="btn btn-light mx-2 p-0 pb-1 border-radius border"
                                                                     style="height: 30px; width: 30px; border-radius: 15px"
@@ -175,7 +175,7 @@ Vue.component('restaurant', {
                                                     
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
-                                                        <div>
+                                                        <div v-if="$cookies.get('role') == 'CUSTOMER'">
                                                             <span><button type="button"
                                                                     class="btn btn-light mx-2 p-0 pb-1 border-radius border"
                                                                     style="height: 30px; width: 30px; border-radius: 15px"
