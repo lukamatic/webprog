@@ -30,10 +30,8 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 		ArrayList<Restaurant> restaurants = this.getAll();
 		for(Restaurant r : restaurants) {
 			if(r.getId() == key) {
-				System.out.println("*************");
-				System.out.println(key);
-				System.out.println("*************");
-				return r;}
+				return r;
+			}
 		}
 		return null;
 	}

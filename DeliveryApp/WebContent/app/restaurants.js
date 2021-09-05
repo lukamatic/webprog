@@ -370,12 +370,9 @@ Vue.component('restaurants', {
       
     },
     choose: function (restaurantId) {
-    	this.$root.$emit('chosenRestaurantId', restaurantId);
-    	router.push("restaurant");
-    	//window.location.href = "#/restaurant?id="+restaurantId;
-      	/**/
-      	//axios.get("/DeliveryApp/rest/restaurants/" + restaurantId).then((response) => {
-        //router.push("restaurant");
+        
+        window.location.href = "#/restaurant?id="+restaurantId;
+        
       //});
     },
   },

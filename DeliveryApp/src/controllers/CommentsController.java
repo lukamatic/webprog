@@ -15,10 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import model.Comment;
-import model.Manager;
-import model.User;
 import services.CommentsService;
-import services.ManagersService;
 
 
 @Path("/comments")

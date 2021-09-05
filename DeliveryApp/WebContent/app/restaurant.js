@@ -5,7 +5,14 @@ Vue.component('restaurant', {
       address: "",
 	  comments: "",
 	  averageRating: 0,
+	  food: "",
+	  beverages: "",
+	  
+	  selectedItemCount: 1,
+	  selectedId:0,
+	  lastSelectedId:0,
     };
+    
   },
   template: `
   <div>
@@ -87,41 +94,44 @@ Vue.component('restaurant', {
                                 <div class="tab-content" id="v-pills-tabContent">
                                     <div class="tab-pane fade show active" id="v-pills-food" role="tabpanel"
                                         aria-labelledby="v-pills-home-tab">
-                                        <!--dobaviti hranu-->
+              <!--dobaviti hranu-->
                                         <h3 class=" mx-4 mt-3">Food</h3>
-                                        <div class="d-flex flex-wrap ">
+                                        
+                                        <div class="d-flex flex-wrap " >
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px">
+                                                style="min-height: 200px; min-width: 600px; width: 1000px" 
+                                                 v-for="f in food" :key="f.id" >
 
-                                                <img src="" width="190" height="190">
+                                                <img :src="f.imagePath" width="190" height="190">
 
                                                 <div class="m-2  pl-3 d-flex flex-column">
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class="d-flex flex-column align-items-start ">
-                                                            <h5 class="pb-0 mb-0">Naziv</h5>
-                                                            <p>300g</p>
+                                                            <h5 class="pb-0 mb-0">{{ f.name }}</h5>
+                                                            <p><span v-if="f.articleSize">{{f.articleSize.ammount}}{{ f.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-end m-3">
-                                                            <h5>360.00 RSD</h5>
+                                                            <h5>{{ parseFloat(f.price).toFixed(2) }} RSD</h5>
                                                         </div>
                                                     </div>
-                                                    <p class="pr-2">Opis: Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing elit,
-                                                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                        aliquaed do eiusmod tempor incididunt ut labore et dolore magna
-                                                        aliqua.</p>
+                                                    <div >
+                                                    	<p class="pr-2">{{f.description}}</p>
+                                                    </div>
+                                                    
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
                                                         <div>
                                                             <span><button type="button"
                                                                     class="btn btn-light mx-2 p-0 pb-1 border-radius border"
-                                                                    style="height: 30px; width: 30px; border-radius: 15px">
+                                                                    style="height: 30px; width: 30px; border-radius: 15px"
+                                                                     v-on:click="decreaseCount(f.id)">
                                                                     -
                                                                 </button>
-                                                                <span>1</span>
+                                                                <span>{{ selectedId == f.id ? selectedItemCount : 1 }}</span>
                                                                 <button type="button"
                                                                     class="btn btn-light border p-0 mx-2 mr-4 pb-1"
-                                                                    style="height: 30px; width: 30px; border-radius:15px">
+                                                                    style="height: 30px; width: 30px; border-radius:15px"
+                                                                     v-on:click="increaseCount(f.id)">
                                                                     +
                                                                 </button>
                                                             </span>
@@ -134,66 +144,49 @@ Vue.component('restaurant', {
                                                 </div>
                                             </div>
 
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
+                                            
 
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="v-pills-beverages" role="tabpanel"
                                         aria-labelledby="v-pills-beverages-tab">
-                                        <!--Dobaviti pice-->
+           <!--Dobaviti pice-->
                                         <h3 class=" mx-4 mt-3">Beverages</h3>
                                         <div class="d-flex flex-wrap ">
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px">
+                                                style="min-height: 200px; min-width: 600px; width: 1000px" 
+                                                 v-for="b in beverages" :key="b.id" >
 
-                                                <img src="" width="190" height="190">
+                                                <img :src="b.imagePath" width="190" height="190">
 
                                                 <div class="m-2  pl-3 d-flex flex-column">
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class="d-flex flex-column align-items-start ">
-                                                            <h5 class="pb-0 mb-0">Naziv</h5>
-                                                            <p>300ml</p>
+                                                            <h5 class="pb-0 mb-0">{{ b.name }}</h5>
+                                                            <p><span v-if="b.articleSize">{{b.articleSize.ammount}}{{ b.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-end m-3">
-                                                            <h5>360.00 RSD</h5>
+                                                            <h5>{{ parseFloat(b.price).toFixed(2) }} RSD</h5>
                                                         </div>
                                                     </div>
-                                                    <p class="pr-2">Opis: Lorem ipsum dolor sit amet, consectetur
-                                                        adipiscing elit,
-                                                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                                                        aliquaed do eiusmod tempor incididunt ut labore et dolore magna
-                                                        aliqua.</p>
+                                                    <div >
+                                                    	<p class="pr-2">{{b.description}}</p>
+                                                    </div>
+                                                    
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
                                                         <div>
                                                             <span><button type="button"
                                                                     class="btn btn-light mx-2 p-0 pb-1 border-radius border"
-                                                                    style="height: 30px; width: 30px; border-radius: 15px">
+                                                                    style="height: 30px; width: 30px; border-radius: 15px"
+                                                                     v-on:click="decreaseCount(b.id)">
                                                                     -
                                                                 </button>
-                                                                <span>1</span>
+                                                                <span>{{ selectedId == b.id ? selectedItemCount : 1 }}</span>
                                                                 <button type="button"
                                                                     class="btn btn-light border p-0 mx-2 mr-4 pb-1"
-                                                                    style="height: 30px; width: 30px; border-radius:15px">
+                                                                    style="height: 30px; width: 30px; border-radius:15px"
+                                                                     v-on:click="increaseCount(b.id)">
                                                                     +
                                                                 </button>
                                                             </span>
@@ -206,26 +199,7 @@ Vue.component('restaurant', {
                                                 </div>
                                             </div>
 
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
-                                            <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px;">
-
-                                                <img src="" width="190" height="190">
-                                            </div>
+                                            
 
                                         </div>
                                     </div>
@@ -298,20 +272,18 @@ Vue.component('restaurant', {
   </div>
 `,
   mounted() {
-  	let restaurantId = 0;
-  	//restaurantId = this.$route.query.id;
-  	this.$root.$on('chosenRestaurantId', (id) => {restaurantId = id;});
-  	//this.$on('chosenRestaurantId', (id) => {restaurantId = id;});
-    axios.get('/DeliveryApp/rest/restaurants/' + restaurantId).then((response) => {
-      this.restaurant = response.data;
+  	
+    let restaurantId = 0;
+    restaurantId = this.$route.query.id;
+    console.log(restaurantId);
+    axios.get('/DeliveryApp/rest/restaurants/' + this.$route.query.id).then(response => {
+    	this.restaurant = response.data;
       if(this.restaurant.location && this.restaurant.location.address){
       	this.address = this.restaurant.location.address;
       }
-     
-    });/*
-    axios.get('/DeliveryApp/rest/restaurants/' + this.$route.query.id).than(response => {
-    	
-    })*/
+    });
+    
+    
     
      
     axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
@@ -322,6 +294,13 @@ Vue.component('restaurant', {
             sum += comment.rating;
       }
       this.averageRating = sum/c;
+    });
+    
+    axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/food').then((response) => {
+      this.food = response.data;
+    });
+    axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/beverages').then((response) => {
+      this.beverages = response.data;
     });
       
        
@@ -336,6 +315,27 @@ Vue.component('restaurant', {
     },
   },
   methods: {
+    increaseCount: function(id) {
+	  this.lastSelectedId = this.selectedId;
+	  this.selectedId = id;
+	  if(this.selectedId == this.lastSelectedId){
+	  	this.selectedItemCount += 1;
+	  }
+	  else{
+	  	this.selectedItemCount = 2;
+	  }
+	  
+    },
+    decreaseCount: function(id) {
+      this.lastSelectedId = this.selectedId;
+	  this.selectedId = id;
+	  if(this.selectedId == this.lastSelectedId && this.selectedItemCount > 1){
+	  	this.selectedItemCount -= 1;
+	  }
+	  else{
+	  	this.selectedItemCount = 1;
+	  }
+    },
     search: function(searchParameters) {
       var params = "";
 

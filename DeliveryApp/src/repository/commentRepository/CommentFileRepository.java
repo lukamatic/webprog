@@ -22,7 +22,7 @@ import repository.IFileRepository;
 
 public class CommentFileRepository implements ICommentRepository, IFileRepository<Comment> {
 
-   private String path = "FileStorage/comments.json";;
+   private String path = "FileStorage/comments.json";
 
 	@Override
 	public Comment getById(Integer key) {

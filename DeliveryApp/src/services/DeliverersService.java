@@ -3,7 +3,6 @@ package services;
 import java.util.ArrayList;
 
 import model.Deliverer;
-import model.Manager;
 import repository.delivererRepository.DelivererFileRepository;
 import repository.delivererRepository.IDelivererRepository;
 
