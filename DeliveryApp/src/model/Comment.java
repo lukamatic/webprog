@@ -6,19 +6,29 @@
 package model;
 
 public class Comment {
+	private int id;
     private int customerId;
     private int restaurantId;
     private String text;
 	private double rating;
 	private CommentStatus status;
 	
-	public Comment(int customerId, int restaurantId, String text, double rating, CommentStatus status) {
+	public Comment(int id, int customerId, int restaurantId, String text, double rating, CommentStatus status) {
 		super();
+		this.id = id; 
 		this.customerId = customerId;
 		this.restaurantId = restaurantId;
 		this.text = text;
 		this.rating = rating;
 		this.status = status;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public int getCustomerId() {

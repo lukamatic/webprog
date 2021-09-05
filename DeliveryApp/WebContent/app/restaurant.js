@@ -4,6 +4,7 @@ Vue.component('restaurant', {
       restaurant: "",
       address: "",
 	  comments: "",
+	  averageRating: 0,
     };
   },
   template: `
@@ -28,7 +29,7 @@ Vue.component('restaurant', {
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
                     <h3 class="flex-fill">{{restaurant.name}}</h3>
                     <h5>{{ restaurant.restaurantType }}</h5>
-                    <h6 class="mt-1"><span style='font-size:18px;'>&starf; </span>{{ restaurant.averageRating }}</h6>
+                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ parseFloat(averageRating).toFixed(2) }}</h6>
                 </div>
                 <div class="d-flex flex-column align-items-end flex-wrap m-2 mr-4">
                     <h6 class="bg-dark text-white px-4 py-2 rounded mb-5 mt-1"> {{ restaurant.open ? "OPEN" : "CLOSED" }} </h6>
@@ -262,7 +263,7 @@ Vue.component('restaurant', {
 
                                     <div class="bg-white box-shadow m-1 p-2 d-flex"
                                         style="min-height: 150px; min-width: 600px; width: 900px" 
-                                        v-for="comment in comments" :key="comment.text">
+                                        v-for="comment in comments" :key="comment.id">
                                         <div class="m-2  pl-3 d-flex flex-column">
                                             <div class="d-flex flex-row justify-content-between">
                                                 <div class="d-flex flex-column align-items-start ">
@@ -315,6 +316,12 @@ Vue.component('restaurant', {
      
     axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
       this.comments = response.data;
+      let sum = 0;
+      let c = this.comments.length;
+      for(comment of this.comments){
+            sum += comment.rating;
+      }
+      this.averageRating = sum/c;
     });
       
        
