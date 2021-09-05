@@ -13,6 +13,10 @@ Vue.component('restaurants', {
   <div>
   	<navbar path="restaurants"></navbar> 
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
+      <a
+        class="btn btn-dark align-self-end mr-5 mt-4"
+        href="#/newRestaurant"
+      >Create new restaurant</a>
       <div
         class="
           d-flex
@@ -26,7 +30,7 @@ Vue.component('restaurants', {
         "
       >
         <button
-          class="btn btn-dark w-75 font-weight-bold"
+          class="btn btn-dark w-75"
           v-on:click="isSearchDivHidden = false"
           :hidden="!isSearchDivHidden"
         >
