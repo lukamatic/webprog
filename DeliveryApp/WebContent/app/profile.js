@@ -8,7 +8,9 @@ Vue.component('profile', {
       isErrorLabelVisible: false,
       oldPassword: "",
       newPassword: "",
-      passwordConfirmation: ""
+      passwordConfirmation: "", 
+      badge: "", 
+      imagePath: ""
     };
   },
   template: ` 
@@ -27,12 +29,12 @@ Vue.component('profile', {
             subtile-box-shadow
             mb-3
           " >
-                <img src="Images/gold.jpg" width="75" height="100" class="m-2 mx-3">
+                <img v-if="$cookies.get('role') == 'CUSTOMER'" :src="imagePath" width="75" height="100" class="m-2 mx-3">
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
                     <h3 class="flex-fill">{{user.firstName}} {{user.lastName}}</h3>
-                    <h5 class="mb-0">Gold costumer</h5>
+                    <h5 v-if="$cookies.get('role') == 'CUSTOMER'" class="mb-0">{{badge}} customer</h5>
 
-                    <h6>8360 points </h6>
+                    <h6 v-if="$cookies.get('role') == 'CUSTOMER'">{{parseFloat(user.points).toFixed(2)}} points </h6>
                 </div>
                 <div class="d-flex flex-column align-items-end flex-wrap m-2 mr-4">
 
@@ -291,7 +293,15 @@ Vue.component('profile', {
 	    axios.get(path).then((response) => {
 	      this.user = response.data;
 	      this.editedUser = [this.user.firstName, this.user.lastName, this.user.username, this.user.password, this.user.gender]
-		   
+		 
+		  if(this.user.role == 'CUSTOMER'){
+		  	this.badge = this.user.customerType.customerTypeName.toLowerCase();
+		  	this.imagePath = "Images/" + this.badge + ".jpg";
+		  	if(this.badge.length > 2){
+		  		this.badge = this.badge.charAt(0).toUpperCase() + this.badge.substring(1);
+		  	}
+		  	
+		  }
 	    });
     });
     
