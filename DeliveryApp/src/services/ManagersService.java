@@ -24,4 +24,10 @@ public class ManagersService {
 		manager.setId(usersService.calculateId());
 		return managerRepository.save(manager);
 	}
+
+	public Manager update(Manager manager) {
+		usersService.validateUsername(manager.getUsername());
+		return managerRepository.update(manager);
+	}
+
 }

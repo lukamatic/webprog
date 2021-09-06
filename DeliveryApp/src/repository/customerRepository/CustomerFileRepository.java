@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import model.Admin;
 import model.Customer;
 import model.Manager;
+import model.User;
 import repository.IFileRepository;
 
 /** @pdOid 45ff99cf-8507-454a-a449-22e68cdf4e98 */
@@ -62,6 +63,25 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 		
 		writeToFile(customers);
 		return value;
+	}
+	
+	@Override
+	public Customer update(User value) {
+		ArrayList<Customer> customers = getAll();
+
+		for (int i = 0; i < customers.size(); i++) {
+			if (customers.get(i).getId() == value.getId()) {
+				customers.get(i).setFirstName(value.getFirstName());
+				customers.get(i).setLastName(value.getLastName());
+				customers.get(i).setUsername(value.getUsername());
+				customers.get(i).setGender(value.getGender());
+				customers.get(i).setPassword(value.getPassword());
+				writeToFile(customers);
+				return customers.get(i);
+			}
+		}
+		
+		return (Customer) value;
 	}
 	
 	@Override

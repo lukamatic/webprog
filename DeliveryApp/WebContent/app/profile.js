@@ -135,18 +135,18 @@ Vue.component('profile', {
                                     aria-labelledby="v-pills-edit-tab">
 
                                     <div class="d-flex flex-column align-items-center p-4 bg-white box-shadow">
-                                        <form>
+                                        <form  v-on:submit.prevent="updateProfile">
                                             <table>
                                                 <tr>
                                                     <td><label for="fname" class="mx-3 mt-2">
-                                                            <h5 class="pb-0 mb-0">First name:</h5>
+                                                            <h5 class="pb-0 mb-0">First name*:</h5>
                                                         </label></td>
                                                     <td><input name="fname" id="fname" class="ml-2 input-size" v-model="editedUser[0]"
                                                            /></td>
                                                 </tr>
                                                 <tr>
                                                     <td><label for="lname" class="mx-3 mt-2">
-                                                            <h5 class="pb-0 mb-0">Last name:</h5>
+                                                            <h5 class="pb-0 mb-0">Last name*:</h5>
                                                         </label></td>
                                                     <td><input name="lname" id="lname" placeholder="last name"
                                                             class="ml-2 input-size"  v-model="editedUser[1]"></td>
@@ -161,7 +161,7 @@ Vue.component('profile', {
                                                 </tr>
                                                 <tr>
                                                     <td><label for="gender" class="mx-3 mt-2">
-                                                            <h5 class="pb-0 mb-0">Gender:</h5>
+                                                            <h5 class="pb-0 mb-0">Gender*:</h5>
                                                         </label></td>
                                                     <td><select name="gender" id="gender" class="ml-2 input-size " v-model="editedUser[4]">
                                                             <option value="MALE">Male</option>
@@ -171,17 +171,17 @@ Vue.component('profile', {
                                                 </tr>
                                                 <tr>
                                                     <td><label for="username" class="mx-3 mt-2">
-                                                            <h5 class="pb-0 mb-0">Username:</h5>
+                                                            <h5 class="pb-0 mb-0">Username*:</h5>
                                                         </label></td>
                                                     <td><input name="username" placeholder="username"
                                                             class="ml-2 input-size" v-model="editedUser[2]">
                                                     </td>
                                                 </tr>
                                                 <tr>
-                                                    <td><label for="olPpassword" class="mx-3 mt-2">
+                                                    <td><label for="oldPassword" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">Old password:</h5>
                                                         </label></td>
-                                                    <td><input name="oldPassword" placeholder="old password"
+                                                    <td><input name="oldPassword" placeholder="old password"  type="password"
                                                             class="ml-2 input-size" v-model="oldPassword">
                                                     </td>
 
@@ -190,7 +190,7 @@ Vue.component('profile', {
                                                     <td><label for="password" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">New password:</h5>
                                                         </label></td>
-                                                    <td><input name="password" placeholder="new password"
+                                                    <td><input  type="password" name="password" placeholder="new password" 
                                                             class="ml-2 input-size" v-model="newPassword">
                                                     </td>
 
@@ -199,7 +199,7 @@ Vue.component('profile', {
                                                     <td><label for="passwordConfirmation" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">Confirm password:</h5>
                                                         </label></td>
-                                                    <td><input name="passwordConfirmation" id="passwordConfirmation"
+                                                    <td><input name="passwordConfirmation" id="passwordConfirmation" type="password"
                                                             placeholder="confirm password" class="ml-2 input-size" v-model="passwordConfirmation"></td>
                                                 </tr>
                                                 
@@ -291,12 +291,7 @@ Vue.component('profile', {
 	    axios.get(path).then((response) => {
 	      this.user = response.data;
 	      this.editedUser = [this.user.firstName, this.user.lastName, this.user.username, this.user.password, this.user.gender]
-		    /*this.editedUser.firstName = this.user.firstName;
-		    this.editedUser.lastName = this.user.lastName;
-		    this.editedUser.username = this.user.username;
-		    this.editedUser.password = this.user.password;
-		    this.editedUser.gender = this.user.gender;
-		    this.editedUser.dateOfBirth = this.user.dateOfBirth;*/
+		   
 	    });
     });
     
@@ -314,5 +309,105 @@ Vue.component('profile', {
       return formated;
     },
   },
-  
+  methods: {
+    updateProfile: function() {
+      if (this.validateInput()) {
+        if (this.newPassword) {
+          this.user.password = this.newPassword;
+        } 
+        this.user.firstName = this.editedUser[0];
+        this.user.lastName = this.editedUser[1];
+        this.user.username = this.editedUser[2];
+        this.user.gender = this.editedUser[4];
+        this.oldPassword = "";
+        this.newPassword = "";
+        this.passwordConfirmation = "";
+        
+        if (this.user.role == "ADMIN") {
+          //this.updateAdmin();
+        } else if (this.user.role == "CUSTOMER") {
+          this.updateCustomer();
+        } else if (this.user.role == "MANAGER") {
+          //this.updateManager();
+        } else if (this.user.role == "DELIVERER") {
+          //this.updateDeliverer();
+        }
+        
+      }
+    },
+    validateInput: function() {
+      if (!this.editedUser[0] || !this.editedUser[1] || !this.editedUser[2] || !this.editedUser[4] ){
+      	this.errorText = "Please fill out all required the fields.";
+      	this.isErrorLabelVisible = true;
+      	return false;
+      }
+      if (this.newPassword != this.passwordConfirmation){
+      	this.errorText = "Passwords don't match.";
+      	this.isErrorLabelVisible = true;
+      	return false;
+      }
+      if ((this.oldPassword || this.newPassword || this.passwordConfirmation)&&(this.oldPassword != this.user.password)){
+      	this.errorText = "Old password incorrect.";
+      	this.isErrorLabelVisible = true;
+      	return false;
+      }
+      const regex = /^[A-Za-z0-9_]{1,30}$/;
+      if (!regex.test(this.editedUser[2])) {
+      	this.errorText = "Invalid username.";
+      	this.isErrorLabelVisible = true;
+      	return false;
+      }
+      this.errorText = "";
+      this.isErrorLabelVisible = false;
+      return true;
+    },
+    /*updateAdmin: function() {
+    	const vm = this;
+	  	axios.put('/DeliveryApp/rest/admins', this.user)
+	    .then(function (response) {
+			router.push('profile');
+	  	  }
+	    )
+	    .catch(function (error) {
+	      vm.errorText = error.response.data;
+	      vm.isErrorLabelVisible = true;
+	    });
+    },*/
+    updateCustomer: function() {
+    	const vm = this;
+	  	axios.put('/DeliveryApp/rest/customers', this.user)
+	    .then(function (response) {
+			router.push('profile');
+	  	  }
+	    )
+	    .catch(function (error) {
+	      vm.errorText = error.response.data;
+	      vm.isErrorLabelVisible = true;
+	    });
+    },
+    updateManager: function() {
+    	const vm = this;
+	  	axios.put('/DeliveryApp/rest/managers', this.user)
+	    .then(function (response) {
+			router.push('profile');
+	  	  }
+	    )
+	    .catch(function (error) {
+	      vm.errorText = error.response.data;
+	      vm.isErrorLabelVisible = true;
+	    });
+    },
+    /*updateDeliverer: function() {
+    	const vm = this;
+	  	axios.put('/DeliveryApp/rest/deliverers', this.user)
+	    .then(function (response) {
+			router.push('profile');
+	  	  }
+	    )
+	    .catch(function (error) {
+	      vm.errorText = error.response.data;
+	      vm.isErrorLabelVisible = true;
+	    });
+    }*/
+  }
 });
