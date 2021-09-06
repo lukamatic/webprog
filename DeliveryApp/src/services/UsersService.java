@@ -54,9 +54,10 @@ public class UsersService {
 
 	public User getByUsername(String username) {
 		ArrayList<Object> users = getAll();
-		
 		for (Object user : users) {
 			if (((User)user).getUsername().equals(username)) {
+
+				//System.out.println(((User)user).getUsername());
 				return (User)user;
 			}
 		}

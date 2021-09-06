@@ -1,6 +1,15 @@
 Vue.component('profile', {
   data: function () {
-    return {};
+    return {
+    	user: "",
+    	editedUser: "", 
+    	date: "",
+      errorText: "",
+      isErrorLabelVisible: false,
+      oldPassword: "",
+      newPassword: "",
+      passwordConfirmation: ""
+    };
   },
   template: ` 
     <div>
@@ -20,7 +29,7 @@ Vue.component('profile', {
           " >
                 <img src="Images/gold.jpg" width="75" height="100" class="m-2 mx-3">
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
-                    <h3 class="flex-fill">Ime Prezime</h3>
+                    <h3 class="flex-fill">{{user.firstName}} {{user.lastName}}</h3>
                     <h5 class="mb-0">Gold costumer</h5>
 
                     <h6>8360 points </h6>
@@ -71,7 +80,7 @@ Vue.component('profile', {
                                                     <h5 class="pb-0 mb-0">First name:</h5>
                                                 </td>
                                                 <td class="ml-2 input-size lead">
-                                                    Ime
+                                                    {{user.firstName}}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -79,7 +88,7 @@ Vue.component('profile', {
                                                     <h5 class="pb-0 mb-0">Last name:</h5>
                                                 </td>
                                                 <td class="ml-2 input-size lead">
-                                                    Prezime
+                                                    {{user.lastName}}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -87,7 +96,7 @@ Vue.component('profile', {
                                                     <h5 class="mr-3 pb-0 mb-0">Date of birth:</h5>
                                                 </td>
                                                 <td class="mr-3 input-size lead">
-                                                    10.12.1985.
+                                                    {{ user.dateOfBirth | formatDate('DD.MM.YYYY.') }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -95,7 +104,7 @@ Vue.component('profile', {
                                                     <h5 class="pb-0 mb-0">Gender:</h5>
                                                 </td>
                                                 <td class="ml-2 input-size lead">
-                                                    Female
+                                                    {{ user.gender | formatEnum()}}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -103,7 +112,7 @@ Vue.component('profile', {
                                                     <h5 class="pb-0 mb-0">Username:</h5>
                                                 </td>
                                                 <td class="ml-2 input-size lead">
-                                                    username123
+                                                    {{ user.username }}
                                                 </td>
                                             </tr>
                                             <tr>
@@ -111,7 +120,7 @@ Vue.component('profile', {
                                                     <h5 class="pb-0 mb-0">Password:</h5>
                                                 </td>
                                                 <td>
-                                                    <span class="lead small">&#9679;&#9679;&#9679;&#9679;&#9679;</span>
+                                                    <span class="lead small" v-for="(c, index) in user.password" :key="user.password.charAt(index)">&#9679;</span>
                                                 </td>
 
                                             </tr>
@@ -126,54 +135,63 @@ Vue.component('profile', {
                                     aria-labelledby="v-pills-edit-tab">
 
                                     <div class="d-flex flex-column align-items-center p-4 bg-white box-shadow">
-                                        <form method="POST" action="#/restaurants">
+                                        <form>
                                             <table>
                                                 <tr>
                                                     <td><label for="fname" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">First name:</h5>
                                                         </label></td>
-                                                    <td><input name="fname" id="fname" placeholder="first name"
-                                                            class="ml-2 input-size"></td>
+                                                    <td><input name="fname" id="fname" class="ml-2 input-size" v-model="editedUser[0]"
+                                                           /></td>
                                                 </tr>
                                                 <tr>
                                                     <td><label for="lname" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">Last name:</h5>
                                                         </label></td>
                                                     <td><input name="lname" id="lname" placeholder="last name"
-                                                            class="ml-2 input-size"></td>
+                                                            class="ml-2 input-size"  v-model="editedUser[1]"></td>
                                                 </tr>
-                                                <tr>
+                                                <tr hidden>
                                                     <td><label for="dateOfBirth" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">Date of birth:</h5>
                                                         </label></td>
-                                                    <td><input type="date" name="dateOfBirth" id="dateOfBirth"
-                                                            placeholder="date of birth" class="ml-2 input-size"
-                                                            value="10/10/2021"></td>
+                                                    <td><!--input type="date" name="dateOfBirth" id="dateOfBirth"
+                                                            placeholder="date of birth" class="ml-2 input-size" v-model="date"-->
+                                                            </td>
                                                 </tr>
                                                 <tr>
                                                     <td><label for="gender" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">Gender:</h5>
                                                         </label></td>
-                                                    <td><select name="gender" id="gender" class="ml-2 input-size">
-                                                            <option value="male">Male</option>
-                                                            <option value="female">Female</option>
-                                                            <option value="other" selected>Other</option>
+                                                    <td><select name="gender" id="gender" class="ml-2 input-size " v-model="editedUser[4]">
+                                                            <option value="MALE">Male</option>
+                                                            <option value="FEMALE">Female</option>
+                                                            <option value="OTHER" selected>Other</option>
                                                         </select></td>
                                                 </tr>
                                                 <tr>
                                                     <td><label for="username" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">Username:</h5>
                                                         </label></td>
-                                                    <td><input name="username" id="username" placeholder="username"
-                                                            class="ml-2 input-size" value="username123">
+                                                    <td><input name="username" placeholder="username"
+                                                            class="ml-2 input-size" v-model="editedUser[2]">
                                                     </td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label for="olPpassword" class="mx-3 mt-2">
+                                                            <h5 class="pb-0 mb-0">Old password:</h5>
+                                                        </label></td>
+                                                    <td><input name="oldPassword" placeholder="old password"
+                                                            class="ml-2 input-size" v-model="oldPassword">
+                                                    </td>
+
                                                 </tr>
                                                 <tr>
                                                     <td><label for="password" class="mx-3 mt-2">
                                                             <h5 class="pb-0 mb-0">New password:</h5>
                                                         </label></td>
-                                                    <td><input name="password" id="password" placeholder="password"
-                                                            class="ml-2 input-size">
+                                                    <td><input name="password" placeholder="new password"
+                                                            class="ml-2 input-size" v-model="newPassword">
                                                     </td>
 
                                                 </tr>
@@ -182,13 +200,17 @@ Vue.component('profile', {
                                                             <h5 class="pb-0 mb-0">Confirm password:</h5>
                                                         </label></td>
                                                     <td><input name="passwordConfirmation" id="passwordConfirmation"
-                                                            placeholder="confirm password" class="ml-2 input-size"></td>
+                                                            placeholder="confirm password" class="ml-2 input-size" v-model="passwordConfirmation"></td>
                                                 </tr>
+                                                
+                                                <tr>
+                        							<td colspan="2"><p v-if="isErrorLabelVisible" class="m-3 px-4 text-danger text-center">{{ errorText }}</p></td>
+                    							</tr>
                                                 <tr>
                                                     <td colspan="2" class="text-center"><input type="submit"
                                                             value="Save changes" class="btn btn-dark mt-4"></td>
                                                 </tr>
-
+	
 
                                             </table>
                                         </form>
@@ -259,5 +281,38 @@ Vue.component('profile', {
         </div>
       
     </div>		  
+
 `,
+  mounted() {
+     let p = "";
+     axios.get('/DeliveryApp/rest/auth/').then((response) => {
+      p = response.data;
+      var path = "/DeliveryApp/rest/users/" + p.username + "/";
+	    axios.get(path).then((response) => {
+	      this.user = response.data;
+	      this.editedUser = [this.user.firstName, this.user.lastName, this.user.username, this.user.password, this.user.gender]
+		    /*this.editedUser.firstName = this.user.firstName;
+		    this.editedUser.lastName = this.user.lastName;
+		    this.editedUser.username = this.user.username;
+		    this.editedUser.password = this.user.password;
+		    this.editedUser.gender = this.user.gender;
+		    this.editedUser.dateOfBirth = this.user.dateOfBirth;*/
+	    });
+    });
+    
+    
+    
+       
+  },
+  filters: {
+    formatDate: function (value, format) {
+      var parsed = moment(value);
+      return parsed.format(format);
+    },
+    formatEnum: function (value) {
+      var formated = value;//.charAt(0) + value.substring(1).toLowerCase();
+      return formated;
+    },
+  },
+  
 });

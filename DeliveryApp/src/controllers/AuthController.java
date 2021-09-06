@@ -57,4 +57,13 @@ public class AuthController {
 	public void logout(@Context HttpServletRequest request) {
 		request.getSession().invalidate();
 	}
+	
+	@GET
+	@Path("/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getLoggedInUser(@Context HttpServletRequest request) {
+		User u = (User) request.getSession().getAttribute("user");
+		return u;
+		
+	}
 }

@@ -90,4 +90,14 @@ public class UsersController {
 	public User unblock(@PathParam("id") int id) {
 		return usersService.unblock(id);
 	}
+	
+	@GET
+	@Path("/{id}/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public User getByUsername(@PathParam("id") String id) {
+		User u = usersService.getByUsername(id);
+
+		System.out.println("**********"+id+"***********");
+		return u;
+	}
 }
