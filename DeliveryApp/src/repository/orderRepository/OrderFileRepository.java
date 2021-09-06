@@ -5,8 +5,18 @@
  ***********************************************************************/
 package repository.orderRepository;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import model.Article;
 import model.Order;
 import repository.IFileRepository;
 
@@ -47,14 +57,37 @@ public class OrderFileRepository implements IOrderRepository, IFileRepository<Or
 	
 	@Override
 	public boolean writeToFile(ArrayList<Order> values) {
-		// TODO Auto-generated method stub
-		return false;
+		Gson gson = new Gson();
+        String json = gson.toJson(values);
+        FileWriter fileWriter = null;
+
+        try {
+            fileWriter = new FileWriter(path, StandardCharsets.UTF_8);
+            fileWriter.write(json);
+            fileWriter.flush();
+            fileWriter.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return false;
 	}
 	
 	@Override
 	public ArrayList<Order> readFromFile() {
-		// TODO Auto-generated method stub
-		return null;
+		Gson gson = new Gson();
+
+        try {
+            String json = new String(Files.readAllBytes(Paths.get(path)));
+
+            Type listType = new TypeToken<ArrayList<Order>>(){}.getType();
+            return gson.fromJson(json, listType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        return null;
 	}
 
 }

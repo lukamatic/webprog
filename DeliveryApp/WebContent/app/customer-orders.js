@@ -242,7 +242,7 @@ Vue.component('customer-orders', {
     </div>		  
 `,
   mounted() {
-    axios.get('/DeliveryApp/rest/restaurants').then((response) => {
+    axios.get('/DeliveryApp/rest/orders').then((response) => {
       this.restaurants = response.data;
       this.displayedRestaurants = this.restaurants;
     });
@@ -369,12 +369,6 @@ Vue.component('customer-orders', {
           break;
       }
       
-    },
-    choose: function (restaurantId) {
-        
-        window.location.href = "#/restaurant?id="+restaurantId;
-        
-      //});
     },
   },
 });
