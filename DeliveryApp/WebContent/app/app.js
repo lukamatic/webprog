@@ -6,6 +6,8 @@ const Users = { template: '<users></users>' };
 const NewUser = { template: '<new-user></new-user>' };
 const Cart = { template: '<cart></cart>' };
 const Profile = { template: '<profile></profile>' };
+const Orders = { template: '<orders></orders>' };
+const CustomerOrders = { template: '<customer-orders></customer-orders>' };
 
 const router = new VueRouter({
   mode: 'hash',
@@ -19,6 +21,8 @@ const router = new VueRouter({
     { path: '/newUser', component: NewUser },
     { path: '/cart', component: Cart },
     { path: '/profile', component: Profile },
+    { path: '/orders', component: Orders },
+    { path: '/customer-orders', component: CustomerOrders },
   ],
 });
 

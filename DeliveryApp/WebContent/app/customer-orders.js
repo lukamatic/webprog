@@ -1,4 +1,4 @@
-Vue.component('restaurants', {
+Vue.component('customer-orders', {
   data: function () {
     return {
       restaurants: null,
@@ -9,11 +9,11 @@ Vue.component('restaurants', {
       filterOptions: { type: "any", open: false },
     };
   },
-  template: `
-  <div>
-  	<navbar path="restaurants"></navbar> 
-    <div class="d-flex flex-column align-items-center pb-5 bg-light">
-    
+  template: ` 
+    <div>
+      <navbar path="customer-orders"></navbar>
+      
+      <div class="d-flex flex-column align-items-center bg-light">
       <div
         class="
           d-flex
@@ -23,7 +23,7 @@ Vue.component('restaurants', {
           p-4
           mt-4
           bg-white
-          shadow-lg
+          box-shadow
         "
       >
         <button
@@ -31,14 +31,14 @@ Vue.component('restaurants', {
           v-on:click="isSearchDivHidden = false"
           :hidden="!isSearchDivHidden"
         >
-          Search for restaurant
+          Search orders
         </button>
         <div
           class="bg-light border boreder-dark w-100 p-3"
           :hidden="isSearchDivHidden"
         >
           <div class="d-flex flex-row justify-content-between">
-            <h4>Search for restaurant:</h4>
+            <h4>Search orders:</h4>
             <button
               class="btn btn-dark font-weight-bold"
               v-on:click="isSearchDivHidden = true"
@@ -57,46 +57,15 @@ Vue.component('restaurants', {
                   name="name"
                   id="name"
                   placeholder="restaurant name"
-                  v-model="searchParameters.name"
+                  v-model="searchParameters.restaurantName"
                 />
               </td>
             </tr>
+            
+            
             <tr>
               <td>
-                <label class="pt-3" for="type"><h5>Restaurant type:</h5></label>
-              </td>
-              <td>
-                <select
-                  class="ml-2"
-                  name="type"
-                  id="type"
-                  v-model="searchParameters.type"
-                >
-                  <option value="any">Any</option>
-                  <option value="grill">Grill</option>
-                  <option value="italian">Italian</option>
-                  <option value="chinese">Chinese</option>
-                  <option value="vegan">Vegan</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label class="pt-3" for="location"><h5>Location:</h5></label>
-              </td>
-              <td>
-                <input
-                  class="ml-2"
-                  name="location"
-                  id="location"
-                  placeholder="city or country name"
-                  v-model="searchParameters.location"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <label class="pt-3" for="from"><h5>Average rating:</h5></label>
+                <label class="pt-3" for="from"><h5>Price:</h5></label>
               </td>
               <td>
                 <label class="ml-4 pt-2" for="from">from:</label>
@@ -107,7 +76,7 @@ Vue.component('restaurants', {
                   type="number"
                   min="0"
                   max="5"
-                  v-model="searchParameters.from"
+                  v-model="searchParameters.fromPrice"
                 />
                 <label class="ml-2 pt-2" for="to">to:</label>
                 <input
@@ -117,7 +86,34 @@ Vue.component('restaurants', {
                   type="number"
                   min="0"
                   max="5"
-                  v-model="searchParameters.to"
+                  v-model="searchParameters.toPrice"
+                />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label class="pt-3"><h5>Date created:</h5></label>
+              </td>
+              <td>
+                <label class="ml-4 pt-2" for="from">from:</label>
+                <input
+                  class="ml-2"
+                  name="from"
+                  id="from"
+                  type="number"
+                  min="0"
+                  max="5"
+                  v-model="searchParameters.fromDate"
+                />
+                <label class="ml-2 pt-2" for="to">to:</label>
+                <input
+                  class="ml-2"
+                  name="to"
+                  id="to"
+                  type="number"
+                  min="0"
+                  max="5"
+                  v-model="searchParameters.toDate"
                 />
               </td>
             </tr>
@@ -144,9 +140,9 @@ Vue.component('restaurants', {
                 v-on:change="sort"
                 v-model="sortOptions.condition"
               >
-                <option value="name">Name</option>
-                <option value="location">Location</option>
-                <option value="rating">Average rating</option>
+                <option value="name">Restaurant name</option>
+                <option value="location">Price</option>
+                <option value="rating">Date created</option>
               </select>
             </div>
             <div>
@@ -164,6 +160,26 @@ Vue.component('restaurants', {
             </div>
           </div>
           <div class="mt-4 mx-3">
+          <div>
+              <label for="statusFilter"
+                ><h5>Filter by order status:</h5></label
+              >
+              <select
+                class="ml-2"
+                name="statusFilter"
+                id="statusFilter"
+                v-on:change="filter"
+                v-model="filterOptions.status"
+              >
+                <option value="any">Any</option>
+                <option value="PROCESSING">Processing</option>
+                <option value="IN_PREPARATION">In preparation</option>
+                <option value="WAITING_FOR_DELIVERY">Waiting for delivery</option>
+                <option value="IN_TRANSPORT">In transport</option>
+                <option value="DELIVERED">Delivered</option>
+                <option value="CANCELED">Canceled</option>
+              </select>
+            </div>
             <div>
               <label for="typeFilter"
                 ><h5>Filter by restaurant type:</h5></label
@@ -182,64 +198,48 @@ Vue.component('restaurants', {
                 <option value="vegan">Vegan</option>
               </select>
             </div>
-            <div>
-              <h5>
-                <input
-                  type="checkbox"
-                  id="openFilter"
-                  name="openFilter"
-                  v-on:change="filter"
-                  v-model="filterOptions.open"
-                />
-                <label for="openFilter" class="ml-1"
-                  >Show only open restaurants</label
-                >
-              </h5>
+            
+          </div>
+        </div>
+      </div>
+      
+<!-- --------NARUDZBINE-------- -->
+	<div class="d-flex flex-column align-items-center bg-light">
+            <!--dobaviti hranu-->
+            <br>
+
+            <div class="d-flex flex-column">
+
+                <div class="bg-white subtile-box-shadow m-1 p-2 d-flex flex-row justify-content-between"
+                    style="min-height: 100px; min-width: 600px; width: 1000px;">
+                    <div class="d-flex flex-column align-items-center">
+                    	<h4 class="pl-4 pt-2">Restaurant Name</h4>
+                        <ul class="p-0">
+                            <li><span>2</span> x <span>Pljeskavica</span></li>
+                            <li><span>2</span> x <span>Coca-cola</span></li>
+                            <li><span>2</span> x <span>Pljeskavica</span></li>
+                            <li><span>2</span> x <span>Coca-cola</span></li>
+                        </ul>
+                    </div>
+                    <div class="d-flex flex-column align-items-start m-2">
+                        <div>Created at: <span>30.08.2021. 16:38</span> </div>
+                        <div>
+                            Status: <span>MAKING</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-sm btn-outline-primary">Leave a comment</button>
+                            <button class="btn btn-sm btn-outline-secondary m-2">Cancel order</button>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
-          </div>
         </div>
-      </div>
-      <div
-        v-for="restaurant in displayedRestaurants"
-        :key="restaurant.id"
-        class="
-          d-flex
-          flex-row
-          align-items-center
-          flex-wrap flex-md-nowrap
-          justify-content-center
-          w-75
-          mt-4
-          bg-white
-          shadow
-        "
-        v-on:click="choose(restaurant.id)"
-      >
-        <img class="m-3" src="" width="200" height="200"/>
-        <div class="flex-column flex-fill mx-3">
-          <div
-            class="
-              d-flex
-              flex-row
-              align-items-center
-              flex-wrap
-              justify-content-center
-            "
-          >
-            <h2 class="flex-fill">{{ restaurant.name }}</h2>
-            <h4 class="bg-dark text-white px-4 py-2 mr-2 rounded">
-              {{ restaurant.open ? "OPEN" : "CLOSED" }}
-            </h4>
-          </div>
-          <h5 class="mt-2">Restauarnt type: {{ restaurant.restaurantType }}</h5>
-          <h5 style="min-width: 300px">
-            Address: {{ restaurant.location.address | formatAddress }}
-          </h5>
-           <h5>Average rating: {{ restaurant.averageRating }}</h5>
-        </div>
-      </div>
-    </div>
-  </div>
+      
+     </div>
+      
+    </div>		  
 `,
   mounted() {
     axios.get('/DeliveryApp/rest/restaurants').then((response) => {
