@@ -19,11 +19,36 @@ public class Cart {
 		this.price = price;
 	}
    
-	public Cart(int customerId, double price) {
+	public Cart() {
 		super();
 		this.items = new ArrayList<CartItem>();
-		this.customerId = customerId;
+		this.customerId = 0;
 		this.price = 0.0;
 	}
+
+	public ArrayList<CartItem> getItems() {
+		return items;
+	}
+
+	public void setItems(ArrayList<CartItem> items) {
+		this.items = items;
+	}
+
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	
 
 }

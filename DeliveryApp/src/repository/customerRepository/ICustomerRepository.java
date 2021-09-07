@@ -5,6 +5,7 @@
  ***********************************************************************/
 package repository.customerRepository;
 
+import model.Cart;
 import model.Customer;
 import model.User;
 import repository.IRepository;
@@ -13,4 +14,6 @@ import repository.IRepository;
 public interface ICustomerRepository extends IRepository<Integer, Customer> {
 
 	Customer update(User value);
+
+	Customer updateCart(int id, Cart cart);
 }
