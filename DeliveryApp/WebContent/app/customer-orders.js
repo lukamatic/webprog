@@ -10,7 +10,7 @@ Vue.component('customer-orders', {
       isSearchDivHidden: true,
       searchParameters: { type: "any" },
       sortOptions: { condition: "", order: "asc" },
-      filterOptions: { type: "any", open: false },
+      filterOptions: { type: "any", status: "any" },
     };
   },
   template: ` 
@@ -104,7 +104,7 @@ Vue.component('customer-orders', {
                   class="ml-2"
                   name="from"
                   id="from"
-                  type="number"
+                  type="date"
                   min="0"
                   max="5"
                   v-model="searchParameters.fromDate"
@@ -114,7 +114,7 @@ Vue.component('customer-orders', {
                   class="ml-2"
                   name="to"
                   id="to"
-                  type="number"
+                  type="date"
                   min="0"
                   max="5"
                   v-model="searchParameters.toDate"
@@ -124,7 +124,7 @@ Vue.component('customer-orders', {
             <tr>
               <td colspan="2" class="text-center">
                 <button
-                  class="btn btn-dark"
+                  class="btn btn-dark px-3 mt-4"
                   v-on:click="search(searchParameters)"
                 >
                   Search
@@ -136,7 +136,7 @@ Vue.component('customer-orders', {
         <div class="d-flex flex-row flex-wrap w-100 justify-content-center">
           <div class="mt-4 mx-3">
             <div>
-              <label for="condition"><h5>Sort restaurants by:</h5></label>
+              <label for="condition"><h5>Sort by:</h5></label>
               <select
                 class="ml-2"
                 name="condition"
@@ -145,8 +145,8 @@ Vue.component('customer-orders', {
                 v-model="sortOptions.condition"
               >
                 <option value="name">Restaurant name</option>
-                <option value="location">Price</option>
-                <option value="rating">Date created</option>
+                <option value="price">Price</option>
+                <option value="date">Date created</option>
               </select>
             </div>
             <div>
@@ -181,6 +181,7 @@ Vue.component('customer-orders', {
                 <option value="WAITING_FOR_DELIVERY">Waiting for delivery</option>
                 <option value="IN_TRANSPORT">In transport</option>
                 <option value="DELIVERED">Delivered</option>
+                <option value="UNDELIVERED">Undelivered</option>
                 <option value="CANCELED">Canceled</option>
               </select>
             </div>
@@ -269,17 +270,10 @@ Vue.component('customer-orders', {
 	          /*this.allOrdersDTO = Array.from(this.ordersDTO);
               this.displayedOrdersDTO = Array.from(this.ordersDTO);*/
 	        });
-	        
           }
-          
-          
         });
-        
-        
       });
     });
-
-    
   },
   filters: {
     formatDate: function (value, format) {
@@ -317,24 +311,29 @@ Vue.component('customer-orders', {
       });*/
     },
     sort: function () {
-      /*if (this.sortOptions.condition) {
+      if (this.sortOptions.condition) {
         switch (this.sortOptions.condition) {
           case "name":
-            this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+            this.displayedOrdersDTO = this.displayedOrdersDTO.sort((a, b) =>
               this.sortByName(a, b, this.sortOptions.order)
             );
             break;
-          case "location":
-            this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
-              this.sortByLocation(a, b, this.sortOptions.order)
+          case "price":
+            this.displayedOrdersDTO = this.displayedOrdersDTO.sort((a, b) =>
+              this.sortByPrice(a, b, this.sortOptions.order)
+            );
+            break;
+          case "date":
+            this.displayedOrdersDTO = this.displayedOrdersDTO.sort((a, b) =>
+              this.sortByDate(a, b, this.sortOptions.order)
             );
             break;
         }
       }
     },
     sortByName: function (a, b, order) {
-      const nameA = a.name.toUpperCase();
-      const nameB = b.name.toUpperCase();
+      const nameA = a.restaurantName.toUpperCase();
+      const nameB = b.restaurantName.toUpperCase();
 
       if (order == "asc") {
         if (nameA < nameB) {
@@ -353,26 +352,49 @@ Vue.component('customer-orders', {
       }
       return 0;
     },
-    sortByLocation: function (a, b, order) {
-      const locationA = this.$options.filters.formatAddress(a.location.address).toUpperCase();
-      const locationB = this.$options.filters.formatAddress(b.location.address).toUpperCase();
+    sortByDate: function (a, b, order) {
+      //const locationA = this.$options.filters.formatAddress(a.location.address).toUpperCase();
+      const dateA = moment(a.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
+      const dateB = moment(b.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
+      //const locationB = this.$options.filters.formatAddress(b.location.address).toUpperCase();
 
       if (order == "asc") {
-        if (locationA < locationB) {
+        if (dateA < dateB) {
           return -1;
         }
-        if (locationA > locationB) {
+        if (dateA > dateB) {
           return 1;
         }
       } else {
-        if (locationA < locationB) {
+        if (dateA < dateB) {
           return 1;
         }
-        if (locationA > locationB) {
+        if (dateA > dateB) {
           return -1;
         }
       }
-      return 0;*/
+      return 0;
+    },
+    sortByPrice: function (a, b, order) {
+      const priceA = a.order.price;
+      const priceB = b.order.price;
+
+      if (order == "asc") {
+        if (priceA < priceB) {
+          return -1;
+        }
+        if (priceA > priceB) {
+          return 1;
+        }
+      } else {
+        if (priceA < priceB) {
+          return 1;
+        }
+        if (priceA > priceB) {
+          return -1;
+        }
+      }
+      return 0;
     },
     filter: function () {
       /*this.displayedRestaurants = this.restaurants.filter((r) =>
