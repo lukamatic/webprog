@@ -39,8 +39,7 @@ public class OrderFileRepository implements IOrderRepository, IFileRepository<Or
 	
 	@Override
 	public ArrayList<Order> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.readFromFile();
 	}
 	
 	@Override

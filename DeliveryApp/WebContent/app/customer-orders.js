@@ -5,10 +5,9 @@ Vue.component('customer-orders', {
       orders: null,
       ordersDTO: [],
       allOrdersDTO: [],
-      displayedOrders: null,
       displayedOrdersDTO: [],
       isSearchDivHidden: true,
-      searchParameters: { type: "any" },
+      searchParameters: {  },
       sortOptions: { condition: "", order: "asc" },
       filterOptions: { type: "any", status: "any" },
     };
@@ -78,9 +77,9 @@ Vue.component('customer-orders', {
                   name="from"
                   id="from"
                   type="number"
+                  step="0.01"
                   min="0"
-                  max="5"
-                  v-model="searchParameters.fromPrice"
+                  v-model="searchParameters.priceFrom"
                 />
                 <label class="ml-2 pt-2" for="to">to:</label>
                 <input
@@ -88,9 +87,9 @@ Vue.component('customer-orders', {
                   name="to"
                   id="to"
                   type="number"
+                  step="0.01"
                   min="0"
-                  max="5"
-                  v-model="searchParameters.toPrice"
+                  v-model="searchParameters.priceTo"
                 />
               </td>
             </tr>
@@ -103,11 +102,8 @@ Vue.component('customer-orders', {
                 <input
                   class="ml-2"
                   name="from"
-                  id="from"
                   type="date"
-                  min="0"
-                  max="5"
-                  v-model="searchParameters.fromDate"
+                  v-model="searchParameters.dateFrom"
                 />
                 <label class="ml-2 pt-2" for="to">to:</label>
                 <input
@@ -115,9 +111,7 @@ Vue.component('customer-orders', {
                   name="to"
                   id="to"
                   type="date"
-                  min="0"
-                  max="5"
-                  v-model="searchParameters.toDate"
+                  v-model="searchParameters.dateTo"
                 />
               </td>
             </tr>
@@ -283,32 +277,45 @@ Vue.component('customer-orders', {
   },
   methods: {
     search: function (searchParameters) {
-      /*var params = "";
-
-      if (searchParameters.name) {
-        params = params.concat("name=" + searchParameters.name);
+      var params = "user=" + this.user.id;
+	  let dateFrom = moment(searchParameters.dateFrom).format("x");
+	  let dateTo = moment(searchParameters.dateTo).format("x");
+      if (searchParameters.restaurantName) {
+        params = params.concat("&restaurantName=" + searchParameters.restaurantName);
       }
 
-      if (searchParameters.type) {
-        params = params.concat("&type=" + searchParameters.type);
+      if (searchParameters.priceFrom) {
+        params = params.concat("&priceFrom=" + searchParameters.priceFrom);
       }
 
-      if (searchParameters.location) {
-        params = params.concat("&location=" + searchParameters.location);
+      if (searchParameters.priceTo) {
+        params = params.concat("&priceTo=" + searchParameters.priceTo);
       }
 
-      if (searchParameters.from) {
-        params = params.concat("&from=" + searchParameters.from);
+      if (searchParameters.dateFrom) {
+        params = params.concat("&dateFrom=" + dateFrom);
       }
 
-      if (searchParameters.to) {
-        params = params.concat("&to=" + searchParameters.from);
+      if (searchParameters.dateTo) {
+        params = params.concat("&dateTo=" + dateTo);
       }
 
-      axios.get("/DeliveryApp/rest/restaurants/search?" + params).then((response) => {
-        this.restaurants = response.data;
-        this.displayedRestaurants = this.restaurants;
-      });*/
+      axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
+        this.orders = response.data;
+        
+	      this.ordersDTO = [];
+	      this.displayedOrdersDTO = [];
+        for(let o of this.orders) {
+          	let restaurant = null;
+	        axios.get('/DeliveryApp/rest/restaurants/' + o.restaurantId).then((response) => {
+	          restaurant = response.data;
+	          let name = restaurant.name;
+	          let odto = {order: o, restaurantName: restaurant.name, restaurantType: restaurant.restaurantType};
+	          this.ordersDTO.push(odto);
+	          this.displayedOrdersDTO.push(odto);
+	        });
+          }
+      });
     },
     sort: function () {
       if (this.sortOptions.condition) {
