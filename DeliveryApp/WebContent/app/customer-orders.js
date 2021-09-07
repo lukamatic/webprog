@@ -176,13 +176,13 @@ Vue.component('customer-orders', {
                 v-model="filterOptions.status"
               >
                 <option value="any">Any</option>
-                <option value="PROCESSING">Processing</option>
-                <option value="IN_PREPARATION">In preparation</option>
-                <option value="WAITING_FOR_DELIVERY">Waiting for delivery</option>
-                <option value="IN_TRANSPORT">In transport</option>
-                <option value="DELIVERED">Delivered</option>
-                <option value="UNDELIVERED">Undelivered</option>
-                <option value="CANCELED">Canceled</option>
+                <option value="processing">Processing</option>
+                <option value="in-preparation">In preparation</option>
+                <option value="waiting-for-delivery">Waiting for delivery</option>
+                <option value="in-transport">In transport</option>
+                <option value="delivered">Delivered</option>
+                <option value="undelivered">Undelivered</option>
+                <option value="canceled">Canceled</option>
               </select>
             </div>
             <div>
@@ -353,10 +353,8 @@ Vue.component('customer-orders', {
       return 0;
     },
     sortByDate: function (a, b, order) {
-      //const locationA = this.$options.filters.formatAddress(a.location.address).toUpperCase();
       const dateA = moment(a.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
       const dateB = moment(b.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
-      //const locationB = this.$options.filters.formatAddress(b.location.address).toUpperCase();
 
       if (order == "asc") {
         if (dateA < dateB) {
@@ -397,34 +395,77 @@ Vue.component('customer-orders', {
       return 0;
     },
     filter: function () {
-      /*this.displayedRestaurants = this.restaurants.filter((r) =>
-        this.filterOptions.open ? r.open : true
-      );
-
       this.sort();
+      this.displayedOrdersDTO = Array.from(this.ordersDTO);
 
       switch (this.filterOptions.type) {
+        case "any":
+          this.displayedOrdersDTO = this.displayedOrdersDTO = this.displayedOrdersDTO.filter((r) =>
+         true);
+          break;
         case "grill":
-          this.displayedRestaurants = this.displayedRestaurants.filter(
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
             (r) => r.restaurantType == "GRILL"
           );
           break;
         case "italian":
-          this.displayedRestaurants = this.displayedRestaurants.filter(
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
             (r) => r.restaurantType == "ITALIAN"
           );
           break;
         case "chinese":
-          this.displayedRestaurants = this.displayedRestaurants.filter(
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
             (r) => r.restaurantType == "CHINESE"
           );
           break;
         case "vegan":
-          this.displayedRestaurants = this.displayedRestaurants.filter(
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
             (r) => r.restaurantType == "VEGAN"
           );
           break;
-      }*/
+      }
+      
+      switch (this.filterOptions.status) {
+        case "any":
+          this.displayedOrdersDTO.filter((r) =>
+         true);
+          break;
+        case "processing":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus == "PROCESSING"
+          );
+          break;
+        case "in-preparation":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus == "IN_PREPARATION"
+          );
+          break;
+        case "waiting-for-delivery":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus == "WAITING_FOR_DELIVERY"
+          );
+          break;
+        case "in-transport":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus == "IN_TRANSPORT"
+          );
+          break;
+        case "delivered":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus == "DELIVERED"
+          );
+          break;
+        case "undelivered":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus != "DELIVERED"
+          );
+          break;
+        case "canceled":
+          this.displayedOrdersDTO = this.displayedOrdersDTO.filter(
+            (r) => r.order.orderStatus == "CANCELED"
+          );
+          break;
+      }
 
     },
   },
