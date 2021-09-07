@@ -34,7 +34,7 @@ private IOrderRepository orderRepository;
 		name = name.toLowerCase().trim();
 		for (int i = 0; i < orders.size(); i++) {
 			RestaurantsService rs = new RestaurantsService();
-			if (!(rs.getById(orders.get(i).getRestaurantId()).getName().contains(name))) {
+			if (!(rs.getById(orders.get(i).getRestaurantId()).getName().toLowerCase().contains(name))) {
 				orders.remove(i);
 				i--;
 			}

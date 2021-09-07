@@ -100,8 +100,6 @@ public class OrdersController {
 			ordersService.filterByDate(orders, startDate, endDate);
 		}
 		
-
-		System.out.println(orders.size());
 		return orders;
 	}
 

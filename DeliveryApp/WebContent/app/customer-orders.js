@@ -25,6 +25,7 @@ Vue.component('customer-orders', {
           w-50
           p-4
           mt-4
+          mb-3
           bg-white
           box-shadow
         "
@@ -118,11 +119,12 @@ Vue.component('customer-orders', {
             <tr>
               <td colspan="2" class="text-center">
                 <button
-                  class="btn btn-dark px-3 mt-4"
+                  class="btn btn-dark mx-2 px-3 mt-4"
                   v-on:click="search(searchParameters)"
                 >
                   Search
                 </button>
+                <button type="button" class="btn btn-link mx-2 px-3 mt-4" v-on:click="clearSearchParameters()">Clear all</button>
               </td>
             </tr>
           </table>
@@ -209,7 +211,7 @@ Vue.component('customer-orders', {
 
             <div class="d-flex flex-column">
 
-                <div class="bg-white subtile-box-shadow m-1 p-2 d-flex flex-row justify-content-between"
+                <div class="bg-white box-shadow m-1 p-2 d-flex flex-row justify-content-between"
                     style="min-height: 100px; min-width: 600px; width: 1000px;" v-for="orderDTO in displayedOrdersDTO" :key="orderDTO.order.id">
                     <div class="d-flex flex-column pl-5">
                     	<h4 class="pt-2">{{orderDTO.restaurantName}}</h4>
@@ -299,6 +301,11 @@ Vue.component('customer-orders', {
       if (searchParameters.dateTo) {
         params = params.concat("&dateTo=" + dateTo);
       }
+      
+      this.sortOptions.condition = "";
+      this.sortOptions.order = "asc";
+      this.filterOptions.type = "any";
+      this.filterOptions.status = "any";
 
       axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
         this.orders = response.data;
@@ -316,6 +323,10 @@ Vue.component('customer-orders', {
 	        });
           }
       });
+    },
+    clearSearchParameters: function(){
+    	this.searchParameters = {};
+    	this.search(this.searchParameters);
     },
     sort: function () {
       if (this.sortOptions.condition) {
