@@ -1,8 +1,12 @@
 Vue.component('customer-orders', {
   data: function () {
     return {
-      restaurants: null,
-      displayedRestaurants: null,
+      user: null,
+      orders: null,
+      ordersDTO: [],
+      allOrdersDTO: [],
+      displayedOrders: null,
+      displayedOrdersDTO: [],
       isSearchDivHidden: true,
       searchParameters: { type: "any" },
       sortOptions: { condition: "", order: "asc" },
@@ -205,30 +209,31 @@ Vue.component('customer-orders', {
       
 <!-- --------NARUDZBINE-------- -->
 	<div class="d-flex flex-column align-items-center bg-light">
-            <!--dobaviti hranu-->
+            
             <br>
 
             <div class="d-flex flex-column">
 
                 <div class="bg-white subtile-box-shadow m-1 p-2 d-flex flex-row justify-content-between"
-                    style="min-height: 100px; min-width: 600px; width: 1000px;">
-                    <div class="d-flex flex-column align-items-center">
-                    	<h4 class="pl-4 pt-2">Restaurant Name</h4>
+                    style="min-height: 100px; min-width: 600px; width: 1000px;" v-for="orderDTO in displayedOrdersDTO" :key="orderDTO.order.id">
+                    <div class="d-flex flex-column pl-5">
+                    	<h4 class="pt-2">{{orderDTO.restaurantName}}</h4>
                         <ul class="p-0">
-                            <li><span>2</span> x <span>Pljeskavica</span></li>
-                            <li><span>2</span> x <span>Coca-cola</span></li>
-                            <li><span>2</span> x <span>Pljeskavica</span></li>
-                            <li><span>2</span> x <span>Coca-cola</span></li>
+                            <li v-for="item in orderDTO.order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li> 
                         </ul>
                     </div>
-                    <div class="d-flex flex-column align-items-start m-2">
-                        <div>Created at: <span>30.08.2021. 16:38</span> </div>
-                        <div>
-                            Status: <span>MAKING</span>
+                    <div class="d-flex flex-column align-items-start m-2 mr-4">
+                        <div>Created at {{orderDTO.order.dateTimeCreated | formatDate('hh:mm on DD.MM.YYYY.') }}
                         </div>
                         <div>
-                            <button class="btn btn-sm btn-outline-primary">Leave a comment</button>
-                            <button class="btn btn-sm btn-outline-secondary m-2">Cancel order</button>
+                            Status: {{orderDTO.order.orderStatus}}
+                        </div>
+                        <div>
+                          <b>Total: {{parseFloat(orderDTO.order.price).toFixed(2)}} RSD</b>
+                        </div>
+                        <div>
+                            <button v-if="orderDTO.order.orderStatus == 'DELIVERED'" class="btn btn-sm btn-outline-primary mt-3">Leave a comment</button>
+                            <button v-if="orderDTO.order.orderStatus == 'PROCESSING'" class="btn btn-sm btn-outline-secondary mt-3">Cancel order</button>
                         </div>
                     </div>
 
@@ -237,24 +242,54 @@ Vue.component('customer-orders', {
             </div>
         </div>
       
-     </div>
+      </div>
       
     </div>		  
 `,
   mounted() {
-    axios.get('/DeliveryApp/rest/orders').then((response) => {
-      this.restaurants = response.data;
-      this.displayedRestaurants = this.restaurants;
+
+    let p = "";
+    axios.get('/DeliveryApp/rest/auth/').then((response) => {
+      p = response.data;
+      var path = "/DeliveryApp/rest/users/" + p.username + "/";
+      axios.get(path).then((response) => {
+        this.user = response.data;
+
+        axios.get('/DeliveryApp/rest/orders/user/' + this.user.id).then((response) => {
+          this.orders = response.data;
+          for(let o of this.orders) {
+          	let restaurant = null;
+	        axios.get('/DeliveryApp/rest/restaurants/' + o.restaurantId).then((response) => {
+	          restaurant = response.data;
+	          let name = restaurant.name;
+	          let odto = {order: o, restaurantName: restaurant.name, restaurantType: restaurant.restaurantType};
+	          this.ordersDTO.push(odto);
+	          this.allOrdersDTO.push(odto);
+	          this.displayedOrdersDTO.push(odto);
+	          /*this.allOrdersDTO = Array.from(this.ordersDTO);
+              this.displayedOrdersDTO = Array.from(this.ordersDTO);*/
+	        });
+	        
+          }
+          
+          
+        });
+        
+        
+      });
     });
+
+    
   },
   filters: {
-    formatAddress: (address) => {
-      return address.street + ' ' + address.streetNumber + ', ' + address.city + ', ' + address.country;
+    formatDate: function (value, format) {
+      var parsed = moment(value);
+      return parsed.format(format);
     },
   },
   methods: {
-    search: function(searchParameters) {
-      var params = "";
+    search: function (searchParameters) {
+      /*var params = "";
 
       if (searchParameters.name) {
         params = params.concat("name=" + searchParameters.name);
@@ -279,10 +314,10 @@ Vue.component('customer-orders', {
       axios.get("/DeliveryApp/rest/restaurants/search?" + params).then((response) => {
         this.restaurants = response.data;
         this.displayedRestaurants = this.restaurants;
-      });
+      });*/
     },
     sort: function () {
-      if (this.sortOptions.condition) {
+      /*if (this.sortOptions.condition) {
         switch (this.sortOptions.condition) {
           case "name":
             this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
@@ -337,13 +372,13 @@ Vue.component('customer-orders', {
           return -1;
         }
       }
-      return 0;
+      return 0;*/
     },
     filter: function () {
-      this.displayedRestaurants = this.restaurants.filter((r) =>
+      /*this.displayedRestaurants = this.restaurants.filter((r) =>
         this.filterOptions.open ? r.open : true
       );
-      
+
       this.sort();
 
       switch (this.filterOptions.type) {
@@ -367,8 +402,8 @@ Vue.component('customer-orders', {
             (r) => r.restaurantType == "VEGAN"
           );
           break;
-      }
-      
+      }*/
+
     },
   },
 });

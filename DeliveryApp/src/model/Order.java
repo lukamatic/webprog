@@ -7,19 +7,18 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 public class Order {
    private String id;
    private ArrayList<CartItem> items;
    private int restaurantId;
-   private Date dateTimeCreated;
+   private long dateTimeCreated;
    private double price;
-   private String customerId;
+   private int customerId;
    private OrderStatus orderStatus;
    
-	public Order(String id, ArrayList<CartItem> items, int restaurantId, Date dateTimeCreated, double price,
-			String customerId, OrderStatus orderStatus) {
+	public Order(String id, ArrayList<CartItem> items, int restaurantId, long dateTimeCreated, double price,
+			int customerId, OrderStatus orderStatus) {
 		super();
 		this.id = id;
 		this.items = items;
@@ -54,11 +53,11 @@ public class Order {
 		this.restaurantId = restaurantId;
 	}
 
-	public Date getDateTimeCreated() {
+	public long getDateTimeCreated() {
 		return dateTimeCreated;
 	}
 
-	public void setDateTimeCreated(Date dateTimeCreated) {
+	public void setDateTimeCreated(long dateTimeCreated) {
 		this.dateTimeCreated = dateTimeCreated;
 	}
 
@@ -70,11 +69,11 @@ public class Order {
 		this.price = price;
 	}
 
-	public String getCustomerId() {
+	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(String customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 
