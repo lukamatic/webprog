@@ -229,8 +229,12 @@ Vue.component('customer-orders', {
                           <b>Total: {{parseFloat(orderDTO.order.price).toFixed(2)}} RSD</b>
                         </div>
                         <div>
-                            <button v-if="orderDTO.order.orderStatus == 'DELIVERED'" class="btn btn-sm btn-outline-primary mt-3">Leave a comment</button>
-                            <button v-if="orderDTO.order.orderStatus == 'PROCESSING'" class="btn btn-sm btn-outline-secondary mt-3">Cancel order</button>
+                            <button v-if="orderDTO.order.orderStatus == 'DELIVERED'"
+                            		v-on:click=""
+                             		class="btn btn-sm btn-outline-primary mt-3">Leave a comment</button>
+                            <button v-if="orderDTO.order.orderStatus == 'PROCESSING'"
+                            		v-on:click="cancelOrder(orderDTO.order.id)"
+                             		class="btn btn-sm btn-outline-secondary mt-3">Cancel order</button>
                         </div>
                     </div>
 
@@ -486,5 +490,11 @@ Vue.component('customer-orders', {
       }
 
     },
+    cancelOrder: function(id){
+    	this.ordersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+    	this.allOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+    	this.displayedOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+    	axios.put('/DeliveryApp/rest/orders/cancel/'+id);
+    }
   },
 });

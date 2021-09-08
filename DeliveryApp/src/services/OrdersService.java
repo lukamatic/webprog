@@ -4,9 +4,12 @@ import java.util.ArrayList;
 
 import javax.ws.rs.BadRequestException;
 
+import model.Cart;
 import model.Order;
+import model.OrderStatus;
 import model.Restaurant;
 import model.RestaurantType;
+import model.User;
 import repository.orderRepository.IOrderRepository;
 import repository.orderRepository.OrderFileRepository;
 
@@ -26,6 +29,10 @@ private IOrderRepository orderRepository;
 		return orderRepository.getByRestaurantId(id);
 	}
 
+	public Order getById(String id) {
+		return orderRepository.getById(id);
+	}
+	
 	public ArrayList<Order> getAll() {
 		return orderRepository.getAll();
 	}
@@ -59,4 +66,53 @@ private IOrderRepository orderRepository;
 		}
 		
 	}
+	
+	private String calculateId() {
+		ArrayList<Order> orders = getAll();
+		
+		if (orders.size() == 0) {
+			return "0000000000";
+		}
+		int newIdInt = getMaxId(orders) + 1;
+		String idStr = String.valueOf(newIdInt);
+		    StringBuilder sb = new StringBuilder();
+		for(int i = 0 ; i < 10-idStr.length(); i++) {
+		    sb.append("0");
+		}
+		sb.append(idStr);
+		return sb.toString();
+	}
+	
+	private int getMaxId(ArrayList<Order> orders) {
+		int maxId = Integer.parseInt(orders.get(0).getId());
+		
+		for (Order order : orders) {
+			int id = Integer.parseInt(orders.get(0).getId());
+			if (id > maxId) {
+				maxId = id;
+			}
+		}
+		
+		return maxId;
+	}
+	
+	public void createOrder(Cart cart) {
+		Order order = new Order(this.calculateId(), cart.getItems(), cart.getPrice(), cart.getCustomerId());
+		orderRepository.save(order);
+		double points = order.getPrice() * 133 / 1000;
+		CustomersService cs = new CustomersService();
+		cs.AddCustomerOrder(order.getCustomerId(), order.getId());
+		cs.updatePoints(order.getCustomerId(), points);
+	}
+
+	public void cancelOrder(String id) {
+		Order order = orderRepository.getById(id);
+		order.setOrderStatus(OrderStatus.CANCELED);
+		orderRepository.update(order);
+		double points = -1 * order.getPrice() * 133 * 4 / 1000;
+		CustomersService cs = new CustomersService();
+		cs.updatePoints(order.getCustomerId(), points);
+	}
+	
+	
 }

@@ -21,6 +21,7 @@ import model.Article;
 import model.ArticleSize;
 import model.ArticleType;
 import model.CartItem;
+import model.Deliverer;
 import model.Order;
 import model.OrderStatus;
 import model.Unit;
@@ -34,9 +35,17 @@ public class OrderFileRepository implements IOrderRepository, IFileRepository<Or
 
 	@Override
 	public Order getById(String key) {
-		// TODO Auto-generated method stub
+		System.out.println(key);
+		ArrayList<Order> orders = getAll();
+		for (Order order : orders) {
+			if (order.getId().equals(key)) {
+				return order;
+			}
+		}
 		return null;
 	}
+	
+	
 	
 	@Override
 	public ArrayList<Order> getAll() {
@@ -45,14 +54,23 @@ public class OrderFileRepository implements IOrderRepository, IFileRepository<Or
 	
 	@Override
 	public Order save(Order value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Order> orders = getAll();
+		orders.add(value);
+		writeToFile(orders);
+		return value;
 	}
 	
 	@Override
 	public Order update(Order value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Order> orders = getAll();
+
+		for (int i = 0; i < orders.size(); i++) {
+			if (orders.get(i).getId().equals(value.getId())) {
+				orders.set(i, value);
+			}
+		}
+		writeToFile(orders);
+		return value;
 	}
 	
 	@Override

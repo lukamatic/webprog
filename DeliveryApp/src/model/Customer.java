@@ -8,7 +8,7 @@ package model;
 import java.util.ArrayList;
 
 public class Customer extends User {
-	private ArrayList<Integer> orders;
+	private ArrayList<String> orders;
 	private double points;
 	private boolean isSuspicious;
    
@@ -16,7 +16,7 @@ public class Customer extends User {
 	private CustomerType customerType;
 
 	public Customer(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
-			Role role, boolean isBlocked, boolean isDeleted, ArrayList<Integer> orders, double points, boolean isSuspicious, Cart cart, CustomerType customerType) {
+			Role role, boolean isBlocked, boolean isDeleted, ArrayList<String> orders, double points, boolean isSuspicious, Cart cart, CustomerType customerType) {
 		super(username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.orders = orders;
 		this.points = points;
@@ -26,7 +26,7 @@ public class Customer extends User {
 	
 	public Customer(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth) {
 		super(username, password, firstName, lastName, gender, dateOfBirth, Role.CUSTOMER, false, false); // role, isBlocked, isDeleted
-		this.orders = new ArrayList<Integer>();
+		this.orders = new ArrayList<String>();
 		this.points = 0;
 		this.isSuspicious = false;
 		this.cart = new Cart();
@@ -34,11 +34,11 @@ public class Customer extends User {
 		this.customerType = customerType;
 	}
 
-	public ArrayList<Integer> getOrders() {
+	public ArrayList<String> getOrders() {
 		return orders;
 	}
 
-	public void setOrders(ArrayList<Integer> orders) {
+	public void setOrders(ArrayList<String> orders) {
 		this.orders = orders;
 	}
 

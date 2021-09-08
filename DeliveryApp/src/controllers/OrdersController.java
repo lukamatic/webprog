@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,6 +17,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import model.Cart;
 import model.Order;
 import model.Restaurant;
 import services.OrdersService;
@@ -62,17 +64,6 @@ public class OrdersController {
 										@QueryParam("priceTo") Double highestPrice,
 										@QueryParam("dateFrom") long startDate, 
 										@QueryParam("dateTo") long endDate) {
-		
-		
-
-		/*System.out.println(restaurantName);
-		System.out.println(lowestPrice);
-		System.out.println(highestPrice);
-		System.out.println(startDate);
-
-		System.out.println(new Date(startDate));
-		System.out.println(new Date(startDate + 86399999L));
-		System.out.println(endDate);*/
 
 		
 		ArrayList<Order> orders;
@@ -107,8 +98,17 @@ public class OrdersController {
 	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Order create(@Context HttpServletRequest request) {
-		
-		return null;
+	public void create(@Context HttpServletRequest request, Cart cart) {
+		ordersService.createOrder(cart);
+	}
+	
+	@PUT
+	@Path("/cancel/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void cancel(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.cancelOrder(id);
 	}
 }
+
+

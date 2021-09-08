@@ -8,6 +8,7 @@ import model.Customer;
 import model.User;
 import repository.customerRepository.CustomerFileRepository;
 import repository.customerRepository.ICustomerRepository;
+import repository.customerTypeRepository.CustomerTypeFileRepository;
 
 public class CustomersService {
 	private ICustomerRepository customerRepository;
@@ -60,6 +61,26 @@ public class CustomersService {
 		}
 		this.updateCart(cart);
 			
+	}
+
+	public void updatePoints(int id, double points) {
+		Customer customer = customerRepository.getById(id);
+		
+		if((customer.getPoints() + points) > 0) {
+			customer.setPoints(customer.getPoints() + points);
+		} else {
+			customer.setPoints(0.0);
+		}
+		CustomerTypeFileRepository typeRepo = new CustomerTypeFileRepository();
+		customer.setCustomerType(typeRepo.getBasedOnPoints(customer.getPoints()));
+		customerRepository.update(customer);
+	}
+
+	public void AddCustomerOrder(int customerId, String orderId) {
+		Customer customer = customerRepository.getById(customerId);
+		customer.getOrders().add(orderId);
+		customerRepository.update(customer);
+		
 	}
 
 }

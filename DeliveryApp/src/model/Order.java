@@ -17,7 +17,7 @@ public class Order {
    private int customerId;
    private OrderStatus orderStatus;
    
-	public Order(String id, ArrayList<CartItem> items, int restaurantId, long dateTimeCreated, double price,
+   public Order(String id, ArrayList<CartItem> items, int restaurantId, long dateTimeCreated, double price,
 			int customerId, OrderStatus orderStatus) {
 		super();
 		this.id = id;
@@ -27,6 +27,24 @@ public class Order {
 		this.price = price;
 		this.customerId = customerId;
 		this.orderStatus = orderStatus;
+	}
+   
+   public Order(String id, ArrayList<CartItem> items, double price, int customerId) {
+		super();
+		this.id = id;
+		this.items = items;
+		this.restaurantId = 0;
+		if(items.size() > 0) {
+			this.restaurantId = items.get(0).getArticle().getRestaurantId();
+		}
+		this.dateTimeCreated = System.currentTimeMillis();
+		this.price = price;
+		this.customerId = customerId;
+		this.orderStatus = OrderStatus.PROCESSING;
+	}
+   
+    public Order() {
+		super();
 	}
 
 	public String getId() {
