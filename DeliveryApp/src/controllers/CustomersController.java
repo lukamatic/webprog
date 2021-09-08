@@ -13,11 +13,8 @@ import javax.ws.rs.core.MediaType;
 
 import model.Cart;
 import model.Customer;
-import model.Gender;
-import model.Manager;
 import model.User;
 import services.CustomersService;
-import services.ManagersService;
 
 @Path("/customers")
 public class CustomersController {
@@ -59,7 +56,6 @@ public class CustomersController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Customer updateCart(@Context HttpServletRequest request, Cart cart) {
-		System.out.println("***************");
 		return customerService.updateCart(cart);
 	}
 }

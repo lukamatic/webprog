@@ -167,6 +167,9 @@ Vue.component('cart', {
 	    			this.customer.cart.items.splice(i, 1);
     			}
 	    	}
+	    	if(this.customer.cart.items.length == 0){
+	    		this.isCartEmpty = true;
+	    	}
 	    	this.updateCart();
     	}
     }
