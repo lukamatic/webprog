@@ -43,4 +43,10 @@ public class ManagersService {
 		manager.setRestaurantId(restaurantId);
 		managerRepository.update(manager);
 	}
+
+	public Manager update(Manager manager) {
+		usersService.validateUsername(manager.getUsername());
+		return managerRepository.update(manager);
+	}
+
 }

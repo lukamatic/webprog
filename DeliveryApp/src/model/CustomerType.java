@@ -10,11 +10,18 @@ public class CustomerType {
    	private int discount;
    	private double pointsRequired;
    
-	public CustomerType(CustomerTypeName customerTypeName, int discount, double pointsRequired) {
+   	public CustomerType(CustomerTypeName customerTypeName, int discount, double pointsRequired) {
 		super();
 		this.customerTypeName = customerTypeName;
 		this.discount = discount;
 		this.pointsRequired = pointsRequired;
+	}
+
+   	public CustomerType() {
+		super();
+		this.customerTypeName = CustomerTypeName.BRONZE;
+		this.discount = 0;
+		this.pointsRequired = 0;
 	}
 
 	public CustomerTypeName getCustomerTypeName() {

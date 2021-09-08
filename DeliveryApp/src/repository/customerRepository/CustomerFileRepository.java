@@ -17,8 +17,15 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import model.Admin;
+import model.Article;
+import model.ArticleSize;
+import model.ArticleType;
+import model.Cart;
+import model.CartItem;
 import model.Customer;
 import model.Manager;
+import model.Unit;
+import model.User;
 import repository.IFileRepository;
 
 /** @pdOid 45ff99cf-8507-454a-a449-22e68cdf4e98 */
@@ -105,5 +112,7 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
         
         return null;
 	}
+	
+	
 
 }

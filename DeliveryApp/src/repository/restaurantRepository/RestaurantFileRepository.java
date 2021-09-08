@@ -28,7 +28,12 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 
 	@Override
 	public Restaurant getById(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Restaurant> restaurants = this.getAll();
+		for(Restaurant r : restaurants) {
+			if(r.getId() == key) {
+				return r;
+			}
+		}
 		return null;
 	}
 	

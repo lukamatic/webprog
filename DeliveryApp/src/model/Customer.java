@@ -23,6 +23,16 @@ public class Customer extends User {
 		this.cart = cart;
 		this.customerType = customerType;
 	}
+	
+	public Customer(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth) {
+		super(username, password, firstName, lastName, gender, dateOfBirth, Role.CUSTOMER, false, false); // role, isBlocked, isDeleted
+		this.orders = new ArrayList<Integer>();
+		this.points = 0;
+		this.isSuspicious = false;
+		this.cart = new Cart();
+		CustomerType customerType = new CustomerType(CustomerTypeName.BRONZE, 0, 0);
+		this.customerType = customerType;
+	}
 
 	public ArrayList<Integer> getOrders() {
 		return orders;
