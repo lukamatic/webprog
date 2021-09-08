@@ -87,7 +87,11 @@ Vue.component('cart', {
       p = response.data;
       var path = "/DeliveryApp/rest/users/" + p.username + "/";
       axios.get(path).then((response) => {
-        this.customer = response.data;
+        if(response.data){
+        	this.customer = response.data;
+        	this.discount = this.customer.customerType.discount;
+        }
+        
 
         if(this.customer.cart.items){
         	if(this.customer.cart.items.length > 0){
@@ -97,7 +101,7 @@ Vue.component('cart', {
 	       		});
     		}
     	}
-    	this.discount = this.customer.customerType.discount;
+    	
       });
     });
       
@@ -151,6 +155,17 @@ Vue.component('cart', {
     	if(this.customer.cart.items){
 	    	while (this.customer.cart.items.length > 0){
 	    		this.customer.cart.items.pop();
+	    	}
+	    	this.isCartEmpty = true;
+	    	this.updateCart();
+    	}
+    },
+    removeItem: function(id) {
+    	if(this.customer.cart.items){
+	    	for(let i in this.customer.cart.items){
+	    		if (i.article.id == id){
+	    			this.customer.cart.items.splice(i, 1);
+    			}
 	    	}
 	    	this.isCartEmpty = true;
 	    	this.updateCart();
