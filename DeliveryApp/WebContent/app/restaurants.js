@@ -217,7 +217,7 @@ Vue.component('restaurants', {
           shadow
         "
       >
-        <img class="m-3" src="" width="200" height="200" />
+        <img class="m-3" src="../Images/ssss.png" width="200" height="200" />
         <div class="flex-column flex-fill mx-3">
           <div
             class="

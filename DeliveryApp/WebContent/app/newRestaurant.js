@@ -8,22 +8,29 @@ Vue.component('new-restaurant', {
 	    restaurantType: "",
         location: {
           latitude: null,
-          longitude: "",
+          longitude: null,
           address: {
 	        street: "",
-	        streetNumber: ""
+	        streetNumber: "",
+	        city: "",
+	        country: "",
+	        postalCode: ""
 	      }
         },
       },
-      managers: null
+      managers: null,
+      managerId: null,
+      file: null,
+      errorText: "",
+      isErrorLabelVisible: false
     }
   },
   template: ` 
   <div>
   	<navbar></navbar>
     <div class="d-flex flex-column align-items-center bg-light">
-            <div class="d-flex flex-column align-items-center p-4 bg-white box-shadow w-75 mt-4">
-                <form>
+            <div class="d-flex flex-column align-items-center p-4 bg-white box-shadow w-75 mt-3">
+                <form v-on:submit.prevent="createNewRestaurant">
                     <table>
                         <tr>
                             <td>
@@ -32,7 +39,7 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td>
-                                <input name="fname" id="name" placeholder="restaurant name" class="ml-2 input-size">
+                                <input name="fname" id="name" placeholder="restaurant name" class="ml-2 input-size" v-model="newRestaurant.name">
                             </td>
                             <td class="pl-5">
                                 <label for="manager" class="mx-3 mt-2">
@@ -40,8 +47,8 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td rowspan="2">
-                                <select name="manager" id="manager" class="ml-2 input-size">
- 
+                                <select name="manager" id="manager" class="ml-2 input-size" v-model="managerId">
+                                    <option v-for="manager in managers" :key="manager.id" :value="manager.id">{{ manager.firstName + ' ' + manager.lastName }}</option>
                                 </select>
                                 <br>
                                 <button class="btn btn-sm btn-outline-secondary float-right m-2">New manager</button>
@@ -54,12 +61,11 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td>
-                                <select name="type" id="type" class="ml-2 input-size">
-                                    <option value="none" style="display:none" selected></option>
-                                    <option value="italian">Italian</option>
-                                    <option value="chinese">Chinese</option>
-                                    <option value="grill">Grill</option>
-                                    <option value="vegan">Vegan</option>
+                                <select name="type" id="type" class="ml-2 input-size"  v-model="newRestaurant.restaurantType">
+                                    <option value="ITALIAN">Italian</option>
+                                    <option value="CHINESE">Chinese</option>
+                                    <option value="GRILL">Grill</option>
+                                    <option value="VEGAN">Vegan</option>
                                 </select>
                             </td>
                         </tr>
@@ -70,7 +76,7 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td>
-                                <input name="street" id="street" placeholder="street" class="ml-2 input-size">
+                                <input name="street" id="street" placeholder="street" class="ml-2 input-size" v-model="newRestaurant.location.address.street">
                             </td>
                             <td class="pl-5">
                                 <label for="logo" class="mx-3 mt-2">
@@ -78,17 +84,17 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td rowspan="2">
-                                <input type="file"></input>
+                                <input type="file" ref="file" v-on:change="handleFileUpload()"></input>
                             </td>
                         </tr>
                         <tr>
                             <td>
-                                <label for="street" class="mx-3 mt-2">
+                                <label for="number" class="mx-3 mt-2">
                                     <h5 class="pb-0 mb-0">Street number:</h5>
                                 </label>
                             </td>
                             <td>
-                                <input name="number" id="number" placeholder="number" class="ml-2 input-size">
+                                <input name="number" id="number" placeholder="number" class="ml-2 input-size" v-model="newRestaurant.location.address.streetNumber">
                             </td>
                         </tr>
                         <tr>
@@ -98,7 +104,7 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td>
-                                <input name="city" id="city" placeholder="city" class="ml-2 input-size">
+                                <input name="city" id="city" placeholder="city" class="ml-2 input-size" v-model="newRestaurant.location.address.city">
                             </td>
                         </tr>
                         <tr>
@@ -108,12 +114,23 @@ Vue.component('new-restaurant', {
                                 </label>
                             </td>
                             <td>
-                                <input name="country" id="country" placeholder="country" class="ml-2 input-size">
+                                <input name="country" id="country" placeholder="country" class="ml-2 input-size" v-model="newRestaurant.location.address.country">
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="4" class="text-right"><input type="submit" value="Create restaurant"
-                                    class="btn btn-dark my-4 px-4"></td>
+                            <td>
+                                <label for="postalCode" class="mx-3 mt-2">
+                                    <h5 class="pb-0 mb-0">PostalCode:</h5>
+                                </label>
+                            </td>
+                            <td>
+                                <input name="postalCode" id="postalCode" placeholder="postal code" class="ml-2 input-size" v-model="newRestaurant.location.address.postalCode">
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td colspan="2"><p v-if="isErrorLabelVisible" class="m-3 px-4 text-danger text-center">{{ errorText }}</p></td>
+                            <td colspan="2" class="text-right"><input type="submit" value="Create restaurant"
+                                    class="btn btn-dark mb-2 px-4"></td>
                         </tr>
                     </table>
                 </form>
@@ -123,6 +140,7 @@ Vue.component('new-restaurant', {
       </div>
 `,
   mounted() {
+    axios.get('/DeliveryApp/rest/managers/available').then((response) => this.managers = response.data);
     this.map = this.initMap();
     vm = this;
     this.map.on('singleclick', function (evt) {
@@ -166,6 +184,63 @@ Vue.component('new-restaurant', {
 	  this.markers.getSource().addFeature(marker);
 	  this.newRestaurant.location.latitude = coordinates[0];
 	  this.newRestaurant.location.longitude = coordinates[1];
+    },
+    handleFileUpload(){
+    this.file = this.$refs.file.files[0];
+  },
+    createNewRestaurant: function() {
+    		if (!this.validateRestaurant()) {
+    			return;
+    		}
+    
+    		let formData = new FormData();
+    
+            formData.append('file', this.file);
+            const restaurantJSON = JSON.stringify(this.newRestaurant);
+            formData.append('restaurantJSON', restaurantJSON);
+            console.log(this.newRestaurant)
+            formData.append('managerId', this.managerId);
+            axios.post( '/DeliveryApp/rest/restaurants/create',
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            ).then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+	      this.errorText = error.response.data;
+	      this.isErrorLabelVisible = true;	
+        });
+    },
+    validateRestaurant: function() {
+    	if (!this.newRestaurant.name || !this.newRestaurant.restaurantType
+    		|| !this.newRestaurant.location.address.street || !this.newRestaurant.location.address.streetNumber 
+    		|| !this.newRestaurant.location.address.city || !this.newRestaurant.location.address.country || !this.newRestaurant.location.address.postalCode) {
+	      this.errorText = "Please fill out all the fields.";
+	      this.isErrorLabelVisible = true;
+	      return false;
+    	}
+    	
+    	console.log(this.managerId);
+    	
+    	if (this.managerId == null) {
+	      this.errorText = "Please select manager.";
+	      this.isErrorLabelVisible = true;	
+	      return false;
+    	}
+    	
+    	if (!this.newRestaurant.location.latitude || !this.newRestaurant.location.longitude) {
+	      this.errorText = "Please pin location on the map.";
+	      this.isErrorLabelVisible = true;	
+	      return false;
+    	}
+    	
+    	this.errorText = "";
+	    this.isErrorLabelVisible = false;
+	    return true;
     }
   }
 });

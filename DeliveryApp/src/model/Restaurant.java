@@ -13,19 +13,22 @@ public class Restaurant {
 	private RestaurantType restaurantType;
 	private ArrayList<Integer> articles;
 	private boolean isOpen;
-	private String logoPath;
+	private String logoImageName;
 	   
 	private Location location;
 
+	public Restaurant() {
+	}
+
 	public Restaurant(int id, String name, RestaurantType restaurantType, ArrayList<Integer> articles, boolean isOpen,
-			String logoPath, Location location) {
+			String logoImageName, Location location) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.restaurantType = restaurantType;
 		this.articles = articles;
 		this.isOpen = isOpen;
-		this.logoPath = logoPath;
+		this.logoImageName = logoImageName;
 		this.location = location;
 	}
 
@@ -69,12 +72,12 @@ public class Restaurant {
 		this.isOpen = isOpen;
 	}
 
-	public String getLogoPath() {
-		return logoPath;
+	public String getLogoImageName() {
+		return logoImageName;
 	}
 
-	public void setLogoPath(String logoPath) {
-		this.logoPath = logoPath;
+	public void setLogoImageName(String logoImageName) {
+		this.logoImageName = logoImageName;
 	}
 
 	public Location getLocation() {
