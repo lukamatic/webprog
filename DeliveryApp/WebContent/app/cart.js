@@ -18,7 +18,7 @@ Vue.component('cart', {
             <div v-if="!isCartEmpty">
                 <div class="d-flex flex-row justify-content-between align-items-end">
                     <h3 class="mx-5 mt-5 mb-3">{{restaurantName}}</h3>
-                    <button class=" ml-5 px-4 btn ">Remove all</button>
+                    <button class=" ml-5 px-4 btn " v-on:click="clearCart()">Remove all</button>
                 </div>
 
                 <!--1 proizvod-->
@@ -46,12 +46,12 @@ Vue.component('cart', {
                             </button>
                             <span>
                                 <button type="button" class="btn btn-light mx-2 p-0 pb-1 border-radius border"
-                                    style="height: 30px; width: 30px; border-radius: 15px">
+                                    style="height: 30px; width: 30px; border-radius: 15px" v-on:click="decreaseCount(item.article.id)">
                                     -
                                 </button>
                                 {{item.count}}
                                 <button type="button" class="btn btn-light border p-0 mx-2 mr-4 pb-1"
-                                    style="height: 30px; width: 30px; border-radius:15px">
+                                    style="height: 30px; width: 30px; border-radius:15px" v-on:click="increaseCount(item.article.id)">
                                     +
                                 </button>
                                 <span class="font-weight-bold mr-1" style="width: 100px">{{parseFloat(calculateItemDiscountPrice(item)).toFixed(2)}} RSD</span>
@@ -124,25 +124,37 @@ Vue.component('cart', {
     	
     },
     increaseCount: function(id) {
-	  /*this.lastSelectedId = this.selectedId;
-	  this.selectedId = id;
-	  if(this.selectedId == this.lastSelectedId){
-	  	this.selectedItemCount += 1;
-	  }
-	  else{
-	  	this.selectedItemCount = 2;
-	  }*/
+	  if(this.customer.cart.items){
+	    	for(let i of this.customer.cart.items){
+	    		if (i.article.id == id){
+					i.count += 1;
+					this.updateCart();	    		
+	    		}
+	    	}
+    	}
 	  
     },
     decreaseCount: function(id) {
-      /*this.lastSelectedId = this.selectedId;
-	  this.selectedId = id;
-	  if(this.selectedId == this.lastSelectedId && this.selectedItemCount > 1){
-	  	this.selectedItemCount -= 1;
-	  }
-	  else{
-	  	this.selectedItemCount = 1;
-	  }*/
+     	if(this.customer.cart.items){
+	    	for(let i of this.customer.cart.items){
+	    		if (i.article.id == id && i.count > 1){
+					i.count -= 1;
+					this.updateCart();	    		
+	    		}
+	    	}
+    	}
     },
+    updateCart: function() {
+    	axios.put('/DeliveryApp/rest/customers/cart', this.customer.cart);
+    },
+    clearCart: function() {
+    	if(this.customer.cart.items){
+	    	while (this.customer.cart.items.length > 0){
+	    		this.customer.cart.items.pop();
+	    	}
+	    	this.isCartEmpty = true;
+	    	this.updateCart();
+    	}
+    }
   },
 });

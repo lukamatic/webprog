@@ -8,6 +8,10 @@ public class CartItem {
 		this.article = article;
 		this.count = count;
 	}
+	
+	public CartItem() {
+		super();
+	}
 	public Article getArticle() {
 		return article;
 	}

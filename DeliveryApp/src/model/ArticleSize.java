@@ -14,6 +14,10 @@ public class ArticleSize {
 		this.ammount = ammount;
 		this.unit = unit;
 	}
+	
+	public ArticleSize() {
+		super();
+	}
 
 	public int getAmmount() {
 		return ammount;

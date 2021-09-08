@@ -11,7 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import model.Cart;
 import model.Customer;
+import model.Gender;
 import model.Manager;
 import model.User;
 import services.CustomersService;
@@ -47,8 +49,17 @@ public class CustomersController {
 	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Customer update(@Context HttpServletRequest request, User customer) {
+	public Customer updateProfile(@Context HttpServletRequest request, User customer) {
 		//Customer customer = new Customer(user);
-		return customerService.update(customer);
+		return customerService.updateProfile(customer);
+	}
+	
+	@PUT
+	@Path("/cart")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Customer updateCart(@Context HttpServletRequest request, Cart cart) {
+		System.out.println("***************");
+		return customerService.updateCart(cart);
 	}
 }

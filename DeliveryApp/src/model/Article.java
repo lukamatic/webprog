@@ -30,6 +30,13 @@ public class Article {
 		this.isDeleted = isDeleted;
 		this.articleSize = articleSize;
 	}
+	
+	
+
+	public Article() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public int getId() {
 		return id;

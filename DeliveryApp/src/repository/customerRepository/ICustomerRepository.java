@@ -13,7 +13,8 @@ import repository.IRepository;
 /** @pdOid ae10ebcb-1fa3-4672-93a1-56cf21bef034 */
 public interface ICustomerRepository extends IRepository<Integer, Customer> {
 
-	Customer update(User value);
+	Customer updateProfile(User value);
 
-	Customer updateCart(int id, Cart cart);
+	public Customer updateCart(Cart cart);
+
 }

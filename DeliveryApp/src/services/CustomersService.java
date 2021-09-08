@@ -2,6 +2,7 @@ package services;
 
 import java.util.ArrayList;
 
+import model.Cart;
 import model.Customer;
 import model.User;
 import repository.customerRepository.CustomerFileRepository;
@@ -19,9 +20,13 @@ public class CustomersService {
 		return customerRepository.getAll();
 	}
 
-	public Customer update(User user) {
+	public Customer updateProfile(User user) {
 		//usersService.validateUsername(user.getUsername());
-		return customerRepository.update(user);
+		return customerRepository.updateProfile(user);
+	}
+
+	public Customer updateCart(Cart cart) {
+		return customerRepository.updateCart(cart);
 	}
 
 }
