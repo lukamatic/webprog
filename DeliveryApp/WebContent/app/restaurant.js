@@ -1,6 +1,7 @@
 Vue.component('restaurant', {
   data: function () {
     return {
+      user: {},
       restaurant: "",
       address: "",
 	  comments: "",
@@ -11,6 +12,8 @@ Vue.component('restaurant', {
 	  selectedItemCount: 1,
 	  selectedId:0,
 	  lastSelectedId:0,
+	  
+	  isManaged: false,
     };
     
   },
@@ -64,8 +67,17 @@ Vue.component('restaurant', {
                             Comments
                         </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link text-dark" id="menu-tab" href="#" role="tab" aria-disabled="true"></a>
+                    <li class="nav-item" role="presentation" v-if="isManaged">
+                        <a class="nav-link text-dark" id="orders-tab" data-toggle="tab" href="#orders" role="tab"
+                            aria-controls="orders" aria-selected="false">
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation" v-if="isManaged">
+                        <a class="nav-link text-dark" id="customers-tab" data-toggle="tab" href="#customers" role="tab"
+                            aria-controls="customers" aria-selected="false">
+                            Customers
+                        </a>
                     </li>
                 </ul>
                 
@@ -255,9 +267,35 @@ Vue.component('restaurant', {
 
                     </div>
                     
+                    <!--ORDERS-->
+                    <div  v-if="isManaged" class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <div class="row mt-3">
+                            <div class="col-2">
+                                <h5 class="my-3">Orders</h5>
+                                <p>{{ address | formatAddressStreet }},<br>{{ address | formatAddressCity }}, <br>{{ address.country }}</p>
+                            </div>
+
+                            <div class="d-flex col-8">
+                                <img src="" class="w-100 m-3 flex-fill box-shadow"
+                                    style="min-height: 300px; height: 450px;">
+                            </div>
+                        </div>
+                    </div>
                     
-                    
-                    
+                    <!--CUSTOMERS-->
+                    <div v-if="isManaged" class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                        <div class="row mt-3">
+                            <div class="col-2">
+                                <h5 class="my-3">Customers</h5>
+                                <p>{{ address | formatAddressStreet }},<br>{{ address | formatAddressCity }}, <br>{{ address.country }}</p>
+                            </div>
+
+                            <div class="d-flex col-8">
+                                <img src="" class="w-100 m-3 flex-fill box-shadow"
+                                    style="min-height: 300px; height: 450px;">
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
                 
@@ -276,14 +314,24 @@ Vue.component('restaurant', {
     console.log(restaurantId);
     axios.get('/DeliveryApp/rest/restaurants/' + this.$route.query.id).then(response => {
     	this.restaurant = response.data;
-      if(this.restaurant.location && this.restaurant.location.address){
-      	this.address = this.restaurant.location.address;
-      }
+    	if(this.restaurant.location && this.restaurant.location.address){
+    		this.address = this.restaurant.location.address;
+		}
+		let p = "";
+     	axios.get('/DeliveryApp/rest/auth/').then((response) => {
+      		p = response.data;
+      		var path = "/DeliveryApp/rest/users/" + p.username + "/";
+	    	axios.get(path).then((response) => {
+		      	this.user = response.data;
+			  	if(this.user.role == 'MANAGER'){
+			  		if(this.user.restaurantId == this.restaurant.id){
+			  			this.isManaged = true;
+			  		}
+			  	}
+	    	});
+		});
     });
     
-    
-    
-     
     axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
       this.comments = response.data;
       let sum = 0;

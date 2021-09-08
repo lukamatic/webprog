@@ -4,6 +4,7 @@ Vue.component('navbar', {
     return {
       activeItemClass: 'nav-item active',
       inactiveItemClass: 'nav-item',
+      restaurantId: 0,
     };
   },
   template: `
@@ -29,7 +30,7 @@ Vue.component('navbar', {
                     <a class="nav-link" href="#/users">Users</a>
                 </li>
                 <li :class="[this.path == 'restaurant' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'MANAGER'">
-                    <a class="nav-link" href="#/manager-restaurant">My restaurant</a>
+                    <a class="nav-link" :href="'#/restaurant?id=' + restaurantId ">My restaurant</a>
                 </li>
                 <li :class="[this.path == 'cart' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'CUSTOMER'">
                     <a class="nav-link" href="#/cart">Cart</a>
@@ -50,6 +51,19 @@ Vue.component('navbar', {
         </div>
     </nav>
 `,
+  created() {
+	let p = "";
+ 	axios.get('/DeliveryApp/rest/auth/').then((response) => {
+  		p = response.data;
+  		var path = "/DeliveryApp/rest/users/" + p.username + "/";
+    	axios.get(path).then((response) => {
+	      	let user = response.data;
+		  	if(user.role == 'MANAGER'){
+		  		this.restaurantId = user.restaurantId;
+		  	}
+    	});
+	});
+  },
   methods: {
     logOut() {
       const vm = this;
