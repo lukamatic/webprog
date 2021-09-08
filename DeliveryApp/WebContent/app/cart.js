@@ -174,6 +174,9 @@ Vue.component('cart', {
     	}
     },
     makeOrder: function (){
+    	axios.post('/DeliveryApp/rest/orders', this.customer.cart).then((response) => {
+    		this.clearCart();
+    	});
     	
     }
   },

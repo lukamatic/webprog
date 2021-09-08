@@ -491,10 +491,12 @@ Vue.component('customer-orders', {
 
     },
     cancelOrder: function(id){
-    	this.ordersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
-    	this.allOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
-    	this.displayedOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
-    	axios.put('/DeliveryApp/rest/orders/cancel/'+id);
+    	
+    	axios.put('/DeliveryApp/rest/orders/cancel/'+id).then((response) => {
+	    	this.ordersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+	    	this.allOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+	    	this.displayedOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+    	})
     }
   },
 });

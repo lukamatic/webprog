@@ -87,7 +87,7 @@ private IOrderRepository orderRepository;
 		int maxId = Integer.parseInt(orders.get(0).getId());
 		
 		for (Order order : orders) {
-			int id = Integer.parseInt(orders.get(0).getId());
+			int id = Integer.parseInt(order.getId());
 			if (id > maxId) {
 				maxId = id;
 			}
