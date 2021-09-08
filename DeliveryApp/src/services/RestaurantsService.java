@@ -36,6 +36,8 @@ public class RestaurantsService {
 		String imageName = saveImage(fileInputStream, restaurant.getId(), getFileExtension(fileMetaData));
 		restaurant.setLogoImageName(imageName);
 		
+		managersService.assignRestaurantToManager(restaurant.getId(), managerId);
+		
 		return  restaurantRepository.save(restaurant);
 	}
 	

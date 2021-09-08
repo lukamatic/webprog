@@ -37,4 +37,10 @@ public class ManagersService {
 		
 		return managers;
 	} 
+	
+	public void assignRestaurantToManager(int restaurantId, int managerId) {
+		Manager manager = managerRepository.getById(managerId);
+		manager.setRestaurantId(restaurantId);
+		managerRepository.update(manager);
+	}
 }
