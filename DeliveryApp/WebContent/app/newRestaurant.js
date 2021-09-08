@@ -224,11 +224,15 @@ Vue.component('new-restaurant', {
 	      return false;
     	}
     	
-    	console.log(this.managerId);
-    	
     	if (this.managerId == null) {
 	      this.errorText = "Please select manager.";
 	      this.isErrorLabelVisible = true;	
+	      return false;
+    	}
+    	
+    	if (!this.file) {
+	      this.errorText = "Please upload restaurant logo.";
+	      this.isErrorLabelVisible = true;
 	      return false;
     	}
     	

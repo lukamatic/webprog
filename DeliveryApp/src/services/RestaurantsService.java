@@ -34,6 +34,7 @@ public class RestaurantsService {
 		
 		restaurant.setId(calculateId());
 		String imageName = saveImage(fileInputStream, restaurant.getId(), getFileExtension(fileMetaData));
+		restaurant.setLogoImageName(imageName);
 		
 		return  restaurantRepository.save(restaurant);
 	}
@@ -66,7 +67,7 @@ public class RestaurantsService {
 	private String saveImage(InputStream fileInputStream, int restaurantId, String fileExtension) {
 	    try
 	    {
-	    	String fileName = "r" + restaurantId + fileExtension;
+	    	String fileName = "r" + restaurantId + "." + fileExtension;
 		    String filePath = "WebContent/Images/";
 	        int read = 0;
 	        byte[] bytes = new byte[1024];
