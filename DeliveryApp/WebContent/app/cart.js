@@ -41,7 +41,7 @@ Vue.component('cart', {
                         </div>
 
                         <div class="d-flex flex-column justify-content-between align-items-end mr-2">
-                            <button class=" btn btn-sm font-weight-bold">
+                            <button class="btn btn-sm font-weight-bold" v-on:click="removeItem(item.article.id)">
                                 ✕
                             </button>
                             <span>
@@ -163,11 +163,10 @@ Vue.component('cart', {
     removeItem: function(id) {
     	if(this.customer.cart.items){
 	    	for(let i in this.customer.cart.items){
-	    		if (i.article.id == id){
+	    		if (this.customer.cart.items[i].article.id == id){
 	    			this.customer.cart.items.splice(i, 1);
     			}
 	    	}
-	    	this.isCartEmpty = true;
 	    	this.updateCart();
     	}
     }
