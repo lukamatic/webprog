@@ -66,7 +66,7 @@ Vue.component('cart', {
                 </div>
                 <br>
                 <br>
-                <button class="float-right ml-5 mt-2 px-4 btn btn-primary">Make order</button>
+                <button class="float-right ml-5 mt-2 px-4 btn btn-primary" v-on:click="makeOrder()">Make order</button>
                 <br>
             </div>
             
@@ -172,6 +172,9 @@ Vue.component('cart', {
 	    	}
 	    	this.updateCart();
     	}
+    },
+    makeOrder: function (){
+    	
     }
   },
 });

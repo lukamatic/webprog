@@ -72,25 +72,6 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 	}
 	
 	@Override
-	public Customer updateProfile(User value) {
-		ArrayList<Customer> customers = getAll();
-
-		for (int i = 0; i < customers.size(); i++) {
-			if (customers.get(i).getId() == value.getId()) {
-				customers.get(i).setFirstName(value.getFirstName());
-				customers.get(i).setLastName(value.getLastName());
-				customers.get(i).setUsername(value.getUsername());
-				customers.get(i).setGender(value.getGender());
-				customers.get(i).setPassword(value.getPassword());
-				writeToFile(customers);
-				return customers.get(i);
-			}
-		}
-		
-		return (Customer) value;
-	}
-	
-	@Override
 	public Boolean delete(Integer key) {
 		// TODO Auto-generated method stub
 		return null;
@@ -132,18 +113,6 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
         return null;
 	}
 	
-	@Override
-	public Customer updateCart(Cart cart) {
-		ArrayList<Customer> customers = getAll();
-		for (int i = 0; i < customers.size(); i++) {
-			if (customers.get(i).getId() == cart.getCustomerId()) {
-				customers.get(i).setCart(cart);
-				writeToFile(customers);
-				return customers.get(i);
-			}
-		}
-		
-		return null;
-	}
+	
 
 }

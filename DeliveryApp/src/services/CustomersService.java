@@ -23,11 +23,20 @@ public class CustomersService {
 
 	public Customer updateProfile(User user) {
 		//usersService.validateUsername(user.getUsername());
-		return customerRepository.updateProfile(user);
+		Customer customer = customerRepository.getById(user.getId());
+		customer.setFirstName(user.getFirstName());
+		customer.setLastName(user.getLastName());
+		customer.setUsername(user.getUsername());
+		customer.setGender(user.getGender());
+		customer.setPassword(user.getPassword());
+			
+		return customerRepository.update(customer);
 	}
 
 	public Customer updateCart(Cart cart) {
-		return customerRepository.updateCart(cart);
+		Customer customer = customerRepository.getById(cart.getCustomerId());
+		customer.setCart(cart);
+		return customerRepository.update(customer);
 	}
 
 	public void addToCart(CartItem addedItem, int id) {
@@ -49,7 +58,7 @@ public class CustomersService {
 		if (!isInCart) {
 			cart.getItems().add(addedItem);
 		}
-		customerRepository.updateCart(cart);
+		this.updateCart(cart);
 			
 	}
 

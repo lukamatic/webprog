@@ -189,9 +189,8 @@ Vue.component('restaurant', {
                                                                     +
                                                                 </button>
                                                             </span>
-                                                            <button class="mx-5 px-4 py-1 border btn btn-primary">
-                                                                <span class="glyphicon glyphicon-star"></span> Add to
-                                                                cart
+                                                            <button class="mx-5 px-4 py-1 border btn btn-primary" v-on:click="addToCart(b.id)">
+                                                                Add to cart
                                                             </button>
                                                         </div>
                                                     </div>
