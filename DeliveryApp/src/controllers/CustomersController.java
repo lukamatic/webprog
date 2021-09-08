@@ -7,11 +7,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import model.Cart;
+import model.CartItem;
 import model.Customer;
 import model.User;
 import services.CustomersService;
@@ -57,5 +59,12 @@ public class CustomersController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Customer updateCart(@Context HttpServletRequest request, Cart cart) {
 		return customerService.updateCart(cart);
+	}
+	
+	@PUT
+	@Path("/item/{customerId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void addItemToCart(@Context HttpServletRequest request, @PathParam("customerId") int id, CartItem item) {
+		customerService.addToCart(item,id);
 	}
 }

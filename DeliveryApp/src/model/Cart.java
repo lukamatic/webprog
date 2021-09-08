@@ -25,6 +25,13 @@ public class Cart {
 		this.customerId = 0;
 		this.price = 0.0;
 	}
+	
+	public Cart(int id) {
+		super();
+		this.items = new ArrayList<CartItem>();
+		this.customerId = id;
+		this.price = 0.0;
+	}
 
 	public ArrayList<CartItem> getItems() {
 		return items;

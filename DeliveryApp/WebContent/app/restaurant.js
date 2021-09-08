@@ -135,9 +135,8 @@ Vue.component('restaurant', {
                                                                     +
                                                                 </button>
                                                             </span>
-                                                            <button class="mx-5 px-4 py-1 border btn btn-primary">
-                                                                <span class="glyphicon glyphicon-star"></span> Add to
-                                                                cart
+                                                            <button class="mx-5 px-4 py-1 border btn btn-primary" v-on:click="addToCart(f.id)">
+                                                                 Add to cart
                                                             </button>
                                                         </div>
                                                     </div>
@@ -335,6 +334,42 @@ Vue.component('restaurant', {
 	  else{
 	  	this.selectedItemCount = 1;
 	  }
+    },
+    addToCart: function(id) {
+    //let count = 1;
+    let item = { article:{}, count:1};
+    let found = false;
+    	if(this.selectedId == id){
+	  		item.count = this.selectedItemCount;
+	  	}
+		else{
+			this.selectedItemCount = 1;
+		}
+		for (let f of this.food){
+			if(f.id == id){
+				item.article = f;
+				found = true;
+			}
+		}
+		if (found == false){
+			for (let b of this.beverages){
+				if(b.id == id){
+					item.article = b;
+				}
+			}
+		}
+		let p = "";
+	     axios.get('/DeliveryApp/rest/auth/').then((response) => {
+	      p = response.data;
+	      let path = "/DeliveryApp/rest/users/" + p.username + "/";
+		  axios.get(path).then((response) => {
+		      let user = response.data;
+		      if(user.id){
+			  	axios.put('/DeliveryApp/rest/customers/item/' + user.id, item);
+			  }
+			  
+		    });
+	    });
     },
   },
 });
