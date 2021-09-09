@@ -35,9 +35,13 @@ public class CustomersService {
 		Customer customer = customerRepository.getById(user.getId());
 		customer.setFirstName(user.getFirstName());
 		customer.setLastName(user.getLastName());
-		customer.setUsername(user.getUsername());
 		customer.setGender(user.getGender());
 		customer.setPassword(user.getPassword());
+		if(!customer.getUsername().equals(user.getUsername())) {
+			usersService.validateUsername(user.getUsername());
+			customer.setUsername(user.getUsername());
+		}
+		
 			
 		return customerRepository.update(customer);
 	}

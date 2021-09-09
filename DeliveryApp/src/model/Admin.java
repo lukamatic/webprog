@@ -12,4 +12,8 @@ public class Admin extends User {
 		super(username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 	}
 	
+	public Admin() {
+		super();
+	}
+	
 }

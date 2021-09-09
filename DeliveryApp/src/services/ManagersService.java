@@ -2,7 +2,9 @@ package services;
 
 import java.util.ArrayList;
 
+import model.Customer;
 import model.Manager;
+import model.User;
 import repository.managerRepository.ManagerFileRepository;
 import repository.managerRepository.IManagerRepository;
 
@@ -46,6 +48,19 @@ public class ManagersService {
 
 	public Manager update(Manager manager) {
 		usersService.validateUsername(manager.getUsername());
+		return managerRepository.update(manager);
+	}
+
+	public Manager updateProfile(User user) {
+		Manager manager = managerRepository.getById(user.getId());
+		manager.setFirstName(user.getFirstName());
+		manager.setLastName(user.getLastName());
+		manager.setGender(user.getGender());
+		manager.setPassword(user.getPassword());
+		if(!manager.getUsername().equals(user.getUsername())) {
+			usersService.validateUsername(user.getUsername());
+			manager.setUsername(user.getUsername());
+		}
 		return managerRepository.update(manager);
 	}
 

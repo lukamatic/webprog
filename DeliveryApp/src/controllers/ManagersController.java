@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import model.Customer;
 import model.Manager;
 import model.User;
 import services.ManagersService;
@@ -56,8 +57,7 @@ public class ManagersController {
 	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Manager update(@Context HttpServletRequest request, User user) {
-		Manager manager = new Manager(user);
-		return managersService.update(manager);
+	public Manager updateProfile(@Context HttpServletRequest request, Manager manager) {
+		return managersService.updateProfile(manager);
 	}
 }
