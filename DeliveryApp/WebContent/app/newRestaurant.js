@@ -22,12 +22,14 @@ Vue.component('new-restaurant', {
       managerId: null,
       file: null,
       errorText: "",
-      isErrorLabelVisible: false
+      isErrorLabelVisible: false,
+      newManagerPopupVisible: false
     }
   },
   template: ` 
   <div>
   	<navbar></navbar>
+    <new-manager v-if="newManagerPopupVisible"></new-manager>
     <div class="d-flex flex-column align-items-center bg-light">
             <div class="d-flex flex-column align-items-center p-4 bg-white box-shadow w-75 mt-3">
                 <form v-on:submit.prevent="createNewRestaurant">
@@ -51,7 +53,7 @@ Vue.component('new-restaurant', {
                                     <option v-for="manager in managers" :key="manager.id" :value="manager.id">{{ manager.firstName + ' ' + manager.lastName }}</option>
                                 </select>
                                 <br>
-                                <button class="btn btn-sm btn-outline-secondary float-right m-2">New manager</button>
+                                <button class="btn btn-sm btn-outline-secondary float-right m-2" v-on:click.prevent="newManagerPopupVisible = !newManagerPopupVisible">New manager</button>
                             </td>
                         </tr>
                         <tr>
@@ -141,6 +143,10 @@ Vue.component('new-restaurant', {
 `,
   mounted() {
     axios.get('/DeliveryApp/rest/managers/available').then((response) => this.managers = response.data);
+    this.$root.$on('closeNewManagerPopup', () => {
+			this.newManagerPopupVisible = false;
+		});
+	this.$root.$on('addManager', (manager) => this.addManager(manager));
     this.map = this.initMap();
     vm = this;
     this.map.on('singleclick', function (evt) {
@@ -206,9 +212,9 @@ Vue.component('new-restaurant', {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
-              }
-            ).then((response) => {
-          console.log(response.data);
+            }).then((response) => {
+          		console.log(response.data);
+          		router.push('restaurants');
         })
         .catch((error) => {
 	      this.errorText = error.response.data;
@@ -245,6 +251,10 @@ Vue.component('new-restaurant', {
     	this.errorText = "";
 	    this.isErrorLabelVisible = false;
 	    return true;
+    },
+    addManager: function(manager) {
+    	this.managers.push(manager);
+    	this.managerId = manager.id;
     }
   }
 });
