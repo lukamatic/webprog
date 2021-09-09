@@ -2,19 +2,21 @@ Vue.component('restaurant', {
   data: function () {
     return {
       restaurant: null,
-      address: "",
+      user: {},
+      address: '',
       map: null,
       markers: null,
-	  comments: "",
-	  averageRating: 0,
-	  food: "",
-	  beverages: "",
-	  
-	  selectedItemCount: 1,
-	  selectedId:0,
-	  lastSelectedId:0,
+      comments: '',
+      averageRating: 0,
+      food: '',
+      beverages: '',
+
+      selectedItemCount: 1,
+      selectedId: 0,
+      lastSelectedId: 0,
+
+      isManaged: false,
     };
-    
   },
   template: `
   <div>
@@ -65,8 +67,17 @@ Vue.component('restaurant', {
                             Comments
                         </a>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link text-dark" id="menu-tab" href="#" role="tab" aria-disabled="true"></a>
+                    <li class="nav-item" role="presentation" v-if="isManaged">
+                        <a class="nav-link text-dark" id="orders-tab" data-toggle="tab" href="#orders" role="tab"
+                            aria-controls="orders" aria-selected="false">
+                            Orders
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation" v-if="isManaged">
+                        <a class="nav-link text-dark" id="customers-tab" data-toggle="tab" href="#customers" role="tab"
+                            aria-controls="customers" aria-selected="false">
+                            Customers
+                        </a>
                     </li>
                 </ul>
                 
@@ -87,6 +98,9 @@ Vue.component('restaurant', {
                                         <a class="nav-link" id="v-pills-beverages-tab" data-toggle="pill"
                                             href="#v-pills-beverages" role="tab" aria-controls="v-pills-beverages"
                                             aria-selected="false">Beverages</a>
+                                    </li>
+                                    <li v-if="isManaged" >
+                                        <a class="nav-link" :href='"#/newArticle?restaurantId="+restaurant.id'>New article</a>
                                     </li>
                                 </ul>
                             </div>
@@ -117,6 +131,10 @@ Vue.component('restaurant', {
                                                     </div>
                                                     <div class="flex-fill">
                                                     	<p class="pr-2">{{f.description}}</p>
+                                                    </div>
+                                                    <div v-if="isManaged" class="d-flex flex-row mt-auto">
+                                                    	<button class="btn btn-outline-secondary px-5 mr-3"> Edit </button>
+                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     </div>
                                                     
 
@@ -159,7 +177,7 @@ Vue.component('restaurant', {
 
                                                 <img :src="b.imagePath" width="190" height="190">
 
-                                                <div class="m-2  pl-3 d-flex flex-column">
+                                                <div class="m-2  pl-3 d-flex flex-column  flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class="d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ b.name }}</h5>
@@ -236,14 +254,28 @@ Vue.component('restaurant', {
                                     <div class="bg-white box-shadow m-1 p-2 d-flex"
                                         style="min-height: 150px; min-width: 600px; width: 900px" 
                                         v-for="comment in comments" :key="comment.id">
-                                        <div class="m-2  pl-3 d-flex flex-column">
-                                            <div class="d-flex flex-row justify-content-between">
+                                        <div class="m-2  pl-3 d-flex flex-column  flex-fill">
+                                            <div class="d-flex flex-row justify-content-between ">
                                                 <div class="d-flex flex-column align-items-start ">
-                                                    <h5 class="">{{ comment.customerId }}</h5>
-                                                    <p>{{ comment.rating }}<span style='font-size:18px;'>&starf;</span></p>
+                                                    <h5 class="mb-1">{{ comment.customerId }}</h5>
+                                                    <p class="mt-0">{{ comment.rating }}<span style='font-size:18px;'>&starf;</span></p>
+                                                    <p class="pr-2">{{ comment.text }}</p>
+                                                </div>
+                                                <div v-if="isManaged" class="m-2 pl-3 ml-auto d-flex flex-column align-items-end">
+                                                	<b class="m-2">{{comment.status}}</b>
+                                                	<button v-if="comment.status == 'PENDING'" 
+                                                			v-on:click="approveComment(comment.id)"
+                                                			type="button" class="btn btn-outline-secondary m-2">
+                                                		Approve
+                                                	</button>
+													<button v-if="comment.status == 'PENDING'" 
+															v-on:click="declineComment(comment.id)"
+															type="button" class="btn btn-outline-danger m-2 px-3">
+														Decline
+													</button>
                                                 </div>
                                             </div>
-                                            <p class="pr-2">{{ comment.text }}</p>
+                                            
                                         </div>
                                     </div>
 
@@ -255,9 +287,35 @@ Vue.component('restaurant', {
 
                     </div>
                     
+                    <!--ORDERS-->
+                    <div  v-if="isManaged" class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <div class="row mt-3">
+                            <div class="col-2">
+                                <h5 class="my-3">Orders</h5>
+                                <p>{{ address | formatAddressStreet }},<br>{{ address | formatAddressCity }}, <br>{{ address.country }}</p>
+                            </div>
+
+                            <div class="d-flex col-8">
+                                <img src="" class="w-100 m-3 flex-fill box-shadow"
+                                    style="min-height: 300px; height: 450px;">
+                            </div>
+                        </div>
+                    </div>
                     
-                    
-                    
+                    <!--CUSTOMERS-->
+                    <div v-if="isManaged" class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                        <div class="row mt-3">
+                            <div class="col-2">
+                                <h5 class="my-3">Customers</h5>
+                                <p>{{ address | formatAddressStreet }},<br>{{ address | formatAddressCity }}, <br>{{ address.country }}</p>
+                            </div>
+
+                            <div class="d-flex col-8">
+                                <img src="" class="w-100 m-3 flex-fill box-shadow"
+                                    style="min-height: 300px; height: 450px;">
+                            </div>
+                        </div>
+                    </div>
                     
                 </div>
                 
@@ -270,37 +328,69 @@ Vue.component('restaurant', {
   </div>
 `,
   mounted() {
-  	
     let restaurantId = 0;
     restaurantId = this.$route.query.id;
     console.log(restaurantId);
-    axios.get('/DeliveryApp/rest/restaurants/' + this.$route.query.id).then(response => {
-    	this.restaurant = response.data;
-      if(this.restaurant.location && this.restaurant.location.address){
-      	this.address = this.restaurant.location.address;
-      }
-    });
-    
-     
-    axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
-      this.comments = response.data;
-      let sum = 0;
-      let c = this.comments.length;
-      for(comment of this.comments){
-            sum += comment.rating;
-      }
-      this.averageRating = sum/c;
-    });
-    
-    axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/food').then((response) => {
-      this.food = response.data;
-    });
-    axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/beverages').then((response) => {
-      this.beverages = response.data;
-    });
-      
-       
-    
+    axios
+      .get('/DeliveryApp/rest/restaurants/' + this.$route.query.id)
+      .then((response) => {
+        this.restaurant = response.data;
+        if (this.restaurant.location && this.restaurant.location.address) {
+          this.address = this.restaurant.location.address;
+        }
+        let p = '';
+        axios.get('/DeliveryApp/rest/auth/').then((response) => {
+          p = response.data;
+          var path = '/DeliveryApp/rest/users/' + p.username + '/';
+          axios.get(path).then((response) => {
+            this.user = response.data;
+            if (this.user.role == 'MANAGER') {
+              if (this.user.restaurantId == this.restaurant.id) {
+                this.isManaged = true;
+              }
+            }
+            let commentsPath = '';
+            if (this.isManaged || this.user.role == 'ADMIN') {
+              commentsPath = '/DeliveryApp/rest/comments/' + restaurantId;
+            } else {
+              commentsPath =
+                '/DeliveryApp/rest/comments/' + restaurantId + '/approved';
+            }
+            axios.get(commentsPath).then((response) => {
+              this.comments = response.data;
+              let sum = 0;
+              let c = this.comments.length;
+              for (comment of this.comments) {
+                sum += comment.rating;
+              }
+              this.averageRating = sum / c;
+            });
+          });
+        });
+      });
+
+    axios
+      .get('/DeliveryApp/rest/comments/' + restaurantId + '/approved')
+      .then((response) => {
+        this.comments = response.data;
+        let sum = 0;
+        let c = this.comments.length;
+        for (comment of this.comments) {
+          sum += comment.rating;
+        }
+        this.averageRating = sum / c;
+      });
+
+    axios
+      .get('/DeliveryApp/rest/articles/' + restaurantId + '/food')
+      .then((response) => {
+        this.food = response.data;
+      });
+    axios
+      .get('/DeliveryApp/rest/articles/' + restaurantId + '/beverages')
+      .then((response) => {
+        this.beverages = response.data;
+      });
   },
   filters: {
     formatAddressStreet: (address) => {
@@ -311,102 +401,124 @@ Vue.component('restaurant', {
     },
   },
   methods: {
-  	initMap: function() {
-  	  if (this.map) {
-  	    return;
-  	  }
-  	
+    initMap: function () {
+      if (this.map) {
+        return;
+      }
+
       this.map = new ol.Map({
         target: 'map',
         layers: [
           new ol.layer.Tile({
-            source: new ol.source.OSM()
-          })
+            source: new ol.source.OSM(),
+          }),
         ],
         view: new ol.View({
-          center: ol.proj.fromLonLat([this.restaurant.location.longitude, this.restaurant.location.latitude]),
-          zoom: 15
-        })
-      })
-      
-      this.markers = new ol.layer.Vector({
-  		source: new ol.source.Vector(),
-  		style: new ol.style.Style({
-    	  image: new ol.style.Icon({
-      	    anchor: [0.5, 1],
-      	    src: 'marker.png',
-      	    scale: 0.05
-    	  })
-  	    })
+          center: ol.proj.fromLonLat([
+            this.restaurant.location.longitude,
+            this.restaurant.location.latitude,
+          ]),
+          zoom: 15,
+        }),
       });
-      
-	  this.map.addLayer(this.markers);
-	  this.putMarker([this.restaurant.location.longitude, this.restaurant.location.latitude])
-	  
-	  setTimeout(() => this.map.updateSize(), 1000);
+
+      this.markers = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        style: new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 1],
+            src: 'marker.png',
+            scale: 0.05,
+          }),
+        }),
+      });
+
+      this.map.addLayer(this.markers);
+      this.putMarker([
+        this.restaurant.location.longitude,
+        this.restaurant.location.latitude,
+      ]);
+
+      setTimeout(() => this.map.updateSize(), 1000);
     },
-    putMarker: function(coordinates) {
-	  this.markers.getSource().clear();
-	  marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(coordinates)));
-	  this.markers.getSource().addFeature(marker);
+    putMarker: function (coordinates) {
+      this.markers.getSource().clear();
+      marker = new ol.Feature(
+        new ol.geom.Point(ol.proj.fromLonLat(coordinates))
+      );
+      this.markers.getSource().addFeature(marker);
     },
-    increaseCount: function(id) {
-	  this.lastSelectedId = this.selectedId;
-	  this.selectedId = id;
-	  if(this.selectedId == this.lastSelectedId){
-	  	this.selectedItemCount += 1;
-	  }
-	  else{
-	  	this.selectedItemCount = 2;
-	  }
-	  
-    },
-    decreaseCount: function(id) {
+    increaseCount: function (id) {
       this.lastSelectedId = this.selectedId;
-	  this.selectedId = id;
-	  if(this.selectedId == this.lastSelectedId && this.selectedItemCount > 1){
-	  	this.selectedItemCount -= 1;
-	  }
-	  else{
-	  	this.selectedItemCount = 1;
-	  }
+      this.selectedId = id;
+      if (this.selectedId == this.lastSelectedId) {
+        this.selectedItemCount += 1;
+      } else {
+        this.selectedItemCount = 2;
+      }
     },
-    addToCart: function(id) {
-    //let count = 1;
-    let item = { article:{}, count:1};
-    let found = false;
-    	if(this.selectedId == id){
-	  		item.count = this.selectedItemCount;
-	  	}
-		else{
-			this.selectedItemCount = 1;
-		}
-		for (let f of this.food){
-			if(f.id == id){
-				item.article = f;
-				found = true;
-			}
-		}
-		if (found == false){
-			for (let b of this.beverages){
-				if(b.id == id){
-					item.article = b;
-				}
-			}
-		}
-		let p = "";
-	     axios.get('/DeliveryApp/rest/auth/').then((response) => {
-	      p = response.data;
-	      let path = "/DeliveryApp/rest/users/" + p.username + "/";
-		  axios.get(path).then((response) => {
-		      let user = response.data;
-		      if(user.id){
-			  	axios.put('/DeliveryApp/rest/customers/item/' + user.id, item);
-			  }
-			  
-		    });
-	    });
-    }
+    decreaseCount: function (id) {
+      this.lastSelectedId = this.selectedId;
+      this.selectedId = id;
+      if (
+        this.selectedId == this.lastSelectedId &&
+        this.selectedItemCount > 1
+      ) {
+        this.selectedItemCount -= 1;
+      } else {
+        this.selectedItemCount = 1;
+      }
+    },
+    addToCart: function (id) {
+      let item = { article: {}, count: 1 };
+      let found = false;
+      if (this.selectedId == id) {
+        item.count = this.selectedItemCount;
+      } else {
+        this.selectedItemCount = 1;
+      }
+      for (let f of this.food) {
+        if (f.id == id) {
+          item.article = f;
+          found = true;
+        }
+      }
+      if (found == false) {
+        for (let b of this.beverages) {
+          if (b.id == id) {
+            item.article = b;
+          }
+        }
+      }
+      let p = '';
+      axios.get('/DeliveryApp/rest/auth/').then((response) => {
+        p = response.data;
+        let path = '/DeliveryApp/rest/users/' + p.username + '/';
+        axios.get(path).then((response) => {
+          let user = response.data;
+          if (user.id) {
+            axios.put('/DeliveryApp/rest/customers/item/' + user.id, item);
+          }
+        });
+      });
+    },
+    approveComment(id) {
+      axios.put('/DeliveryApp/rest/comments/approve/' + id).then((response) => {
+        for (let i = 0; i < this.comments.length; i++) {
+          if (this.comments[i].id == id) {
+            this.comments[i].status = 'APPROVED';
+          }
+        }
+      });
+    },
+    declineComment(id) {
+      axios.put('/DeliveryApp/rest/comments/decline/' + id).then((response) => {
+        for (let i = 0; i < this.comments.length; i++) {
+          if (this.comments[i].id == id) {
+            this.comments[i].status = 'DECLINED';
+          }
+        }
+      });
+    },
   },
 });
-  	

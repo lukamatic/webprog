@@ -60,7 +60,7 @@ Vue.component('profile', {
                                     <a class="nav-link" id="v-pills-edit-tab" data-toggle="pill" href="#v-pills-edit"
                                         role="tab" aria-controls="v-pills-edit" aria-selected="false">Edit profile</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" v-if="$cookies.get('role') == 'CUSTOMER'">
                                     <a class="nav-link" id="v-pills-points-tab" data-toggle="pill"
                                         href="#v-pills-points" role="tab" aria-controls="v-pills-points"
                                         aria-selected="false">Point system and costumer
@@ -334,13 +334,13 @@ Vue.component('profile', {
         this.passwordConfirmation = "";
         
         if (this.user.role == "ADMIN") {
-          //this.updateAdmin();
+          this.updateAdmin();
         } else if (this.user.role == "CUSTOMER") {
           this.updateCustomer();
         } else if (this.user.role == "MANAGER") {
-          //this.updateManager();
+          this.updateManager();
         } else if (this.user.role == "DELIVERER") {
-          //this.updateDeliverer();
+          this.updateDeliverer();
         }
         
       }
@@ -371,7 +371,7 @@ Vue.component('profile', {
       this.isErrorLabelVisible = false;
       return true;
     },
-    /*updateAdmin: function() {
+    updateAdmin: function() {
     	const vm = this;
 	  	axios.put('/DeliveryApp/rest/admins', this.user)
 	    .then(function (response) {
@@ -382,7 +382,7 @@ Vue.component('profile', {
 	      vm.errorText = error.response.data;
 	      vm.isErrorLabelVisible = true;
 	    });
-    },*/
+    },
     updateCustomer: function() {
     	const vm = this;
 	  	axios.put('/DeliveryApp/rest/customers', this.user)
@@ -407,7 +407,7 @@ Vue.component('profile', {
 	      vm.isErrorLabelVisible = true;
 	    });
     },
-    /*updateDeliverer: function() {
+    updateDeliverer: function() {
     	const vm = this;
 	  	axios.put('/DeliveryApp/rest/deliverers', this.user)
 	    .then(function (response) {
@@ -418,6 +418,6 @@ Vue.component('profile', {
 	      vm.errorText = error.response.data;
 	      vm.isErrorLabelVisible = true;
 	    });
-    }*/
+    }
   }
 });
