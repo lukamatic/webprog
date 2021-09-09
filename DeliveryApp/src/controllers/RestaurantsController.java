@@ -1,18 +1,34 @@
 package controllers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+
+import com.google.gson.Gson;
+
+import exceptions.BadRequestException;
+import model.Address;
 import model.Address;
 import model.Article;
 import model.ArticleSize;
@@ -116,5 +132,17 @@ public class RestaurantsController {
 		}
 		
 		return restaurants;
+	}
+	
+	@POST
+	@Path("/create")
+	@Consumes({MediaType.MULTIPART_FORM_DATA})
+	public Restaurant create(@FormDataParam("file") InputStream fileInputStream,
+	                              @FormDataParam("file") FormDataContentDisposition fileMetaData,
+	                              @FormDataParam("restaurantJSON") String restaurantJSON,
+	                              @FormDataParam("managerId") int managerId) throws Exception
+	{
+		Restaurant restaurant = new Gson().fromJson(restaurantJSON, Restaurant.class);
+		return restaurantsService.create(fileInputStream, fileMetaData, restaurant, managerId);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.Cart;
 import model.CartItem;
 import model.Customer;
+import model.Deliverer;
 import model.User;
 import repository.customerRepository.CustomerFileRepository;
 import repository.customerRepository.ICustomerRepository;
@@ -16,10 +17,17 @@ public class CustomersService {
 	
 	public CustomersService() {
 		customerRepository = new CustomerFileRepository();
+		usersService = new UsersService();
 	}
 	
 	public ArrayList<Customer> getAll() {
 		return customerRepository.getAll();
+	}
+
+	public Customer create(Customer customer) {
+		usersService.validateUsername(customer.getUsername());
+		customer.setId(usersService.calculateId());
+		return customerRepository.save(customer);
 	}
 
 	public Customer updateProfile(User user) {
@@ -27,9 +35,13 @@ public class CustomersService {
 		Customer customer = customerRepository.getById(user.getId());
 		customer.setFirstName(user.getFirstName());
 		customer.setLastName(user.getLastName());
-		customer.setUsername(user.getUsername());
 		customer.setGender(user.getGender());
 		customer.setPassword(user.getPassword());
+		if(!customer.getUsername().equals(user.getUsername())) {
+			usersService.validateUsername(user.getUsername());
+			customer.setUsername(user.getUsername());
+		}
+		
 			
 		return customerRepository.update(customer);
 	}

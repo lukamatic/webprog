@@ -12,6 +12,9 @@ public class Address {
 	private String country;
 	private String postalCode;
 	
+	public Address() {
+	}
+	
 	public Address(String street, String streetNumber, String city, String country, String postalCode) {
 		super();
 		this.street = street;

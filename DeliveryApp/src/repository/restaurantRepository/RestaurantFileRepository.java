@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import model.Deliverer;
 import model.Restaurant;
 import repository.IFileRepository;
 
@@ -43,14 +44,24 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 	
 	@Override
 	public Restaurant save(Restaurant value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Restaurant> restaurants = getAll();
+		restaurants.add(value);
+		writeToFile(restaurants);
+		return value;
 	}
 	
 	@Override
 	public Restaurant update(Restaurant value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Restaurant> restaurants = getAll();
+
+		for (int i = 0; i < restaurants.size(); i++) {
+			if (restaurants.get(i).getId() == value.getId()) {
+				restaurants.set(i, value);
+			}
+		}
+		
+		writeToFile(restaurants);
+		return value;
 	}
 	
 	@Override

@@ -34,7 +34,7 @@ public class CustomersController {
 		
 		customerService = (CustomersService)context.getAttribute("customerService");
 	}
-	/*
+	
 	@POST
 	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -43,7 +43,7 @@ public class CustomersController {
 		Customer customer = new Customer(user);
 		return customerService.create(customer);
 	}
-	*/
+	
 	@PUT
 	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)

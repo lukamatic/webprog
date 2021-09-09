@@ -21,6 +21,10 @@ public class Deliverer extends User {
 		super(username, password, firstName, lastName, gender, dateOfBirth, role, isBlocked, isDeleted);
 		this.ordersToDeliver = ordersToDeliver;
 	}
+	
+	public Deliverer() {
+		super();
+	}
 
 	public ArrayList<Integer> getOrdersToDeliver() {
 		return ordersToDeliver;

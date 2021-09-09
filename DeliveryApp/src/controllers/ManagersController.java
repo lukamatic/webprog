@@ -1,9 +1,12 @@
 package controllers;
 
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -11,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import model.Customer;
 import model.Manager;
 import model.User;
 import services.ManagersService;
@@ -42,12 +46,18 @@ public class ManagersController {
 		return managersService.create(manager);
 	}
 	
+	@GET
+	@Path("/available")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Manager> getAvailableManagers() {
+		return managersService.getAvailableManagers();
+	}
+	
 	@PUT
 	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Manager update(@Context HttpServletRequest request, User user) {
-		Manager manager = new Manager(user);
-		return managersService.update(manager);
+	public Manager updateProfile(@Context HttpServletRequest request, Manager manager) {
+		return managersService.updateProfile(manager);
 	}
 }

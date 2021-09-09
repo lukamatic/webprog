@@ -13,6 +13,10 @@ public class Manager extends User {
 				user.getDateOfBirth(), user.getRole(), user.isBlocked(), user.isDeleted());
 		this.restaurantId = -1;
 	}
+	
+	public Manager() {
+		super();
+	}
 
 	public Manager(String username, String password, String firstName, String lastName, Gender gender, long dateOfBirth,
 			Role role, boolean isBlocked, boolean isDeleted, int restaurantId) {
