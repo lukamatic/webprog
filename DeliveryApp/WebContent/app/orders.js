@@ -40,13 +40,12 @@ Vue.component('orders', {
 
                     <!--ORDERS-->
                     <div class="tab-pane fade show active" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                    	{{displayMyOnly}}
                     </div>
                     
                     <!--MYORDERS-->
                     <div class="tab-pane fade" id="myorders" role="tabpanel" aria-labelledby="myorders-tab">
-                        {{displayMyOnly}}
                     </div>
+                    
                         <div class="d-flex flex-column align-items-center">
 
                             <div class="d-flex flex-column align-items-center w-50 p-4 mt-4 mb-3 bg-white box-shadow ">
@@ -203,7 +202,21 @@ Vue.component('orders', {
                                             <div>
                                                 <b>Total: {{parseFloat(orderDTO.order.price).toFixed(2)}} RSD</b>
                                             </div>
-                                            
+                                            <div>
+                                                <button type="button" v-if="orderDTO.order.orderStatus == 'IN_TRANSPORT'"
+                                            						  v-on:click="deliverOrder(orderDTO.order.id)"
+                                        							  class="btn btn-outline-primary px-3 mt-3">Deliver</button>
+                                            </div>
+                                            <div>
+                                                <button type="button" v-if="orderDTO.order.orderStatus == 'WAITING_FOR_DELIVERY'  && !orderDTO.order.deliverers.includes(user.id)"
+                                            						  v-on:click="applyForDelivery(orderDTO.order.id)"
+                                        							  class="btn btn-outline-primary px-3 mt-3">Apply</button>
+                                            </div>
+                                            <div>
+                                                <p v-if="orderDTO.order.orderStatus == 'WAITING_FOR_DELIVERY' && orderDTO.order.deliverers.includes(user.id)"
+                                        							  class="px-3 mt-3">APPLIED</p>
+                                        							  
+                                            </div>
                                         </div>
 
                                     </div>
@@ -271,10 +284,27 @@ Vue.component('orders', {
     },
   },
   methods: {
+  	deliverOrder(id){
+  		axios.put('/DeliveryApp/rest/orders/deliver/'+id).then((response) => {
+	    	this.ordersDTO.find(element => element.order.id == id).order.orderStatus = "DELIVERED";
+	    	this.displayedOrdersDTO.find(element => element.order.id == id).order.orderStatus = "DELIVERED";
+	    	this.delivererOrdersDTO.find(element => element.order.id == id).order.orderStatus = "DELIVERED";
+    	})
+  	},
+  	applyForDelivery(id){
+  		let el = this.ordersDTO.find(element => element.order.id == id);	
+  		if(!(el.order.deliverers.includes(id))){
+  			axios.put('/DeliveryApp/rest/orders/apply/'+id+'/'+this.user.id).then((response) => {
+		    	this.ordersDTO.find(element => element.order.id == id).order.deliverers.push(this.user.id);
+		    	this.waitingDTO.find(element => element.order.id == id).order.deliverers.push(this.user.id);
+		    	this.displayedOrdersDTO.find(element => element.order.id == id).order.deliverers.push(this.user.id);
+	    	});
+  		}
+  	},
     search: function (searchParameters) {
     
       var params = "";
-      if(displayMyOnly){
+      if(this.displayMyOnly){
       	params = "deliverer=" + this.user.id;
       } else {
       	params = "waiting=true";

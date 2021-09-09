@@ -136,6 +136,21 @@ private IOrderRepository orderRepository;
 		}
 		return orders;
 	}
+
+	public void deliverOrder(String id) {
+
+		Order order = orderRepository.getById(id);
+		order.setOrderStatus(OrderStatus.DELIVERED);
+		orderRepository.update(order);
+		
+	}
+
+	public void applyForDelivery(String orderId, int delivererId) {
+		Order order = orderRepository.getById(orderId);
+		order.getDeliverers().add(delivererId);
+		orderRepository.update(order);
+		
+	}
 	
 	
 }

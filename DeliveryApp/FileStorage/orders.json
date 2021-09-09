@@ -58,7 +58,10 @@
         "dateTimeCreated": 1630891523127,
         "price": 1620.0,
         "customerId": 2,
-        "orderStatus": "WAITING_FOR_DELIVERY"
+        "orderStatus": "WAITING_FOR_DELIVERY",
+        "deliverers": [
+            6
+        ]
     },
     {
         "id": "0000000002",
@@ -98,7 +101,8 @@
         "dateTimeCreated": 1630971523127,
         "price": 1020.0,
         "customerId": 2,
-        "orderStatus": "DELIVERED"
+        "orderStatus": "DELIVERED",
+        "deliverers": []
     },
     {
         "id": "0000000003",
@@ -159,7 +163,8 @@
         "dateTimeCreated": 1630991523127,
         "price": 460.0,
         "customerId": 2,
-        "orderStatus": "IN_PREPARATION"
+        "orderStatus": "IN_PREPARATION",
+        "deliverers": []
     },
     {
         "id": "0000000004",
@@ -199,7 +204,8 @@
         "dateTimeCreated": 1630991523127,
         "price": 1020.0,
         "customerId": 1,
-        "orderStatus": "IN_TRANSPORT"
+        "orderStatus": "DELIVERED",
+        "deliverers": []
     },
     {
         "id": "0000000005",
@@ -243,7 +249,8 @@
         "dateTimeCreated": 1631120211776,
         "price": 3847.5,
         "customerId": 2,
-        "orderStatus": "WAITING_FOR_DELIVERY"
+        "orderStatus": "WAITING_FOR_DELIVERY",
+        "deliverers": []
     },
     {
         "id": "0000000006",
@@ -266,7 +273,8 @@
         "dateTimeCreated": 1631120248239,
         "price": 15200.0,
         "customerId": 2,
-        "orderStatus": "CANCELED"
+        "orderStatus": "CANCELED",
+        "deliverers": []
     },
     {
         "id": "0000000007",
@@ -306,7 +314,8 @@
         "dateTimeCreated": 1631120275634,
         "price": 18629.5,
         "customerId": 2,
-        "orderStatus": "PROCESSING"
+        "orderStatus": "PROCESSING",
+        "deliverers": []
     },
     {
         "id": "0000000008",
@@ -350,7 +359,8 @@
         "dateTimeCreated": 1631203158750,
         "price": 2970.0,
         "customerId": 4,
-        "orderStatus": "PROCESSING"
+        "orderStatus": "IN_TRANSPORT",
+        "deliverers": []
     },
     {
         "id": "0000000009",
@@ -373,7 +383,8 @@
         "dateTimeCreated": 1631203174295,
         "price": 1280.0,
         "customerId": 4,
-        "orderStatus": "PROCESSING"
+        "orderStatus": "DELIVERED",
+        "deliverers": []
     },
     {
         "id": "0000000010",
@@ -417,6 +428,80 @@
         "dateTimeCreated": 1631203195607,
         "price": 2960.0,
         "customerId": 4,
-        "orderStatus": "WAITING_FOR_DELIVERY"
+        "orderStatus": "WAITING_FOR_DELIVERY",
+        "deliverers": []
+    },
+    {
+        "id": "0000000011",
+        "items": [
+            {
+                "article": {
+                    "id": 0,
+                    "name": "Pastrmka",
+                    "price": 570.0,
+                    "articleType": "FOOD",
+                    "restaurantId": 0,
+                    "description": "Pecena pastrmka posluzena sa krompir salatom i tzatziki sosom.",
+                    "imagePath": "",
+                    "isDeleted": false,
+                    "articleSize": {
+                        "ammount": 400,
+                        "unit": "GRAMS"
+                    }
+                },
+                "count": 4
+            },
+            {
+                "article": {
+                    "id": 4,
+                    "name": "Staropramen",
+                    "price": 290.0,
+                    "articleType": "DRINK",
+                    "restaurantId": 0,
+                    "description": "",
+                    "imagePath": "",
+                    "isDeleted": false,
+                    "articleSize": {
+                        "ammount": 500,
+                        "unit": "MILILITERS"
+                    }
+                },
+                "count": 3
+            }
+        ],
+        "restaurantId": 0,
+        "dateTimeCreated": 1631205542841,
+        "price": 3150.0,
+        "customerId": 2,
+        "orderStatus": "PROCESSING",
+        "deliverers": []
+    },
+    {
+        "id": "0000000012",
+        "items": [
+            {
+                "article": {
+                    "id": 3,
+                    "name": "Limunada",
+                    "price": 170.0,
+                    "articleType": "DRINK",
+                    "restaurantId": 0,
+                    "description": "Domace cedjena limunada",
+                    "imagePath": "",
+                    "isDeleted": false,
+                    "articleSize": {
+                        "ammount": 300,
+                        "unit": "MILILITERS"
+                    }
+                },
+                "count": 3
+            }
+        ],
+        "restaurantId": 0,
+        "dateTimeCreated": 1631205589799,
+        "price": 510.0,
+        "customerId": 2,
+        "orderStatus": "IN_TRANSPORT",
+        "deliverers": []
     }
 ]

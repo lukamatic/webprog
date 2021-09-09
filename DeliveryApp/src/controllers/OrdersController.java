@@ -83,11 +83,10 @@ public class OrdersController {
 										@QueryParam("dateFrom") long startDate, 
 										@QueryParam("dateTo") long endDate) {
 
-		System.out.println(waiting);
 		ArrayList<Order> orders;
 		if (userId != null) {
 			orders = ordersService.getByUserId(userId);
-		} else if (waiting == true) {
+		} else if (waiting != null && waiting == true) {
 			orders = ordersService.getByStatus(OrderStatus.WAITING_FOR_DELIVERY);
 		} else if (delivererId != null) {
 			orders = ordersService.getByDeliverer(delivererId);
@@ -132,6 +131,23 @@ public class OrdersController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void cancel(@Context HttpServletRequest request, @PathParam("orderId") String id) {
 		ordersService.cancelOrder(id);
+	}
+	
+	@PUT
+	@Path("/deliver/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void deliver(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.deliverOrder(id);
+	}
+	
+	@PUT
+	@Path("/apply/{orderId}/{delivererId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void apply(@Context HttpServletRequest request, @PathParam("orderId") String orderId, @PathParam("delivererId") int delivererId) {
+		System.out.println(delivererId);
+		ordersService.applyForDelivery(orderId, delivererId);
 	}
 }
 

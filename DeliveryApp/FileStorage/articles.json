@@ -1,1 +1,120 @@
-[{"id":0,"name":"Pastrmka","price":570.0,"articleType":"FOOD","restaurantId":0,"description":"Pecena pastrmka posluzena sa krompir salatom i tzatziki sosom.","imagePath":"","isDeleted":false,"articleSize":{"ammount":400,"unit":"GRAMS"}},{"id":1,"name":"Pizza capricciosa","price":320.0,"articleType":"FOOD","restaurantId":1,"description":"Pelat, origano, sunka, kackavalj, sampinjoni, masline","imagePath":"","isDeleted":false},{"id":2,"name":"Belo meso u prezli","price":400.0,"articleType":"FOOD","restaurantId":0,"description":"Belo meso pohovano u prezli sa pomfritom","imagePath":"","isDeleted":false,"articleSize":{"ammount":500,"unit":"GRAMS"}},{"id":3,"name":"Limunada","price":170.0,"articleType":"DRINK","restaurantId":0,"description":"Domace cedjena limunada","imagePath":"","isDeleted":false,"articleSize":{"ammount":300,"unit":"MILILITERS"}},{"id":4,"name":"Staropramen","price":290.0,"articleType":"DRINK","restaurantId":0,"description":"","imagePath":"","isDeleted":false,"articleSize":{"ammount":500,"unit":"MILILITERS"}},{"id":5,"name":"Karadjordjeva snicla","price":630.0,"articleType":"FOOD","restaurantId":0,"description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.","imagePath":"","isDeleted":false},{"id":6,"name":"Riba","price":570.0,"articleType":"FOOD","restaurantId":0,"description":"Pecena riba posluzena sa krompir salatom i tzatziki sosom.","imagePath":"","isDeleted":true,"articleSize":{"ammount":400,"unit":"GRAMS"}},{"id":7,"name":"Spaghetti bolognese","price":570.0,"articleType":"FOOD","restaurantId":0,"description":"Al dente kuvana testenina spaghetti sa bolognese sosom","imagePath":"","isDeleted":false,"articleSize":{"ammount":400,"unit":"GRAMS"}},{"id":8,"name":"Pizza margarita","price":240.0,"articleType":"FOOD","restaurantId":1,"description":"Pelat, origano, kackavalj","imagePath":"","isDeleted":false,"articleSize":{"ammount":400,"unit":"GRAMS"}}]
+[
+    {
+        "id": 0,
+        "name": "Pastrmka",
+        "price": 570.0,
+        "articleType": "FOOD",
+        "restaurantId": 0,
+        "description": "Pecena pastrmka posluzena sa krompir salatom i tzatziki sosom.",
+        "imagePath": "",
+        "isDeleted": false,
+        "articleSize": {
+            "ammount": 400,
+            "unit": "GRAMS"
+        }
+    },
+    {
+        "id": 1,
+        "name": "Pizza capricciosa",
+        "price": 320.0,
+        "articleType": "FOOD",
+        "restaurantId": 1,
+        "description": "Pelat, origano, sunka, kackavalj, sampinjoni, masline",
+        "imagePath": "",
+        "isDeleted": false
+    },
+    {
+        "id": 2,
+        "name": "Belo meso u prezli",
+        "price": 400.0,
+        "articleType": "FOOD",
+        "restaurantId": 0,
+        "description": "Belo meso pohovano u prezli sa pomfritom",
+        "imagePath": "",
+        "isDeleted": false,
+        "articleSize": {
+            "ammount": 500,
+            "unit": "GRAMS"
+        }
+    },
+    {
+        "id": 3,
+        "name": "Limunada",
+        "price": 170.0,
+        "articleType": "DRINK",
+        "restaurantId": 0,
+        "description": "Domace cedjena limunada",
+        "imagePath": "",
+        "isDeleted": false,
+        "articleSize": {
+            "ammount": 300,
+            "unit": "MILILITERS"
+        }
+    },
+    {
+        "id": 4,
+        "name": "Staropramen",
+        "price": 290.0,
+        "articleType": "DRINK",
+        "restaurantId": 0,
+        "description": "",
+        "imagePath": "",
+        "isDeleted": false,
+        "articleSize": {
+            "ammount": 500,
+            "unit": "MILILITERS"
+        }
+    },
+    {
+        "id": 5,
+        "name": "Karadjordjeva snicla",
+        "price": 630.0,
+        "articleType": "FOOD",
+        "restaurantId": 0,
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        "imagePath": "",
+        "isDeleted": false
+    },
+    {
+        "id": 6,
+        "name": "Riba",
+        "price": 570.0,
+        "articleType": "FOOD",
+        "restaurantId": 0,
+        "description": "Pecena riba posluzena sa krompir salatom i tzatziki sosom.",
+        "imagePath": "",
+        "isDeleted": true,
+        "articleSize": {
+            "ammount": 400,
+            "unit": "GRAMS"
+        }
+    },
+    {
+        "id": 7,
+        "name": "Spaghetti bolognese",
+        "price": 570.0,
+        "articleType": "FOOD",
+        "restaurantId": 0,
+        "description": "Al dente kuvana testenina spaghetti sa bolognese sosom",
+        "imagePath": "",
+        "isDeleted": false,
+        "articleSize": {
+            "ammount": 400,
+            "unit": "GRAMS"
+        }
+    },
+    {
+        "id": 8,
+        "name": "Pizza margarita",
+        "price": 240.0,
+        "articleType": "FOOD",
+        "restaurantId": 1,
+        "description": "Pelat, origano, kackavalj",
+        "imagePath": "",
+        "isDeleted": false,
+        "articleSize": {
+            "ammount": 400,
+            "unit": "GRAMS"
+        }
+    }
+]
