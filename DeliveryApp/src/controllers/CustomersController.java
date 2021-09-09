@@ -65,6 +65,8 @@ public class CustomersController {
 	@Path("/item/{customerId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addItemToCart(@Context HttpServletRequest request, @PathParam("customerId") int id, CartItem item) {
+		System.out.println(id);
+		System.out.println(item.getArticle().getName());
 		customerService.addToCart(item,id);
 	}
 }

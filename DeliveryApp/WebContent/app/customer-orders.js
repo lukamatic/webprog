@@ -312,7 +312,7 @@ Vue.component('customer-orders', {
       this.filterOptions.status = "any";
 
       axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
-        this.orders = response.data;
+       let orders = response.data;
         
 	      this.ordersDTO = [];
 	      this.displayedOrdersDTO = [];
