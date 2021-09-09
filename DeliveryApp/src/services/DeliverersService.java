@@ -39,4 +39,8 @@ public class DeliverersService {
 		}
 		return delivererRepository.update(deliverer);
 	}
+
+	public Deliverer getById(int id) {
+		return delivererRepository.getById(id);
+	}
 }

@@ -19,6 +19,7 @@ import javax.ws.rs.core.MediaType;
 
 import model.Cart;
 import model.Order;
+import model.OrderStatus;
 import model.Restaurant;
 import services.OrdersService;
 
@@ -41,6 +42,20 @@ public class OrdersController {
 	}
 	
 	@GET
+	@Path("/deliverer/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Order> getByDeliverer(@PathParam("id") int id) {
+		return ordersService.getByDeliverer(id);
+	}
+	
+	@GET
+	@Path("/status/{status}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Order> getByStatus(@PathParam("status") OrderStatus status) {
+		return ordersService.getByStatus(status);
+	}
+	
+	@GET
 	@Path("/user/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Order> getByUserId(@PathParam("id") int id) {
@@ -58,21 +73,27 @@ public class OrdersController {
 	@GET
 	@Path("/search")
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Order> search(@QueryParam("user") int id,
+	@Consumes(MediaType.APPLICATION_JSON)
+	public ArrayList<Order> search(@QueryParam("user") Integer userId,
+										@QueryParam("waiting") Boolean waiting,
+										@QueryParam("deliverer") Integer delivererId,
 										@QueryParam("restaurantName") String restaurantName,
 										@QueryParam("priceFrom") Double lowestPrice, 
 										@QueryParam("priceTo") Double highestPrice,
 										@QueryParam("dateFrom") long startDate, 
 										@QueryParam("dateTo") long endDate) {
 
-		
 		ArrayList<Order> orders;
-		if (id == 0) {
+		if (userId != null) {
+			orders = ordersService.getByUserId(userId);
+		} else if (waiting != null && waiting == true) {
+			orders = ordersService.getByStatus(OrderStatus.WAITING_FOR_DELIVERY);
+		} else if (delivererId != null) {
+			orders = ordersService.getByDeliverer(delivererId);
+		} else {
 			orders = ordersService.getAll(); 
 		}
-		else {
-			orders = ordersService.getByUserId(id);
-		}
+		
 		
 		if (restaurantName != null && restaurantName != "") {
 			ordersService.filterByRestaurantName(orders, restaurantName);
@@ -93,6 +114,8 @@ public class OrdersController {
 		
 		return orders;
 	}
+	
+	
 
 	@POST
 	@Path("")
@@ -108,6 +131,23 @@ public class OrdersController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public void cancel(@Context HttpServletRequest request, @PathParam("orderId") String id) {
 		ordersService.cancelOrder(id);
+	}
+	
+	@PUT
+	@Path("/deliver/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void deliver(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.deliverOrder(id);
+	}
+	
+	@PUT
+	@Path("/apply/{orderId}/{delivererId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void apply(@Context HttpServletRequest request, @PathParam("orderId") String orderId, @PathParam("delivererId") int delivererId) {
+		System.out.println(delivererId);
+		ordersService.applyForDelivery(orderId, delivererId);
 	}
 }
 

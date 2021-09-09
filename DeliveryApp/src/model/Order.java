@@ -16,9 +16,10 @@ public class Order {
    private double price;
    private int customerId;
    private OrderStatus orderStatus;
+   private ArrayList<Integer> deliverers;
    
    public Order(String id, ArrayList<CartItem> items, int restaurantId, long dateTimeCreated, double price,
-			int customerId, OrderStatus orderStatus) {
+			int customerId, OrderStatus orderStatus, ArrayList<Integer> deliverers) {
 		super();
 		this.id = id;
 		this.items = items;
@@ -27,6 +28,7 @@ public class Order {
 		this.price = price;
 		this.customerId = customerId;
 		this.orderStatus = orderStatus;
+		this.deliverers = deliverers;
 	}
    
    public Order(String id, ArrayList<CartItem> items, double price, int customerId) {
@@ -41,6 +43,7 @@ public class Order {
 		this.price = price;
 		this.customerId = customerId;
 		this.orderStatus = OrderStatus.PROCESSING;
+		this.deliverers = new ArrayList<Integer>();
 	}
    
     public Order() {
@@ -101,6 +104,14 @@ public class Order {
 
 	public void setOrderStatus(OrderStatus orderStatus) {
 		this.orderStatus = orderStatus;
+	}
+
+	public ArrayList<Integer> getDeliverers() {
+		return deliverers;
+	}
+
+	public void setDeliverers(ArrayList<Integer> deliverers) {
+		this.deliverers = deliverers;
 	}
    
    

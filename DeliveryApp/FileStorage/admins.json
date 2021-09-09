@@ -1,1 +1,14 @@
-[{"id":0,"username":"marko","password":"marko123","firstName":"Marko","lastName":"Stevic","gender":"MALE","dateOfBirth":691232451000,"role":"ADMIN","isBlocked":false,"isDeleted":false}]
+[
+    {
+        "id": 0,
+        "username": "marko",
+        "password": "marko123",
+        "firstName": "Marko",
+        "lastName": "Stevic",
+        "gender": "MALE",
+        "dateOfBirth": 691232451000,
+        "role": "ADMIN",
+        "isBlocked": false,
+        "isDeleted": false
+    }
+]

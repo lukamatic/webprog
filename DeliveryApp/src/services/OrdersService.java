@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import javax.ws.rs.BadRequestException;
 
 import model.Cart;
+import model.Deliverer;
 import model.Order;
 import model.OrderStatus;
 import model.Restaurant;
@@ -112,6 +113,43 @@ private IOrderRepository orderRepository;
 		double points = -1 * order.getPrice() * 133 * 4 / 1000;
 		CustomersService cs = new CustomersService();
 		cs.updatePoints(order.getCustomerId(), points);
+	}
+
+	public ArrayList<Order> getByDeliverer(int id) {
+		ArrayList<Order> orders = new ArrayList<Order>();
+		Deliverer d = (new DeliverersService()).getById(id);
+		for(String orderId : d.getOrdersToDeliver()) {
+			orders.add(this.getById(orderId));
+		}
+		
+		return orders;
+	}
+
+	public ArrayList<Order> getByStatus(OrderStatus status) {
+		ArrayList<Order> allOrders = getAll();
+		ArrayList<Order> orders = new ArrayList<Order>();
+		for(Order order : allOrders) {
+			if(order.getOrderStatus() == status) {
+				orders.add(order);
+			}
+			
+		}
+		return orders;
+	}
+
+	public void deliverOrder(String id) {
+
+		Order order = orderRepository.getById(id);
+		order.setOrderStatus(OrderStatus.DELIVERED);
+		orderRepository.update(order);
+		
+	}
+
+	public void applyForDelivery(String orderId, int delivererId) {
+		Order order = orderRepository.getById(orderId);
+		order.getDeliverers().add(delivererId);
+		orderRepository.update(order);
+		
 	}
 	
 	
