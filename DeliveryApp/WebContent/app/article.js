@@ -6,6 +6,7 @@ Vue.component('articleComponent', {
         name: "",
         articleType: null,
         price: null,
+        imageName: "",
         articleSize: {
           ammount: null,
           unit: null
@@ -197,7 +198,16 @@ Vue.component('articleComponent', {
     },
     turnEditModeOn: function () {
       this.readonlyModeOn = false;
-      this.backupArticle = { ...this.article };
+      this.backupArticle = { 
+        name: this.article.name,
+        articleType: this.article.articleType,
+        price: this.article.price,
+        imageName: this.article.imageName,
+        articleSize: {
+          ammount: this.article.articleSize.ammount,
+          unit: this.article.articleSize.unit
+        }
+      };
     },
     cancelChanges: function () {
       this.article = this.backupArticle;
