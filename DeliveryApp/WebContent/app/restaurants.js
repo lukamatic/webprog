@@ -13,7 +13,7 @@ Vue.component('restaurants', {
   <div>
   	<navbar path="restaurants"></navbar> 
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
-      <a
+      <a v-if="$cookies.get('role') == 'ADMIN'"
         class="btn btn-dark align-self-end mr-5 mt-4"
         href="#/newRestaurant"
       >Create new restaurant</a>
@@ -217,7 +217,7 @@ Vue.component('restaurants', {
           bg-white
           shadow
         "
-        v-on:click="choose(restaurant.id)"
+        v-on:click="choose(restaurant.id)" style="cursor:pointer"
       >
         <img class="m-3" :src="'Images/' + restaurant.logoImageName" width="200" height="200" />
         <div class="flex-column flex-fill mx-3">

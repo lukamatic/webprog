@@ -1,8 +1,10 @@
 Vue.component('restaurant', {
   data: function () {
     return {
-      restaurant: "",
+      restaurant: null,
       address: "",
+      map: null,
+      markers: null,
 	  comments: "",
 	  averageRating: 0,
 	  food: "",
@@ -17,7 +19,6 @@ Vue.component('restaurant', {
   template: `
   <div>
   	<navbar path="restaurants"></navbar> 
-  	
 	<div class="d-flex flex-column align-items-center bg-light">
 
 
@@ -32,7 +33,7 @@ Vue.component('restaurant', {
             box-shadow
             mb-3
           ">
-                <img src="" width="100" height="100" class="m-2 ml-3">
+                <img :src="'Images/' + restaurant.logoImageName" width="100" height="100" class="m-2 ml-3">
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
                     <h3 class="flex-fill">{{restaurant.name}}</h3>
                     <h5>{{ restaurant.restaurantType }}</h5>
@@ -53,7 +54,7 @@ Vue.component('restaurant', {
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link text-dark" id="location-tab" data-toggle="tab" href="#location" role="tab"
+                        <a class="nav-link text-dark" id="location-tab" data-toggle="tab" href="#location" role="tab" v-on:click="initMap"
                             aria-controls="profile" aria-selected="false">
                             Location
                         </a>
@@ -216,8 +217,7 @@ Vue.component('restaurant', {
                             </div>
 
                             <div class="d-flex col-8">
-                                <img src="" class="w-100 m-3 flex-fill box-shadow"
-                                    style="min-height: 300px; height: 450px;">
+        						<div id="map" class="d-flex w-100 shadow" style="height:500px;"></div>
                             </div>
                         </div>
                     </div>
@@ -281,8 +281,6 @@ Vue.component('restaurant', {
       }
     });
     
-    
-    
      
     axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
       this.comments = response.data;
@@ -313,6 +311,45 @@ Vue.component('restaurant', {
     },
   },
   methods: {
+  	initMap: function() {
+  	  if (this.map) {
+  	    return;
+  	  }
+  	
+      this.map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([this.restaurant.location.longitude, this.restaurant.location.latitude]),
+          zoom: 15
+        })
+      })
+      
+      this.markers = new ol.layer.Vector({
+  		source: new ol.source.Vector(),
+  		style: new ol.style.Style({
+    	  image: new ol.style.Icon({
+      	    anchor: [0.5, 1],
+      	    src: 'marker.png',
+      	    scale: 0.05
+    	  })
+  	    })
+      });
+      
+	  this.map.addLayer(this.markers);
+	  this.putMarker([this.restaurant.location.longitude, this.restaurant.location.latitude])
+	  
+	  setTimeout(() => this.map.updateSize(), 1000);
+    },
+    putMarker: function(coordinates) {
+	  this.markers.getSource().clear();
+	  marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(coordinates)));
+	  this.markers.getSource().addFeature(marker);
+    },
     increaseCount: function(id) {
 	  this.lastSelectedId = this.selectedId;
 	  this.selectedId = id;
@@ -369,7 +406,7 @@ Vue.component('restaurant', {
 			  
 		    });
 	    });
-    },
+    }
   },
 });
   	
