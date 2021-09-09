@@ -4,15 +4,19 @@ Vue.component('restaurants', {
       restaurants: null,
       displayedRestaurants: null,
       isSearchDivHidden: true,
-      searchParameters: { type: "any" },
-      sortOptions: { condition: "", order: "asc" },
-      filterOptions: { type: "any", open: false },
+      searchParameters: { type: 'any' },
+      sortOptions: { condition: '', order: 'asc' },
+      filterOptions: { type: 'any', open: false },
     };
   },
   template: `
   <div>
   	<navbar path="restaurants"></navbar> 
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
+      <a
+        class="btn btn-dark align-self-end mr-5 mt-4"
+        href="#/newRestaurant"
+      >Create new restaurant</a>
     
       <div
         class="
@@ -27,7 +31,7 @@ Vue.component('restaurants', {
         "
       >
         <button
-          class="btn btn-dark w-75 font-weight-bold"
+          class="btn btn-dark w-75"
           v-on:click="isSearchDivHidden = false"
           :hidden="!isSearchDivHidden"
         >
@@ -215,7 +219,7 @@ Vue.component('restaurants', {
         "
         v-on:click="choose(restaurant.id)"
       >
-        <img class="m-3" src="" width="200" height="200"/>
+        <img class="m-3" :src="'Images/' + restaurant.logoImageName" width="200" height="200" />
         <div class="flex-column flex-fill mx-3">
           <div
             class="
@@ -249,47 +253,57 @@ Vue.component('restaurants', {
   },
   filters: {
     formatAddress: (address) => {
-      return address.street + ' ' + address.streetNumber + ', ' + address.city + ', ' + address.country;
+      return (
+        address.street +
+        ' ' +
+        address.streetNumber +
+        ', ' +
+        address.city +
+        ', ' +
+        address.country
+      );
     },
   },
   methods: {
-    search: function(searchParameters) {
-      var params = "";
+    search: function (searchParameters) {
+      var params = '';
 
       if (searchParameters.name) {
-        params = params.concat("name=" + searchParameters.name);
+        params = params.concat('name=' + searchParameters.name);
       }
 
       if (searchParameters.type) {
-        params = params.concat("&type=" + searchParameters.type);
+        params = params.concat('&type=' + searchParameters.type);
       }
 
       if (searchParameters.location) {
-        params = params.concat("&location=" + searchParameters.location);
+        params = params.concat('&location=' + searchParameters.location);
       }
 
       if (searchParameters.from) {
-        params = params.concat("&from=" + searchParameters.from);
+        params = params.concat('&from=' + searchParameters.from);
       }
 
       if (searchParameters.to) {
-        params = params.concat("&to=" + searchParameters.from);
+        params = params.concat('&to=' + searchParameters.from);
       }
 
-      axios.get("/DeliveryApp/rest/restaurants/search?" + params).then((response) => {
-        this.restaurants = response.data;
-        this.displayedRestaurants = this.restaurants;
-      });
+      axios
+        .get('/DeliveryApp/rest/restaurants/search?' + params)
+        .then((response) => {
+          this.restaurants = response.data;
+          this.displayedRestaurants = this.restaurants;
+        });
     },
     sort: function () {
       if (this.sortOptions.condition) {
         switch (this.sortOptions.condition) {
-          case "name":
+          case 'name':
             this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
               this.sortByName(a, b, this.sortOptions.order)
             );
             break;
-          case "location":
+          case 'location':
             this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
               this.sortByLocation(a, b, this.sortOptions.order)
             );
@@ -301,7 +315,7 @@ Vue.component('restaurants', {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
 
-      if (order == "asc") {
+      if (order == 'asc') {
         if (nameA < nameB) {
           return -1;
         }
@@ -319,10 +333,14 @@ Vue.component('restaurants', {
       return 0;
     },
     sortByLocation: function (a, b, order) {
-      const locationA = this.$options.filters.formatAddress(a.location.address).toUpperCase();
-      const locationB = this.$options.filters.formatAddress(b.location.address).toUpperCase();
+      const locationA = this.$options.filters
+        .formatAddress(a.location.address)
+        .toUpperCase();
+      const locationB = this.$options.filters
+        .formatAddress(b.location.address)
+        .toUpperCase();
 
-      if (order == "asc") {
+      if (order == 'asc') {
         if (locationA < locationB) {
           return -1;
         }
@@ -343,37 +361,35 @@ Vue.component('restaurants', {
       this.displayedRestaurants = this.restaurants.filter((r) =>
         this.filterOptions.open ? r.open : true
       );
-      
+
       this.sort();
 
       switch (this.filterOptions.type) {
-        case "grill":
+        case 'grill':
           this.displayedRestaurants = this.displayedRestaurants.filter(
-            (r) => r.restaurantType == "GRILL"
+            (r) => r.restaurantType == 'GRILL'
           );
           break;
-        case "italian":
+        case 'italian':
           this.displayedRestaurants = this.displayedRestaurants.filter(
-            (r) => r.restaurantType == "ITALIAN"
+            (r) => r.restaurantType == 'ITALIAN'
           );
           break;
-        case "chinese":
+        case 'chinese':
           this.displayedRestaurants = this.displayedRestaurants.filter(
-            (r) => r.restaurantType == "CHINESE"
+            (r) => r.restaurantType == 'CHINESE'
           );
           break;
-        case "vegan":
+        case 'vegan':
           this.displayedRestaurants = this.displayedRestaurants.filter(
-            (r) => r.restaurantType == "VEGAN"
+            (r) => r.restaurantType == 'VEGAN'
           );
           break;
       }
-      
     },
     choose: function (restaurantId) {
-        
-        window.location.href = "#/restaurant?id="+restaurantId;
-        
+      window.location.href = '#/restaurant?id=' + restaurantId;
+
       //});
     },
   },

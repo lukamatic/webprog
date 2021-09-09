@@ -24,6 +24,25 @@ public class ManagersService {
 		manager.setId(usersService.calculateId());
 		return managerRepository.save(manager);
 	}
+	
+	public ArrayList<Manager> getAvailableManagers() {
+		ArrayList<Manager> managers = managerRepository.getAll();
+		
+		for (int i = 0; i < managers.size(); i++) {
+			if (managers.get(i).getRestaurantId() != -1) {
+				managers.remove(i);
+				i--;
+			}
+		}
+		
+		return managers;
+	} 
+	
+	public void assignRestaurantToManager(int restaurantId, int managerId) {
+		Manager manager = managerRepository.getById(managerId);
+		manager.setRestaurantId(restaurantId);
+		managerRepository.update(manager);
+	}
 
 	public Manager update(Manager manager) {
 		usersService.validateUsername(manager.getUsername());
