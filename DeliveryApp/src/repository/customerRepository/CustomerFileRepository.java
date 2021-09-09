@@ -53,8 +53,10 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 	
 	@Override
 	public Customer save(Customer value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Customer> customers = getAll();
+		customers.add(value);
+		writeToFile(customers);
+		return value;
 	}
 	
 	@Override
