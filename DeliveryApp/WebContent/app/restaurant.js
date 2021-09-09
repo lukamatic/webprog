@@ -100,7 +100,7 @@ Vue.component('restaurant', {
                                             aria-selected="false">Beverages</a>
                                     </li>
                                     <li v-if="isManaged" >
-                                        <a class="nav-link" :href='"#/newArticle?restaurantId="+restaurant.id'>New article</a>
+                                        <a class="nav-link" href="#/newArticle">New article</a>
                                     </li>
                                 </ul>
                             </div>
@@ -112,11 +112,12 @@ Vue.component('restaurant', {
               <!--dobaviti hranu-->
                                         <h3 class=" mx-4 mt-3">Food</h3>
                                         
-                                        <div class="d-flex flex-wrap " >
+                                        <div class="d-flex flex-wrap ">
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
                                                 style="min-height: 200px; min-width: 600px; width: 1000px" 
                                                  v-for="f in food" :key="f.id" >
-
+                                                 
+												<a :href="'#article/' + f.id">
                                                 <img :src="f.imagePath" width="190" height="190">
 
                                                 <div class="m-2  pl-3 d-flex flex-column flex-fill">
@@ -160,6 +161,7 @@ Vue.component('restaurant', {
                                                         </div>
                                                     </div>
                                                 </div>
+                                               </a>
                                             </div>
 
                                             

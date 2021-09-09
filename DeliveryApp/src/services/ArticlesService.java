@@ -16,6 +16,10 @@ private IArticlesRepository articlesRepository;
 		articlesRepository = new ArticlesFileRepository();
 	}
 	
+	public Article getById(int id) {
+		return articlesRepository.getById(id);
+	}
+	
 	public ArrayList<Article> getByRestaurantIdAndType(int id, ArticleType type) {
 		return articlesRepository.getByRestaurantIdAndType(id, type);
 	}

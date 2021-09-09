@@ -38,6 +38,13 @@ public class ArticlesController {
 	}
 	
 	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Article getById(@PathParam("id") int id) {
+		return articlesService.getById(id);
+	}
+	
+	@GET
 	@Path("/{id}/{typeStr}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Article> getAllByRestaurantIdAndType(@PathParam("id") int id, @PathParam("typeStr") String typeStr) {
