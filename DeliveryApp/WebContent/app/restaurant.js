@@ -99,6 +99,9 @@ Vue.component('restaurant', {
                                             href="#v-pills-beverages" role="tab" aria-controls="v-pills-beverages"
                                             aria-selected="false">Beverages</a>
                                     </li>
+                                    <li v-if="isManaged" >
+                                        <a class="nav-link" :href='"#/newArticle?restaurantId="+restaurant.id'>New article</a>
+                                    </li>
                                 </ul>
                             </div>
 
@@ -128,6 +131,10 @@ Vue.component('restaurant', {
                                                     </div>
                                                     <div class="flex-fill">
                                                     	<p class="pr-2">{{f.description}}</p>
+                                                    </div>
+                                                    <div v-if="isManaged" class="d-flex flex-row mt-auto">
+                                                    	<button class="btn btn-outline-secondary px-5 mr-3"> Edit </button>
+                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     </div>
                                                     
 
@@ -170,7 +177,7 @@ Vue.component('restaurant', {
 
                                                 <img :src="b.imagePath" width="190" height="190">
 
-                                                <div class="m-2  pl-3 d-flex flex-column">
+                                                <div class="m-2  pl-3 d-flex flex-column  flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class="d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ b.name }}</h5>
@@ -248,14 +255,28 @@ Vue.component('restaurant', {
                                     <div class="bg-white box-shadow m-1 p-2 d-flex"
                                         style="min-height: 150px; min-width: 600px; width: 900px" 
                                         v-for="comment in comments" :key="comment.id">
-                                        <div class="m-2  pl-3 d-flex flex-column">
-                                            <div class="d-flex flex-row justify-content-between">
+                                        <div class="m-2  pl-3 d-flex flex-column  flex-fill">
+                                            <div class="d-flex flex-row justify-content-between ">
                                                 <div class="d-flex flex-column align-items-start ">
-                                                    <h5 class="">{{ comment.customerId }}</h5>
-                                                    <p>{{ comment.rating }}<span style='font-size:18px;'>&starf;</span></p>
+                                                    <h5 class="mb-1">{{ comment.customerId }}</h5>
+                                                    <p class="mt-0">{{ comment.rating }}<span style='font-size:18px;'>&starf;</span></p>
+                                                    <p class="pr-2">{{ comment.text }}</p>
+                                                </div>
+                                                <div v-if="isManaged" class="m-2 pl-3 ml-auto d-flex flex-column align-items-end">
+                                                	<b class="m-2">{{comment.status}}</b>
+                                                	<button v-if="comment.status == 'PENDING'" 
+                                                			v-on:click="approveComment(comment.id)"
+                                                			type="button" class="btn btn-outline-secondary m-2">
+                                                		Approve
+                                                	</button>
+													<button v-if="comment.status == 'PENDING'" 
+															v-on:click="declineComment(comment.id)"
+															type="button" class="btn btn-outline-danger m-2 px-3">
+														Decline
+													</button>
                                                 </div>
                                             </div>
-                                            <p class="pr-2">{{ comment.text }}</p>
+                                            
                                         </div>
                                     </div>
 
@@ -328,19 +349,25 @@ Vue.component('restaurant', {
 			  			this.isManaged = true;
 			  		}
 			  	}
+			  	let commentsPath = "";
+			    if(this.isManaged || this.user.role == 'ADMIN'){
+			    	commentsPath = '/DeliveryApp/rest/comments/' + restaurantId;
+			    } else {
+			    	commentsPath = '/DeliveryApp/rest/comments/' + restaurantId + '/approved';
+			    }
+			    axios.get(commentsPath).then((response) => {
+			      this.comments = response.data;
+			      let sum = 0;
+			      let c = this.comments.length;
+			      for(comment of this.comments){
+			            sum += comment.rating;
+			      }
+			      this.averageRating = sum/c;
+			    });
 	    	});
 		});
     });
     
-    axios.get('/DeliveryApp/rest/comments/' + restaurantId + '/approved').then((response) => {
-      this.comments = response.data;
-      let sum = 0;
-      let c = this.comments.length;
-      for(comment of this.comments){
-            sum += comment.rating;
-      }
-      this.averageRating = sum/c;
-    });
     
     axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/food').then((response) => {
       this.food = response.data;
@@ -383,7 +410,6 @@ Vue.component('restaurant', {
 	  }
     },
     addToCart: function(id) {
-    //let count = 1;
     let item = { article:{}, count:1};
     let found = false;
     	if(this.selectedId == id){
@@ -418,6 +444,25 @@ Vue.component('restaurant', {
 		    });
 	    });
     },
+    approveComment(id){
+    	axios.put('/DeliveryApp/rest/comments/approve/' + id).then((response) => {
+    		for(let i = 0; i < this.comments.length; i++){
+	    		if(this.comments[i].id == id){
+	    			this.comments[i].status = "APPROVED";
+	    		}
+    		}
+    	});
+    	
+    }, 
+    declineComment(id){
+    	axios.put('/DeliveryApp/rest/comments/decline/' + id).then((response) => {
+    		for(let i = 0; i < this.comments.length; i++){
+	    		if(this.comments[i].id == id){
+	    			this.comments[i].status = "DECLINED";
+	    		}
+    		}
+    	});
+    }
   },
 });
   	

@@ -18,6 +18,7 @@ import com.google.gson.reflect.TypeToken;
 
 import model.Comment;
 import model.CommentStatus;
+import model.Customer;
 import repository.IFileRepository;
 
 public class CommentFileRepository implements ICommentRepository, IFileRepository<Comment> {
@@ -26,14 +27,20 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 
 	@Override
 	public Comment getById(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Comment> comments = getAll();
+		
+		for (Comment comment : comments) {
+			if (comment.getId() == key) {
+				return comment;
+			}
+		}
 		return null;
 	}
 	
 	@Override
 	public ArrayList<Comment> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return readFromFile();
 	}
 	
 	@Override
@@ -44,8 +51,15 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 	
 	@Override
 	public Comment update(Comment value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Comment> comments = getAll();
+
+		for (int i = 0; i < comments.size(); i++) {
+			if (comments.get(i).getId() == value.getId()) {
+				comments.set(i, value);
+			}
+		}
+		writeToFile(comments);
+		return value;
 	}
 	
 	@Override

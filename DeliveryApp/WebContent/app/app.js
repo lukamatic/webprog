@@ -4,6 +4,7 @@ const Login = { template: '<login></login>' };
 const Signup = { template: '<signup></signup>' };
 const Users = { template: '<users></users>' };
 const NewUser = { template: '<new-user></new-user>' };
+const NewArticle = { template: '<new-article></new-article>' };
 const Cart = { template: '<cart></cart>' };
 const Profile = { template: '<profile></profile>' };
 const Orders = { template: '<orders></orders>' };
@@ -19,6 +20,7 @@ const router = new VueRouter({
     { path: '/signup', component: Signup },
     { path: '/users', component: Users },
     { path: '/newUser', component: NewUser },
+    { path: '/newArticle', component: NewArticle },
     { path: '/cart', component: Cart },
     { path: '/profile', component: Profile },
     { path: '/orders', component: Orders },

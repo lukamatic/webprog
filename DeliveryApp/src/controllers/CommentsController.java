@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -57,5 +58,19 @@ public class CommentsController {
 	public Comment create(@Context HttpServletRequest request) {
 		
 		return null;
+	}
+	
+	@PUT
+	@Path("/approve/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void approve(@PathParam("id") int id) {
+		commentsService.approveComment(id);
+	}
+	
+	@PUT
+	@Path("/decline/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void decline(@PathParam("id") int id) {
+		commentsService.declineComment(id);
 	}
 }
