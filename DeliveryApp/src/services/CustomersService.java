@@ -6,6 +6,7 @@ import model.Cart;
 import model.CartItem;
 import model.Customer;
 import model.Deliverer;
+import model.Order;
 import model.User;
 import repository.customerRepository.CustomerFileRepository;
 import repository.customerRepository.ICustomerRepository;
@@ -14,10 +15,12 @@ import repository.customerTypeRepository.CustomerTypeFileRepository;
 public class CustomersService {
 	private ICustomerRepository customerRepository;
 	private UsersService usersService;
+	private OrdersService ordersService;
 	
 	public CustomersService() {
 		customerRepository = new CustomerFileRepository();
 		usersService = new UsersService();
+		ordersService = new OrdersService();
 	}
 	
 	public ArrayList<Customer> getAll() {
@@ -95,4 +98,20 @@ public class CustomersService {
 		
 	}
 
+	public ArrayList<Customer> getRestaurantCustomers(int restaurantId) {
+		ArrayList<Customer> customers = new ArrayList<Customer>();
+		
+		for (Customer customer : getAll()) {
+			for (String orderId : customer.getOrders()) {
+				Order order = ordersService.getById(orderId);
+				
+				if (order.getRestaurantId() == restaurantId) {
+					customers.add(customer);
+					break;
+				}
+			}
+		}
+		
+		return customers;
+	}
 }

@@ -1,9 +1,12 @@
 package controllers;
 
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -25,14 +28,22 @@ public class CustomersController {
 	@Context
 	ServletContext context;
 
-	private CustomersService customerService;
+	private CustomersService customersService;
 
 	@PostConstruct
 	public void init() {
 		if (context.getAttribute("customerService") == null)
 			context.setAttribute("customerService", new CustomersService());
 		
-		customerService = (CustomersService)context.getAttribute("customerService");
+		customersService = (CustomersService)context.getAttribute("customerService");
+	}
+	
+	@GET
+	@Path("restaurantCustomers/{restaurantId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Customer> getRestaurantCustomers(@PathParam("restaurantId") int restaurantId) {
+		return customersService.getRestaurantCustomers(restaurantId);
 	}
 	
 	@POST
@@ -41,7 +52,7 @@ public class CustomersController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Customer create(@Context HttpServletRequest request, User user) {
 		Customer customer = new Customer(user);
-		return customerService.create(customer);
+		return customersService.create(customer);
 	}
 	
 	@PUT
@@ -50,7 +61,7 @@ public class CustomersController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Customer updateProfile(@Context HttpServletRequest request, User customer) {
 		//Customer customer = new Customer(user);
-		return customerService.updateProfile(customer);
+		return customersService.updateProfile(customer);
 	}
 	
 	@PUT
@@ -58,13 +69,13 @@ public class CustomersController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Customer updateCart(@Context HttpServletRequest request, Cart cart) {
-		return customerService.updateCart(cart);
+		return customersService.updateCart(cart);
 	}
 	
 	@PUT
 	@Path("/item/{customerId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void addItemToCart(@Context HttpServletRequest request, @PathParam("customerId") int id, CartItem item) {
-		customerService.addToCart(item,id);
+		customersService.addToCart(item,id);
 	}
 }

@@ -311,17 +311,7 @@ Vue.component('restaurant', {
                     
                     <!--CUSTOMERS-->
                     <div v-if="isManaged" class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
-                        <div class="row mt-3">
-                            <div class="col-2">
-                                <h5 class="my-3">Customers</h5>
-                                <p>{{ address | formatAddressStreet }},<br>{{ address | formatAddressCity }}, <br>{{ address.country }}</p>
-                            </div>
-
-                            <div class="d-flex col-8">
-                                <img src="" class="w-100 m-3 flex-fill box-shadow"
-                                    style="min-height: 300px; height: 450px;">
-                            </div>
-                        </div>
+                                <customers :restaurantPropId="0"></customers>
                     </div>
                     
                 </div>
