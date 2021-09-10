@@ -1,1 +1,42 @@
-[{"id":0,"customerId":1,"restaurantId":0,"text":"Odlicna hrana i brza dostava, sve je ostalo toplo :)\n Porucicemo ponovo.","rating":5.0,"status":"APPROVED"},{"id":1,"customerId":1,"restaurantId":0,"text":"okej hrana","rating":3.0,"status":"APPROVED"},{"id":2,"customerId":0,"restaurantId":0,"text":"Sve super, ali visoke cene dostave. ","rating":4.0,"status":"PENDING"},{"id":3,"customerId":1,"restaurantId":0,"text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","rating":5.0,"status":"APPROVED"},{"id":4,"customerId":0,"restaurantId":1,"text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua.","rating":4.0,"status":"PENDING"}]
+[
+    {
+        "id": 0,
+        "customerId": 1,
+        "restaurantId": 0,
+        "text": "Odlicna hrana i brza dostava, sve je ostalo toplo :)\n Porucicemo ponovo.",
+        "rating": 5.0,
+        "status": "APPROVED"
+    },
+    {
+        "id": 1,
+        "customerId": 1,
+        "restaurantId": 0,
+        "text": "okej hrana",
+        "rating": 3.0,
+        "status": "APPROVED"
+    },
+    {
+        "id": 2,
+        "customerId": 0,
+        "restaurantId": 0,
+        "text": "Sve super, ali visoke cene dostave. ",
+        "rating": 4.0,
+        "status": "PENDING"
+    },
+    {
+        "id": 3,
+        "customerId": 1,
+        "restaurantId": 0,
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "rating": 5.0,
+        "status": "APPROVED"
+    },
+    {
+        "id": 4,
+        "customerId": 0,
+        "restaurantId": 1,
+        "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliquaed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+        "rating": 4.0,
+        "status": "PENDING"
+    }
+]

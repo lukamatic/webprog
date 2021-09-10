@@ -1,3 +1,4 @@
-/services/
-/exceptions/
 /controllers/
+/model/
+/services/
+/repository/

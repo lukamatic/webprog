@@ -60,7 +60,7 @@ Vue.component('profile', {
                                     <a class="nav-link" id="v-pills-edit-tab" data-toggle="pill" href="#v-pills-edit"
                                         role="tab" aria-controls="v-pills-edit" aria-selected="false">Edit profile</a>
                                 </li>
-                                <li class="nav-item">
+                                <li class="nav-item" v-if="$cookies.get('role') == 'CUSTOMER'">
                                     <a class="nav-link" id="v-pills-points-tab" data-toggle="pill"
                                         href="#v-pills-points" role="tab" aria-controls="v-pills-points"
                                         aria-selected="false">Point system and costumer
