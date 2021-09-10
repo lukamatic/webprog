@@ -101,8 +101,10 @@
         "dateTimeCreated": 1630971523127,
         "price": 1020.0,
         "customerId": 2,
-        "orderStatus": "DELIVERED",
-        "deliverers": []
+        "orderStatus": "WAITING_FOR_DELIVERY",
+        "deliverers": [
+            6
+        ]
     },
     {
         "id": "0000000003",
@@ -204,7 +206,7 @@
         "dateTimeCreated": 1630991523127,
         "price": 1020.0,
         "customerId": 1,
-        "orderStatus": "DELIVERED",
+        "orderStatus": "PROCESSING",
         "deliverers": []
     },
     {
@@ -273,7 +275,7 @@
         "dateTimeCreated": 1631120248239,
         "price": 15200.0,
         "customerId": 2,
-        "orderStatus": "CANCELED",
+        "orderStatus": "IN_PREPARATION",
         "deliverers": []
     },
     {

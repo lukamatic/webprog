@@ -337,84 +337,78 @@ Vue.component('restaurant', {
           </table>
         </div>
         <div class="d-flex flex-row flex-wrap w-100 justify-content-center">
+	          <div class="mt-4 mx-3">
+	            <div>
+	              <label for="condition"><h5>Sort by:</h5></label>
+	              <select class="ml-2" name="condition" id="condition" v-on:change="sort" v-model="sortOptions.condition">
+	                <option value="price">Price</option>
+	                <option value="date">Date created</option>
+	              </select>
+	            </div>
+	            <div>
+	              <label for="order"><h5>Sort order:</h5></label>
+	              <select class="ml-2"  name="order" id="order" v-on:change="sort" v-model="sortOptions.order">
+	                <option value="asc">Ascending</option>
+	                <option value="desc">Descending</option>
+	              </select>
+	            </div>
+	          </div>
           <div class="mt-4 mx-3">
-            <div>
-              <label for="condition"><h5>Sort by:</h5></label>
-              <select class="ml-2" name="condition" id="condition" v-on:change="sort" v-model="sortOptions.condition">
-                <option value="price">Price</option>
-                <option value="date">Date created</option>
-              </select>
-            </div>
-            <div>
-              <label for="order"><h5>Sort order:</h5></label>
-              <select class="ml-2"  name="order" id="order" v-on:change="sort" v-model="sortOptions.order">
-                <option value="asc">Ascending</option>
-                <option value="desc">Descending</option>
-              </select>
-            </div>
-          </div>
-          <div class="mt-4 mx-3">
-          <div>
-              <label for="statusFilter"><h5>Filter by order status:</h5></label>
-              <select class="ml-2" name="statusFilter" id="statusFilter" v-on:change="filter" v-model="filterOptions.status">
-                <option value="any">Any</option>
-                <option value="processing">Processing</option>
-                <option value="in-preparation">In preparation</option>
-                <option value="waiting-for-delivery">Waiting for delivery</option>
-                <option value="in-transport">In transport</option>
-                <option value="delivered">Delivered</option>
-                <option value="undelivered">Undelivered</option>
-                <option value="canceled">Canceled</option>
-              </select>
-            </div>
-            
-          </div>
-      </div>
-      </div>
+	          <div>
+	              <label for="statusFilter"><h5>Filter by order status:</h5></label>
+	              <select class="ml-2" name="statusFilter" id="statusFilter" v-on:change="filter" v-model="filterOptions.status">
+	                <option value="any">Any</option>
+	                <option value="processing">Processing</option>
+	                <option value="in-preparation">In preparation</option>
+	                <option value="waiting-for-delivery">Waiting for delivery</option>
+	                <option value="in-transport">In transport</option>
+	                <option value="delivered">Delivered</option>
+	                <option value="undelivered">Undelivered</option>
+	                <option value="canceled">Canceled</option>
+	              </select>
+	            </div>
+	          </div>
+	      </div>
+	  </div>
       
 <!-- --------NARUDZBINE-------- -->
-	<div class="d-flex flex-column align-items-center bg-light m-0">
-            
-            <br>
-
-            <div class="d-flex flex-column">
-
-                <div class="bg-white box-shadow m-1 p-2 d-flex flex-row justify-content-between"
-                    style="min-height: 100px; min-width: 600px; width: 1000px;" v-for="order in displayedOrders" :key="order.id">
-                    <div class="d-flex flex-column pl-5">
-                    	<h4 class="pt-2">{{restaurant.name}}</h4>
-                        <ul class="p-0">
-                            <li v-for="item in order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li> 
-                        </ul>
-                    </div>
-                    <div class="d-flex flex-column align-items-start m-2 mr-4">
-                        <div>Created at {{order.dateTimeCreated | formatDate('hh:mm on DD.MM.YYYY.') }}
-                        </div>
-                        <div>
-                            Status: {{order.orderStatus}}
-                        </div>
-                        <div>
-                          <b>Total: {{parseFloat(order.price).toFixed(2)}} RSD</b>
-                        </div>
-                        <div>
-                            <button v-if="order.orderStatus == 'WAITING_FOR_DELIVERY' && order.deliverers.length > 0"
-                            		v-on:click="chooseDeliverer"
-                             		class="btn btn-sm btn-outline-secondary mt-3">Choose deliverer</button>
-                            <button v-if="order.orderStatus == 'PROCESSING'"
-                            		v-on:click="startPreparation(order.id)"
-                             		class="btn btn-sm btn-outline-secondary mt-3">Start preparation</button>
-                             
-                            <button v-if="order.orderStatus == 'IN_PREPARATION'"
-                            		v-on:click="finishPreparation(order.id)"
-                             		class="btn btn-sm btn-outline-secondary mt-3">Finish preparation</button>
-                        </div>
-                    </div>
-
-                </div>
-
-        </div>
-      
-      </div>
+							<div class="d-flex flex-column align-items-center bg-light m-0">
+            					<br>
+					            <div class="d-flex flex-column">
+					
+					                <div class="bg-white box-shadow m-1 p-2 d-flex flex-row justify-content-between"
+					                    style="min-height: 100px; min-width: 600px; width: 1000px;" v-for="order in displayedOrders" :key="order.id">
+					                    <div class="d-flex flex-column pl-5">
+					                    	<h4 class="pt-2">{{restaurant.name}}</h4>
+					                        <ul class="p-0">
+					                            <li v-for="item in order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li> 
+					                        </ul>
+					                    </div>
+					                    <div class="d-flex flex-column align-items-start m-2 mr-4">
+					                        <div>Created at {{order.dateTimeCreated | formatDate('hh:mm on DD.MM.YYYY.') }}
+					                        </div>
+					                        <div>
+					                            Status: {{order.orderStatus}}
+					                        </div>
+					                        <div>
+					                          <b>Total: {{parseFloat(order.price).toFixed(2)}} RSD</b>
+					                        </div>
+					                        <div>
+					                            <button v-if="order.orderStatus == 'WAITING_FOR_DELIVERY' && order.deliverers.length > 0"
+					                            		v-on:click="chooseDeliverer"
+					                             		class="btn  btn-outline-primary mt-3 px-3">Choose deliverer</button>
+					                            <button v-if="order.orderStatus == 'PROCESSING'"
+					                            		v-on:click="startPreparation(order.id)"
+					                             		class="btn  btn-outline-primary mt-3 px-3">Start preparation</button>
+					                             
+					                            <button v-if="order.orderStatus == 'IN_PREPARATION'"
+					                            		v-on:click="finishPreparation(order.id)"
+					                             		class="btn btn-outline-primary mt-3 px-3">Finish preparation</button>
+					                        </div>
+					                    </div>
+					                </div>
+					        	</div>
+  							</div>
                         </div>
                     </div>
                     
@@ -576,9 +570,21 @@ Vue.component('restaurant', {
     		}
     	});
     }, 
-    chooseDeliverer(){},
-    startPreparation(){},
-    finishPreparation(){},
+    chooseDeliverer(){
+    	
+    },
+    startPreparation(id){
+    	axios.put('/DeliveryApp/rest/orders/start-preparation/'+id).then((response) => {
+	    	this.orders.find(element => element.id == id).orderStatus = "IN_PREPARATION";
+	    	this.displayedOrders.find(element => element.id == id).orderStatus = "IN_PREPARATION";
+    	})
+    },
+    finishPreparation(id){
+		axios.put('/DeliveryApp/rest/orders/finish-preparation/'+id).then((response) => {
+	    	this.orders.find(element => element.id == id).orderStatus = "WAITING_FOR_DELIVERY";
+	    	this.displayedOrders.find(element => element.id == id).orderStatus = "WAITING_FOR_DELIVERY";
+    	})
+    },
     search: function (searchParameters) {
       var params = "restaurantName=" + this.restaurant.name;
 	  let dateFrom = moment(searchParameters.dateFrom).format("x");

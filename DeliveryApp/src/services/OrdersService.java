@@ -151,6 +151,20 @@ private IOrderRepository orderRepository;
 		orderRepository.update(order);
 		
 	}
+
+	public void startPreparation(String id) {
+		Order order = orderRepository.getById(id);
+		order.setOrderStatus(OrderStatus.IN_PREPARATION);
+		orderRepository.update(order);
+		
+	}
+	
+	public void finishPreparation(String id) {
+		Order order = orderRepository.getById(id);
+		order.setOrderStatus(OrderStatus.WAITING_FOR_DELIVERY);
+		orderRepository.update(order);
+		
+	}
 	
 	
 }
