@@ -117,7 +117,7 @@ Vue.component('restaurant', {
                                                 style="min-height: 200px; min-width: 600px; width: 1000px" 
                                                  v-for="f in food" :key="f.id" >
                                                  
-                                                <img :src="f.imagePath" width="190" height="190">
+                                                <img :src="'Images/' + f.imageName" width="190" height="190">
 
                                                 <div class="m-2  pl-3 d-flex flex-column flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">
@@ -175,7 +175,7 @@ Vue.component('restaurant', {
                                                 style="min-height: 200px; min-width: 600px; width: 1000px" 
                                                  v-for="b in beverages" :key="b.id" >
 
-                                                <img :src="b.imagePath" width="190" height="190">
+                                                <img :src="'Images/' + b.imageName" width="190" height="190">
 
                                                 <div class="m-2  pl-3 d-flex flex-column  flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">

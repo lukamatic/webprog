@@ -20,6 +20,7 @@ import model.Article;
 import model.ArticleSize;
 import model.ArticleType;
 import model.Customer;
+import model.Manager;
 import model.Unit;
 import repository.IFileRepository;
 
@@ -57,14 +58,24 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	
 	@Override
 	public Article save(Article value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Article> articles = getAll();
+		articles.add(value);
+		writeToFile(articles);
+		return value;
 	}
 	
 	@Override
 	public Article update(Article value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Article> articles = getAll();
+
+		for (int i = 0; i < articles.size(); i++) {
+			if (articles.get(i).getId() == value.getId()) {
+				articles.set(i, value);
+			}
+		}
+		
+		writeToFile(articles);
+		return value;
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ Vue.component('articleComponent', {
       article: {
         name: "",
         articleType: null,
+        restaurantId: null,
         price: null,
         imageName: "",
         articleSize: {
@@ -92,7 +93,7 @@ Vue.component('articleComponent', {
                   v-on:change="changeUnit"
                 >
                   <option value="FOOD">Food</option>
-                  <option value="BEVERAGE">Beverage</option>
+                  <option value="DRINK">Beverage</option>
                 </select>
               </td>
             </tr>
@@ -239,17 +240,35 @@ Vue.component('articleComponent', {
 	    const articleJSON = JSON.stringify(this.article);
 	    formData.append('articleJSON', articleJSON);
 	    console.log(this.article)
-	    axios.post( '/DeliveryApp/rest/articles/create',
+	    
+	    if (this.article.restaurantId == null) {
+	    	axios.post('/DeliveryApp/rest/articles/create',
 	        formData,
 	        { headers: { 'Content-Type': 'multipart/form-data' } })
-	    .then((response) => {
-  			console.log(response.data);
-  			//router.push('restaurant');
-        })
-        .catch((error) => {
-	      this.errorText = error.response.data;
-	      this.isErrorLabelVisible = true;	
-        });
+		    .then((response) => {
+	  			var article = response.data;
+	  			console.log(response.data)
+	  			router.push('restaurant?id=' + article.restaurantId);
+	        })
+	        .catch((error) => {
+		      this.errorText = error.response.data;
+		      this.isErrorLabelVisible = true;	
+	        });
+	    } else {
+	    	axios.put('/DeliveryApp/rest/articles/update',
+	        formData,
+	        { headers: { 'Content-Type': 'multipart/form-data' } })
+		    .then((response) => {
+	  			var article = response.data;
+	  			console.log(response.data)
+	  			router.push('restaurant?id=' + article.restaurantId);
+	        })
+	        .catch((error) => {
+		      this.errorText = error.response.data;
+		      this.isErrorLabelVisible = true;	
+	        });
+	    }
+	    
     },
   },
 });
