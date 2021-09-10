@@ -63,4 +63,12 @@ public class DeliverersController {
 	public Deliverer updateProfile(@Context HttpServletRequest request, Deliverer deliverer) {
 		return deliverersService.updateProfile(deliverer);
 	}
+	
+	@PUT
+	@Path("/{delivererId}/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void AddOrderToDeliverer(@PathParam("delivererId") int delivererId, @PathParam("orderId") String orderId) {
+		deliverersService.AddOrderToDeliverer(delivererId, orderId);
+	}
 }

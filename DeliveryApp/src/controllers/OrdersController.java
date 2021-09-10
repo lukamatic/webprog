@@ -150,6 +150,14 @@ public class OrdersController {
 	}
 	
 	@PUT
+	@Path("/start-delivery/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void startDelivery(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.startDelivery(id);
+	}
+	
+	@PUT
 	@Path("/deliver/{orderId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

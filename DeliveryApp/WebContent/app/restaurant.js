@@ -640,11 +640,11 @@ Vue.component('restaurant', {
     	}
     },
     chooseDeliverer(delivererId, orderId){
-    	/*axios.put('/DeliveryApp/rest/orders/start-delivery/'+orderId).then((response) => {
+    	axios.put('/DeliveryApp/rest/orders/start-delivery/'+orderId).then((response) => {
 	    	this.orders.find(element => element.id == orderId).orderStatus = "IN_TRANSPORT";
 	    	this.displayedOrders.find(element => element.id == orderId).orderStatus = "IN_TRANSPORT";
     	})
-    	axios.put('/DeliveryApp/rest/deliverers/'+delivererId+'/'+orderId);*/
+    	axios.put('/DeliveryApp/rest/deliverers/'+delivererId+'/'+orderId);
     },
     startPreparation(id){
     	axios.put('/DeliveryApp/rest/orders/start-preparation/'+id).then((response) => {

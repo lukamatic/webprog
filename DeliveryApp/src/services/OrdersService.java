@@ -165,6 +165,13 @@ private IOrderRepository orderRepository;
 		orderRepository.update(order);
 		
 	}
+
+	public void startDelivery(String id) {
+		Order order = orderRepository.getById(id);
+		order.setOrderStatus(OrderStatus.IN_TRANSPORT);
+		orderRepository.update(order);
+		
+	}
 	
 	
 }

@@ -43,4 +43,11 @@ public class DeliverersService {
 	public Deliverer getById(int id) {
 		return delivererRepository.getById(id);
 	}
+
+	public void AddOrderToDeliverer(int delivererId, String orderId) {
+		Deliverer deliverer = delivererRepository.getById(delivererId);
+		deliverer.getOrdersToDeliver().add(orderId);
+		delivererRepository.update(deliverer);
+		
+	}
 }
