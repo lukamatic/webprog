@@ -580,13 +580,9 @@ Vue.component('restaurant', {
     startPreparation(){},
     finishPreparation(){},
     search: function (searchParameters) {
-      /*var params = "user=" + this.user.id;
+      var params = "restaurantName=" + this.restaurant.name;
 	  let dateFrom = moment(searchParameters.dateFrom).format("x");
 	  let dateTo = moment(searchParameters.dateTo).format("x");
-      if (searchParameters.restaurantName) {
-        params = params.concat("&restaurantName=" + searchParameters.restaurantName);
-      }
-
       if (searchParameters.priceFrom) {
         params = params.concat("&priceFrom=" + searchParameters.priceFrom);
       }
@@ -609,21 +605,10 @@ Vue.component('restaurant', {
       this.filterOptions.status = "any";
 
       axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
-       let orders = response.data;
+	      this.orders = response.data;
+	      this.displayedOrders = Array.from(this.orders);
         
-	      this.ordersDTO = [];
-	      this.displayedOrdersDTO = [];
-        for(let o of this.orders) {
-          	let restaurant = null;
-	        axios.get('/DeliveryApp/rest/restaurants/' + o.restaurantId).then((response) => {
-	          restaurant = response.data;
-	          let name = restaurant.name;
-	          let odto = {order: o, restaurantName: restaurant.name, restaurantType: restaurant.restaurantType};
-	          this.ordersDTO.push(odto);
-	          this.displayedOrdersDTO.push(odto);
-	        });
-          }
-      });*/
+      });
     },
     clearSearchParameters: function(){
     	this.searchParameters = {};
