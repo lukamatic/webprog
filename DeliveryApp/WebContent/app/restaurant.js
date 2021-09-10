@@ -22,6 +22,7 @@ Vue.component('restaurant', {
       searchParameters: {  },
       sortOptions: { condition: "", order: "asc" },
       filterOptions: { status: "any" },
+      delivererObjects: [],
 	  
     };
     
@@ -403,7 +404,7 @@ Vue.component('restaurant', {
 					                             		class="btn btn-outline-primary mt-3 px-3">Finish preparation</button>
 					                            <button v-if="order.orderStatus == 'WAITING_FOR_DELIVERY' && order.deliverers.length > 0"
 					                            		 data-toggle="modal" data-target="#delivererRequests" 
-					                             		class="btn  btn-outline-primary mt-3 px-3">Choose deliverer</button>
+					                             		class="btn  btn-outline-primary mt-3 px-3" v-on:click="fillDelivererObjects(order)">Choose deliverer</button>
 					                        </div>
 					                        <!-- Modal -->
 											<div class="modal fade" id="delivererRequests" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -419,7 +420,7 @@ Vue.component('restaurant', {
 											      
 											      
 											        <div class="d-flex flex-row flex-fill justify-content-between m-2 bg-white box-shadow  py-2 px-3 align-items-center"
-											        v-for="d in order.deliverersObj" :key="d.id">
+											        v-for="d in delivererObjects" :key="d.id">
 											        	<div class="d-flex flex-column align-items-start">
 												        	<h5  class="p-0 m-0">{{d.firstName}} {{d.lastName}}</h5>
 												        	<p class="p-0 m-0">{{d.username}}</p>
@@ -628,6 +629,15 @@ Vue.component('restaurant', {
     		})
     	}
     	return deliverersObj;
+    },
+    fillDelivererObjects(order){
+    	this.delivererObjects = [];
+    	for (let i = 0; i < order.deliverers.length; i++){
+    		axios.get('/DeliveryApp/rest/deliverers/'+order.deliverers[i]).then((response) => {
+    		let del = response.data
+	    	this.delivererObjects.push(del);
+    		})
+    	}
     },
     chooseDeliverer(delivererId, orderId){
     	/*axios.put('/DeliveryApp/rest/orders/start-delivery/'+orderId).then((response) => {
