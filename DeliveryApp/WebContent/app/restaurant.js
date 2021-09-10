@@ -394,9 +394,6 @@ Vue.component('restaurant', {
 					                          <b>Total: {{parseFloat(order.price).toFixed(2)}} RSD</b>
 					                        </div>
 					                        <div>
-					                            <button v-if="order.orderStatus == 'WAITING_FOR_DELIVERY' && order.deliverers.length > 0"
-					                            		v-on:click="chooseDeliverer"
-					                             		class="btn  btn-outline-primary mt-3 px-3">Choose deliverer</button>
 					                            <button v-if="order.orderStatus == 'PROCESSING'"
 					                            		v-on:click="startPreparation(order.id)"
 					                             		class="btn  btn-outline-primary mt-3 px-3">Start preparation</button>
@@ -404,7 +401,39 @@ Vue.component('restaurant', {
 					                            <button v-if="order.orderStatus == 'IN_PREPARATION'"
 					                            		v-on:click="finishPreparation(order.id)"
 					                             		class="btn btn-outline-primary mt-3 px-3">Finish preparation</button>
+					                            <button v-if="order.orderStatus == 'WAITING_FOR_DELIVERY' && order.deliverers.length > 0"
+					                            		 data-toggle="modal" data-target="#delivererRequests" 
+					                             		class="btn  btn-outline-primary mt-3 px-3">Choose deliverer</button>
 					                        </div>
+					                        <!-- Modal -->
+											<div class="modal fade" id="delivererRequests" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+											  <div class="modal-dialog modal-dialog-centered" role="document">
+											    <div class="modal-content">
+											      <div class="modal-header">
+											        <h5 class="modal-title" id="exampleModalLongTitle">Delivery requests</h5>
+											        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											          <span aria-hidden="true">&times;</span>
+											        </button>
+											      </div>
+											      <div class="modal-body">
+											      
+											      
+											        <div class="d-flex flex-row flex-fill justify-content-between m-2 bg-white box-shadow  py-2 px-3 align-items-center"
+											        v-for="d in order.deliverersObj" :key="d.id">
+											        	<div class="d-flex flex-column align-items-start">
+												        	<h5  class="p-0 m-0">{{d.firstName}} {{d.lastName}}</h5>
+												        	<p class="p-0 m-0">{{d.username}}</p>
+											        	</div>
+											        	<div>
+											        		<button class="btn btn-primary px-3" v-on:click="chooseDeliverer(d.id, order.id)"> Choose </button>
+											        	</div>
+											        </div>
+											        
+											      </div>
+											    </div>
+											  </div>
+											</div>	
+					                        
 					                    </div>
 					                </div>
 					        	</div>
@@ -414,7 +443,12 @@ Vue.component('restaurant', {
                     
                     <!--CUSTOMERS-->
                     <div v-if="isManaged" class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                    
                         
+						
+						
+						
+						
                     </div>
                     
                 </div>
@@ -466,6 +500,8 @@ Vue.component('restaurant', {
 			    axios.get('/DeliveryApp/rest/orders/restaurant/' + this.restaurant.id).then((response) => {
           			this.orders = response.data;
           			this.displayedOrders = Array.from(this.orders);
+          			this.addDelivererObjToOrders();
+          			console.log(this.orders);
       			})
 	    	});
 		});
@@ -570,8 +606,35 @@ Vue.component('restaurant', {
     		}
     	});
     }, 
-    chooseDeliverer(){
-    	
+    
+    addDelivererObjToOrders(){
+    	for(let i = 0; i < this.orders.length; i++){
+    		//this.orders[i].delivererObj = this.getDeliverers(this.orders[i]);
+    		this.orders[i].deliverersObj = [];
+    		for (let j = 0; j < this.orders[i].deliverers.length; j++){
+    			axios.get('/DeliveryApp/rest/deliverers/'+this.orders[i].deliverers[j]).then((response) => {
+	    			this.orders[i].deliverersObj.push(response.data);
+	    			console.log(this.orders);
+    			})
+    		}
+    	}
+    	this.displayedOrders = Array.from(this.orders);
+    },
+    getDeliverers(order){
+    	let deliverersObj = [];
+    	for (let i = 0; i < order.deliverers.length; i++){
+    		axios.get('/DeliveryApp/rest/deliverers/'+order.deliverers[i]).then((response) => {
+	    	deliverersObj.push(response.data);
+    		})
+    	}
+    	return deliverersObj;
+    },
+    chooseDeliverer(delivererId, orderId){
+    	/*axios.put('/DeliveryApp/rest/orders/start-delivery/'+orderId).then((response) => {
+	    	this.orders.find(element => element.id == orderId).orderStatus = "IN_TRANSPORT";
+	    	this.displayedOrders.find(element => element.id == orderId).orderStatus = "IN_TRANSPORT";
+    	})
+    	axios.put('/DeliveryApp/rest/deliverers/'+delivererId+'/'+orderId);*/
     },
     startPreparation(id){
     	axios.put('/DeliveryApp/rest/orders/start-preparation/'+id).then((response) => {
@@ -613,6 +676,7 @@ Vue.component('restaurant', {
       axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
 	      this.orders = response.data;
 	      this.displayedOrders = Array.from(this.orders);
+	      this.addDelivererObjToOrders();
         
       });
     },
