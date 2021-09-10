@@ -1,1 +1,17 @@
-[{"customerTypeName":"BRONZE","discount":0,"pointsRequired":0.0},{"customerTypeName":"SILVER","discount":5,"pointsRequired":2500.0},{"customerTypeName":"GOLD","discount":10,"pointsRequired":7000.0}]
+[
+    {
+        "customerTypeName": "BRONZE",
+        "discount": 0,
+        "pointsRequired": 0.0
+    },
+    {
+        "customerTypeName": "SILVER",
+        "discount": 5,
+        "pointsRequired": 2500.0
+    },
+    {
+        "customerTypeName": "GOLD",
+        "discount": 10,
+        "pointsRequired": 7000.0
+    }
+]
