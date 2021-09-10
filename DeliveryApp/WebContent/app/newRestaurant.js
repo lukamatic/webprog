@@ -188,8 +188,8 @@ Vue.component('new-restaurant', {
 	  this.markers.getSource().clear();
 	  marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(coordinates)));
 	  this.markers.getSource().addFeature(marker);
-	  this.newRestaurant.location.latitude = coordinates[0];
-	  this.newRestaurant.location.longitude = coordinates[1];
+	  this.newRestaurant.location.latitude = coordinates[1];
+	  this.newRestaurant.location.longitude = coordinates[0];
     },
     handleFileUpload(){
     this.file = this.$refs.file.files[0];
