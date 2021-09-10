@@ -4,7 +4,7 @@ Vue.component('navbar', {
     return {
       activeItemClass: 'nav-item active',
       inactiveItemClass: 'nav-item',
-      restaurantId: 0,
+      restaurantId: null,
     };
   },
   template: `
@@ -29,8 +29,8 @@ Vue.component('navbar', {
                 <li :class="[this.path == 'users' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'ADMIN'">
                     <a class="nav-link" href="#/users">Users</a>
                 </li>
-                <li :class="[this.path == 'restaurant' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'MANAGER'">
-                    <a class="nav-link" :href="'#/restaurant?id=' + restaurantId ">My restaurant</a>
+                <li :class="[this.path == ['restaurant?id=' + restaurantId] ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'MANAGER'">
+                    <a class="nav-link" href="#/" v-on:click="loadRestaurant">My restaurant</a>
                 </li>
                 <li :class="[this.path == 'cart' ? activeItemClass : inactiveItemClass]"  v-if="$cookies.get('role') == 'CUSTOMER'">
                     <a class="nav-link" href="#/cart">Cart</a>
@@ -74,5 +74,9 @@ Vue.component('navbar', {
       	router.push("login");
 	  })
     },
+    loadRestaurant() {
+    	router.push('restaurant?id=' + this.restaurantId);
+    	router.go();
+    }
   }
 });

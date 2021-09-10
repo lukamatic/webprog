@@ -1,7 +1,7 @@
 Vue.component('restaurant', {
   data: function () {
     return {
-      restaurant: null,
+      restaurant: {},
       user: {},
       address: '',
       map: null,
@@ -20,7 +20,7 @@ Vue.component('restaurant', {
   },
   template: `
   <div>
-  	<navbar path="restaurants"></navbar> 
+  	<navbar :path="'restaurant?id=' + restaurant.id"></navbar> 
 	<div class="d-flex flex-column align-items-center bg-light">
 
 
@@ -134,8 +134,9 @@ Vue.component('restaurant', {
                                                     </div>
                                                     <div v-if="isManaged" class="d-flex flex-row mt-auto">
                                                     	<a :href="'#/article?id=' + f.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
-                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     </div>
+                                                    
+                                                	<button v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
@@ -192,8 +193,10 @@ Vue.component('restaurant', {
                                                     </div>
                                                     <div v-if="isManaged" class="d-flex flex-row mt-auto">
                                                     	<a :href="'#/article?id=' + b.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
-                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     </div>
+                                                    
+                                                    <button v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
+                                                    
                                                     
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
