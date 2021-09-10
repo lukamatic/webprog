@@ -1,4 +1,5 @@
 /controllers/
+/exceptions/
 /model/
-/services/
 /repository/
+/services/
