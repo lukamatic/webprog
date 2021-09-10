@@ -54,18 +54,16 @@ Vue.component('login', {
     	password: this.password
 	  })
 	  .then(function (response) {
+  	    vm.errorText = "";
+  	    vm.isErrorLabelVisible = false;
 	  	const user = response.data;
-	  	if (!user) {
-	  	  vm.errorText = "Invalid credentials";
-	  	  vm.isErrorLabelVisible = true;
-	  	  return;
-	  	}
 	  	vm.$cookies.set("userId", user.id);
 	  	vm.$cookies.set("role", user.role);
 	  	router.push("restaurants");
 	  })
 	  .catch(function (error) {
-		console.log(error);
+	  	  vm.errorText = error.response.data;
+	  	  vm.isErrorLabelVisible = true;
 	  });
   	}
   }
