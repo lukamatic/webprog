@@ -19,6 +19,8 @@ import com.google.gson.reflect.TypeToken;
 import model.Article;
 import model.ArticleSize;
 import model.ArticleType;
+import model.Customer;
+import model.Manager;
 import model.Unit;
 import repository.IFileRepository;
 
@@ -29,26 +31,51 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	
 	@Override
 	public Article getById(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Article> articles = getAll();
+		
+		for (Article article : articles) {
+			if (article.getId() == key) {
+				return article;
+			}
+		}
+		
 		return null;
 	}
 	
 	@Override
 	public ArrayList<Article> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Article> articles = readFromFile();
+		
+		for (int i = 0; i < articles.size(); i++) {
+			if (articles.get(i).isDeleted()) {
+				articles.remove(i);
+				i--;
+			}
+		}
+		
+		return articles;
 	}
 	
 	@Override
 	public Article save(Article value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Article> articles = getAll();
+		articles.add(value);
+		writeToFile(articles);
+		return value;
 	}
 	
 	@Override
 	public Article update(Article value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Article> articles = getAll();
+
+		for (int i = 0; i < articles.size(); i++) {
+			if (articles.get(i).getId() == value.getId()) {
+				articles.set(i, value);
+			}
+		}
+		
+		writeToFile(articles);
+		return value;
 	}
 	
 	@Override

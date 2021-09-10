@@ -12,6 +12,7 @@ import javax.ws.rs.WebApplicationException;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 import exceptions.BadRequestException;
+import model.Article;
 import model.Manager;
 import model.Restaurant;
 import model.RestaurantType;
@@ -30,11 +31,14 @@ public class RestaurantsService {
 	
 	public Restaurant create(InputStream fileInputStream, FormDataContentDisposition fileMetaData, Restaurant restaurant, int managerId) {
 		validateManagerId(managerId);
-		validateImage(fileMetaData);
 		
 		restaurant.setId(calculateId());
-		String imageName = saveImage(fileInputStream, restaurant.getId(), getFileExtension(fileMetaData));
-		restaurant.setLogoImageName(imageName);
+		
+		if (fileMetaData.getFileName() != null) {
+			validateImage(fileMetaData);
+			String imageName = saveImage(fileInputStream, restaurant.getId(), getFileExtension(fileMetaData));
+			restaurant.setLogoImageName(imageName);
+		}
 		
 		managersService.assignRestaurantToManager(restaurant.getId(), managerId);
 		
@@ -85,7 +89,7 @@ public class RestaurantsService {
 	        return fileName;
 	    } catch (IOException e) 
 	    {
-	        throw new WebApplicationException("Error while uploading file. Please try again !!");
+	        throw new WebApplicationException("Error while uploading file. Please try again.");
 	    }
 	}
 	
@@ -186,5 +190,16 @@ public class RestaurantsService {
 		}
 		
 		return maxId;
+	}
+	
+	public void addArticleToRestaurant(int articleId, int restaurantId) {
+		Restaurant restaurant = getById(restaurantId);
+		restaurant.getArticles().add(articleId);
+	}
+	
+	public void refreshRating(int restaurantId, double newRating) {
+		Restaurant restaurant = getById(restaurantId);
+		restaurant.setAverageRating(newRating);
+		restaurantRepository.update(restaurant);
 	}
 }

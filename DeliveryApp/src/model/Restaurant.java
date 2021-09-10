@@ -14,14 +14,15 @@ public class Restaurant {
 	private ArrayList<Integer> articles;
 	private boolean isOpen;
 	private String logoImageName;
-	   
+	private double averageRating;
+
 	private Location location;
 
 	public Restaurant() {
 	}
 
 	public Restaurant(int id, String name, RestaurantType restaurantType, ArrayList<Integer> articles, boolean isOpen,
-			String logoImageName, Location location) {
+			String logoImageName, double averageRating, Location location) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -29,6 +30,7 @@ public class Restaurant {
 		this.articles = articles;
 		this.isOpen = isOpen;
 		this.logoImageName = logoImageName;
+		this.averageRating = averageRating;
 		this.location = location;
 	}
 
@@ -87,6 +89,12 @@ public class Restaurant {
 	public void setLocation(Location location) {
 		this.location = location;
 	}
+  
+	public double getAverageRating() {
+		return averageRating;
+	}
 
-	
+	public void setAverageRating(double averageRating) {
+		this.averageRating = averageRating;
+	}
 }

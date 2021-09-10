@@ -1,36 +1,37 @@
 Vue.component('restaurant', {
   data: function () {
     return {
+      restaurant: {},
       user: {},
       restaurant: "",
+      map: null,
+      markers: null,
       address: "",
 	  comments: "",
 	  averageRating: 0,
 	  food: "",
 	  beverages: "",
-	  
+
 	  selectedItemCount: 1,
 	  selectedId:0,
 	  lastSelectedId:0,
-	  
+
 	  isManaged: false,
 	  isSearchDivHidden: true,
-	  
+
       orders: null,
       displayedOrders: null,
-	  
+
       searchParameters: {  },
       sortOptions: { condition: "", order: "asc" },
       filterOptions: { status: "any" },
       delivererObjects: [],
-	  
+
     };
-    
   },
   template: `
   <div>
-  	<navbar path="restaurants"></navbar> 
-  	
+  	<navbar :path="'restaurant?id=' + restaurant.id"></navbar>
 	<div class="d-flex flex-column align-items-center bg-light">
 
 
@@ -45,11 +46,11 @@ Vue.component('restaurant', {
             box-shadow
             mb-3
           ">
-                <img src="" width="100" height="100" class="m-2 ml-3">
+                <img :src="'Images/' + restaurant.logoImageName" width="100" height="100" class="m-2 ml-3">
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
                     <h3 class="flex-fill">{{restaurant.name}}</h3>
                     <h5>{{ restaurant.restaurantType }}</h5>
-                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ parseFloat(averageRating).toFixed(2) }}</h6>
+                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ restaurant.averageRating.toFixed(2) }}</h6>
                 </div>
                 <div class="d-flex flex-column align-items-end flex-wrap m-2 mr-4">
                     <h6 class="bg-dark text-white px-4 py-2 rounded mb-5 mt-1"> {{ restaurant.open ? "OPEN" : "CLOSED" }} </h6>
@@ -66,7 +67,7 @@ Vue.component('restaurant', {
                         </a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link text-dark" id="location-tab" data-toggle="tab" href="#location" role="tab"
+                        <a class="nav-link text-dark" id="location-tab" data-toggle="tab" href="#location" role="tab" v-on:click="initMap"
                             aria-controls="profile" aria-selected="false">
                             Location
                         </a>
@@ -90,7 +91,7 @@ Vue.component('restaurant', {
                         </a>
                     </li>
                 </ul>
-                
+
                  <div class="tab-content m-2" id="myTabContent">
                     <!--MENU-->
 
@@ -109,27 +110,30 @@ Vue.component('restaurant', {
                                             aria-selected="false">Beverages</a>
                                     </li>
                                     <li v-if="isManaged" >
-                                        <a class="nav-link" :href='"#/newArticle?restaurantId="+restaurant.id'>New article</a>
+                                        <a class="nav-link" href="#/newArticle">New article</a>
                                     </li>
                                 </ul>
                             </div>
-                            
+
                             <div class="col-8">
                                 <div class="tab-content" id="v-pills-tabContent">
                                     <div class="tab-pane fade show active" id="v-pills-food" role="tabpanel"
                                         aria-labelledby="v-pills-home-tab">
               				<!--dobaviti hranu-->
                                         <h3 class=" mx-4 mt-3">Food</h3>
-                                        <div class="d-flex flex-wrap " >
+
+                                        <div class="d-flex flex-wrap ">
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px" 
+                                                style="min-height: 200px; min-width: 600px; width: 1000px"
                                                  v-for="f in food" :key="f.id" >
-                                                <img :src="f.imagePath" width="190" height="190">
+
+                                                <img :src="'Images/' + f.imageName" width="190" height="190">
+
                                                 <div class="m-2  pl-3 d-flex flex-column flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class=" flex-fill d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ f.name }}</h5>
-                                                            <p><span v-if="f.articleSize">{{f.articleSize.ammount}}{{ f.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
+                                                            <p><span v-if="f.articleSize.ammount > 0">{{f.articleSize.ammount}}{{ f.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-end m-3">
                                                             <h5>{{ parseFloat(f.price).toFixed(2) }} RSD</h5>
@@ -139,10 +143,12 @@ Vue.component('restaurant', {
                                                     	<p class="pr-2">{{f.description}}</p>
                                                     </div>
                                                     <div v-if="isManaged" class="d-flex flex-row mt-auto">
-                                                    	<button class="btn btn-outline-secondary px-5 mr-3"> Edit </button>
-                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
+                                                    	<a :href="'#/article?id=' + f.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
                                                     </div>
-                                                    
+
+                                                	<button v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
+
+
                                                     <div class="d-flex flex-row mt-auto align-items-center">
                                                         <div  v-if="$cookies.get('role') == 'CUSTOMER'">
                                                             <span><button type="button"
@@ -174,14 +180,16 @@ Vue.component('restaurant', {
                                         <h3 class=" mx-4 mt-3">Beverages</h3>
                                         <div class="d-flex flex-wrap ">
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                                style="min-height: 200px; min-width: 600px; width: 1000px" 
+                                                style="min-height: 200px; min-width: 600px; width: 1000px"
                                                  v-for="b in beverages" :key="b.id" >
-                                                <img :src="b.imagePath" width="190" height="190">
+
+                                                <img :src="'Images/' + b.imageName" width="190" height="190">
+
                                                 <div class="m-2  pl-3 d-flex flex-column  flex-fill">
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class="d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ b.name }}</h5>
-                                                            <p><span v-if="b.articleSize">{{b.articleSize.ammount}}{{ b.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
+                                                            <p><span v-if="b.articleSize.ammount > 0">{{b.articleSize.ammount}}{{ b.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-end m-3">
                                                             <h5>{{ parseFloat(b.price).toFixed(2) }} RSD</h5>
@@ -190,6 +198,13 @@ Vue.component('restaurant', {
                                                     <div >
                                                     	<p class="pr-2">{{b.description}}</p>
                                                     </div>
+                                                    <div v-if="isManaged" class="d-flex flex-row mt-auto">
+                                                    	<a :href="'#/article?id=' + b.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
+                                                    </div>
+
+                                                    <button v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
+
+
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
                                                         <div v-if="$cookies.get('role') == 'CUSTOMER'">
@@ -220,7 +235,7 @@ Vue.component('restaurant', {
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--LOCATION-->
                     <div class="tab-pane fade" id="location" role="tabpanel" aria-labelledby="location-tab">
                         <div class="row mt-3">
@@ -229,13 +244,12 @@ Vue.component('restaurant', {
                                 <p>{{ address | formatAddressStreet }},<br>{{ address | formatAddressCity }}, <br>{{ address.country }}</p>
                             </div>
                             <div class="d-flex col-8">
-                                <img src="" class="w-100 m-3 flex-fill box-shadow"
-                                    style="min-height: 300px; height: 450px;">
+        						<div id="map" class="d-flex w-100 shadow" style="height:500px;"></div>
                             </div>
                         </div>
                     </div>
-                    
-                    
+
+
                     <!--COMMENTS-->
                     <div class="tab-pane fade" id="comments" role="tabpanel" aria-labelledby="comments-tab">
                         <div class="row mt-3">
@@ -244,7 +258,7 @@ Vue.component('restaurant', {
                             <div class="d-flex col-8 m-3">
                                 <div class="d-flex flex-wrap ">
                                     <div class="bg-white box-shadow m-1 p-2 d-flex"
-                                        style="min-height: 150px; min-width: 600px; width: 900px" 
+                                        style="min-height: 150px; min-width: 600px; width: 900px"
                                         v-for="comment in comments" :key="comment.id">
                                         <div class="m-2  pl-3 d-flex flex-column  flex-fill">
                                             <div class="d-flex flex-row justify-content-between ">
@@ -255,12 +269,12 @@ Vue.component('restaurant', {
                                                 </div>
                                                 <div v-if="isManaged" class="m-2 pl-3 ml-auto d-flex flex-column align-items-end">
                                                 	<b class="m-2">{{comment.status}}</b>
-                                                	<button v-if="comment.status == 'PENDING'" 
+                                                	<button v-if="comment.status == 'PENDING'"
                                                 			v-on:click="approveComment(comment.id)"
                                                 			type="button" class="btn btn-outline-secondary m-2">
                                                 		Approve
                                                 	</button>
-													<button v-if="comment.status == 'PENDING'" 
+													<button v-if="comment.status == 'PENDING'"
 															v-on:click="declineComment(comment.id)"
 															type="button" class="btn btn-outline-danger m-2 px-3">
 														Decline
@@ -273,11 +287,11 @@ Vue.component('restaurant', {
                             </div>
                         </div>
                     </div>
-                    
+
                     <!--ORDERS-->
-                    
+
                     <div  v-if="isManaged" class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                       
+
                                   <div class="d-flex flex-column align-items-center bg-light">
       <div class=" d-flex flex-column align-items-center w-50 p-4 mt-4 mb-3 bg-white box-shadow">
         <button
@@ -371,18 +385,18 @@ Vue.component('restaurant', {
 	          </div>
 	      </div>
 	  </div>
-      
+
 <!-- --------NARUDZBINE-------- -->
 							<div class="d-flex flex-column align-items-center bg-light m-0">
             					<br>
 					            <div class="d-flex flex-column">
-					
+
 					                <div class="bg-white box-shadow m-1 p-2 d-flex flex-row justify-content-between"
 					                    style="min-height: 100px; min-width: 600px; width: 1000px;" v-for="order in displayedOrders" :key="order.id">
 					                    <div class="d-flex flex-column pl-5">
 					                    	<h4 class="pt-2">{{restaurant.name}}</h4>
 					                        <ul class="p-0">
-					                            <li v-for="item in order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li> 
+					                            <li v-for="item in order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li>
 					                        </ul>
 					                    </div>
 					                    <div class="d-flex flex-column align-items-start m-2 mr-4">
@@ -398,12 +412,12 @@ Vue.component('restaurant', {
 					                            <button v-if="order.orderStatus == 'PROCESSING'"
 					                            		v-on:click="startPreparation(order.id)"
 					                             		class="btn  btn-outline-primary mt-3 px-3">Start preparation</button>
-					                             
+
 					                            <button v-if="order.orderStatus == 'IN_PREPARATION'"
 					                            		v-on:click="finishPreparation(order.id)"
 					                             		class="btn btn-outline-primary mt-3 px-3">Finish preparation</button>
 					                            <button v-if="order.orderStatus == 'WAITING_FOR_DELIVERY' && order.deliverers.length > 0"
-					                            		 data-toggle="modal" data-target="#delivererRequests" 
+					                            		 data-toggle="modal" data-target="#delivererRequests"
 					                             		class="btn  btn-outline-primary mt-3 px-3" v-on:click="fillDelivererObjects(order)">Choose deliverer</button>
 					                        </div>
 					                        <!-- Modal -->
@@ -417,8 +431,8 @@ Vue.component('restaurant', {
 											        </button>
 											      </div>
 											      <div class="modal-body">
-											      
-											      
+
+
 											        <div class="d-flex flex-row flex-fill justify-content-between m-2 bg-white box-shadow  py-2 px-3 align-items-center"
 											        v-for="d in delivererObjects" :key="d.id">
 											        	<div class="d-flex flex-column align-items-start">
@@ -429,41 +443,35 @@ Vue.component('restaurant', {
 											        		<button class="btn btn-primary px-3" v-on:click="chooseDeliverer(d.id, order.id)"> Choose </button>
 											        	</div>
 											        </div>
-											        
+
 											      </div>
 											    </div>
 											  </div>
-											</div>	
-					                        
+											</div>
+
 					                    </div>
 					                </div>
 					        	</div>
   							</div>
                         </div>
                     </div>
-                    
+
                     <!--CUSTOMERS-->
                     <div v-if="isManaged" class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
-                    
-                        
-						
-						
-						
-						
+                                <customers :restaurantPropId="0"></customers>
                     </div>
-                    
+
                 </div>
-                
+
           </div>
-            
+
     </div>
-  	
-  	
+
+
 
   </div>
 `,
   mounted() {
-  	
     let restaurantId = 0;
     restaurantId = this.$route.query.id;
     console.log(restaurantId);
@@ -498,6 +506,7 @@ Vue.component('restaurant', {
 			      }
 			      this.averageRating = sum/c;
 			    });
+
 			    axios.get('/DeliveryApp/rest/orders/restaurant/' + this.restaurant.id).then((response) => {
           			this.orders = response.data;
           			this.displayedOrders = Array.from(this.orders);
@@ -507,17 +516,17 @@ Vue.component('restaurant', {
 	    	});
 		});
     });
-    
-    
+
+
     axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/food').then((response) => {
       this.food = response.data;
     });
     axios.get('/DeliveryApp/rest/articles/' + restaurantId + '/beverages').then((response) => {
       this.beverages = response.data;
     });
-      
-       
-    
+
+
+
   },
   filters: {
     formatAddressStreet: (address) => {
@@ -532,61 +541,124 @@ Vue.component('restaurant', {
     },
   },
   methods: {
-    increaseCount: function(id) {
-	  this.lastSelectedId = this.selectedId;
-	  this.selectedId = id;
-	  if(this.selectedId == this.lastSelectedId){
-	  	this.selectedItemCount += 1;
-	  }
-	  else{
-	  	this.selectedItemCount = 2;
-	  }
-	  
+    initMap: function () {
+      if (this.map) {
+        return;
+      }
+
+      this.map = new ol.Map({
+        target: 'map',
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM(),
+          }),
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([
+            this.restaurant.location.longitude,
+            this.restaurant.location.latitude,
+          ]),
+          zoom: 15,
+        }),
+      });
+
+      this.markers = new ol.layer.Vector({
+        source: new ol.source.Vector(),
+        style: new ol.style.Style({
+          image: new ol.style.Icon({
+            anchor: [0.5, 1],
+            src: 'marker.png',
+            scale: 0.05,
+          }),
+        }),
+      });
+
+      this.map.addLayer(this.markers);
+      this.putMarker([
+        this.restaurant.location.longitude,
+        this.restaurant.location.latitude,
+      ]);
+
+      setTimeout(() => this.map.updateSize(), 1000);
     },
-    decreaseCount: function(id) {
+    putMarker: function (coordinates) {
+      this.markers.getSource().clear();
+      marker = new ol.Feature(
+        new ol.geom.Point(ol.proj.fromLonLat(coordinates))
+      );
+      this.markers.getSource().addFeature(marker);
+    },
+    increaseCount: function (id) {
       this.lastSelectedId = this.selectedId;
-	  this.selectedId = id;
-	  if(this.selectedId == this.lastSelectedId && this.selectedItemCount > 1){
-	  	this.selectedItemCount -= 1;
-	  }
-	  else{
-	  	this.selectedItemCount = 1;
-	  }
+      this.selectedId = id;
+      if (this.selectedId == this.lastSelectedId) {
+        this.selectedItemCount += 1;
+      } else {
+        this.selectedItemCount = 2;
+      }
     },
-    addToCart: function(id) {
-    let item = { article:{}, count:1};
-    let found = false;
-    	if(this.selectedId == id){
-	  		item.count = this.selectedItemCount;
-	  	}
-		else{
-			this.selectedItemCount = 1;
-		}
-		for (let f of this.food){
-			if(f.id == id){
-				item.article = f;
-				found = true;
-			}
-		}
-		if (found == false){
-			for (let b of this.beverages){
-				if(b.id == id){
-					item.article = b;
-				}
-			}
-		}
-		let p = "";
-	     axios.get('/DeliveryApp/rest/auth/').then((response) => {
-	      p = response.data;
-	      let path = "/DeliveryApp/rest/users/" + p.username + "/";
-		  axios.get(path).then((response) => {
-		      let user = response.data;
-		      if(user.id){
-			  	axios.put('/DeliveryApp/rest/customers/item/' + user.id, item);
-			  }
-			  
-		    });
-	    });
+    decreaseCount: function (id) {
+      this.lastSelectedId = this.selectedId;
+      this.selectedId = id;
+      if (
+        this.selectedId == this.lastSelectedId &&
+        this.selectedItemCount > 1
+      ) {
+        this.selectedItemCount -= 1;
+      } else {
+        this.selectedItemCount = 1;
+      }
+    },
+    addToCart: function (id) {
+      let item = { article: {}, count: 1 };
+      let found = false;
+      if (this.selectedId == id) {
+        item.count = this.selectedItemCount;
+      } else {
+        this.selectedItemCount = 1;
+      }
+      for (let f of this.food) {
+        if (f.id == id) {
+          item.article = f;
+          found = true;
+        }
+      }
+      if (found == false) {
+        for (let b of this.beverages) {
+          if (b.id == id) {
+            item.article = b;
+          }
+        }
+      }
+      let p = '';
+      axios.get('/DeliveryApp/rest/auth/').then((response) => {
+        p = response.data;
+        let path = '/DeliveryApp/rest/users/' + p.username + '/';
+        axios.get(path).then((response) => {
+          let user = response.data;
+          if (user.id) {
+            axios.put('/DeliveryApp/rest/customers/item/' + user.id, item);
+          }
+        });
+      });
+    },
+    approveComment(id) {
+      axios.put('/DeliveryApp/rest/comments/approve/' + id).then((response) => {
+        for (let i = 0; i < this.comments.length; i++) {
+          if (this.comments[i].id == id) {
+            this.comments[i].status = 'APPROVED';
+          }
+        }
+      });
+    },
+    declineComment(id) {
+      axios.put('/DeliveryApp/rest/comments/decline/' + id).then((response) => {
+        for (let i = 0; i < this.comments.length; i++) {
+          if (this.comments[i].id == id) {
+            this.comments[i].status = 'DECLINED';
+          }
+        }
+      });
     },
     approveComment(id){
     	axios.put('/DeliveryApp/rest/comments/approve/' + id).then((response) => {
@@ -596,8 +668,8 @@ Vue.component('restaurant', {
 	    		}
     		}
     	});
-    	
-    }, 
+
+    },
     declineComment(id){
     	axios.put('/DeliveryApp/rest/comments/decline/' + id).then((response) => {
     		for(let i = 0; i < this.comments.length; i++){
@@ -606,8 +678,8 @@ Vue.component('restaurant', {
 	    		}
     		}
     	});
-    }, 
-    
+    },
+
     addDelivererObjToOrders(){
     	for(let i = 0; i < this.orders.length; i++){
     		//this.orders[i].delivererObj = this.getDeliverers(this.orders[i]);
@@ -677,7 +749,7 @@ Vue.component('restaurant', {
       if (searchParameters.dateTo) {
         params = params.concat("&dateTo=" + dateTo);
       }
-      
+
       this.sortOptions.condition = "";
       this.sortOptions.order = "asc";
       this.filterOptions.type = "any";
@@ -687,7 +759,7 @@ Vue.component('restaurant', {
 	      this.orders = response.data;
 	      this.displayedOrders = Array.from(this.orders);
 	      this.addDelivererObjToOrders();
-        
+
       });
     },
     clearSearchParameters: function(){
@@ -801,4 +873,3 @@ Vue.component('restaurant', {
     },
   },
 });
-  	

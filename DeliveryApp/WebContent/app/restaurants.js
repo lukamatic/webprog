@@ -13,7 +13,7 @@ Vue.component('restaurants', {
   <div>
   	<navbar path="restaurants"></navbar> 
     <div class="d-flex flex-column align-items-center pb-5 bg-light">
-      <a
+      <a v-if="$cookies.get('role') == 'ADMIN'"
         class="btn btn-dark align-self-end mr-5 mt-4"
         href="#/newRestaurant"
       >Create new restaurant</a>
@@ -217,7 +217,7 @@ Vue.component('restaurants', {
           bg-white
           shadow
         "
-        v-on:click="choose(restaurant.id)"
+        v-on:click="choose(restaurant.id)" style="cursor:pointer"
       >
         <img class="m-3" :src="'Images/' + restaurant.logoImageName" width="200" height="200" />
         <div class="flex-column flex-fill mx-3">
@@ -239,7 +239,7 @@ Vue.component('restaurants', {
           <h5 style="min-width: 300px">
             Address: {{ restaurant.location.address | formatAddress }}
           </h5>
-           <h5>Average rating: {{ restaurant.averageRating }}</h5>
+           <h5>Average rating: {{ restaurant.averageRating.toFixed(2) }}</h5>
         </div>
       </div>
     </div>
@@ -249,6 +249,9 @@ Vue.component('restaurants', {
     axios.get('/DeliveryApp/rest/restaurants').then((response) => {
       this.restaurants = response.data;
       this.displayedRestaurants = this.restaurants;
+      this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+        this.sortByOpen(a, b)
+      )
     });
   },
   filters: {
@@ -293,6 +296,9 @@ Vue.component('restaurants', {
         .then((response) => {
           this.restaurants = response.data;
           this.displayedRestaurants = this.restaurants;
+          this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+            this.sortByOpen(a, b)
+      	  )
         });
     },
     sort: function () {
@@ -311,7 +317,15 @@ Vue.component('restaurants', {
         }
       }
     },
-    sortByName: function (a, b, order) {
+    sortByOpen: function(a, b) {
+    	if (a.open && !b.open) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+    },
+    sortByName: function(a, b, order) {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
 
@@ -332,7 +346,7 @@ Vue.component('restaurants', {
       }
       return 0;
     },
-    sortByLocation: function (a, b, order) {
+    sortByLocation: function(a, b, order) {
       const locationA = this.$options.filters
         .formatAddress(a.location.address)
         .toUpperCase();

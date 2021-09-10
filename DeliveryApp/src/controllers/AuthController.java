@@ -39,15 +39,13 @@ public class AuthController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User login(@Context HttpServletRequest request, User user) {
-		User retVal = null;
-		retVal = (User) request.getSession().getAttribute("user");
+		User retVal = (User)request.getSession().getAttribute("user");
+		
 		if (retVal == null) {
 			retVal = authService.validateUser(user.getUsername(), user.getPassword());
-			if (retVal == null) {
-				return null;
-			}
-			request.getSession().setAttribute("user", user);
+			request.getSession().setAttribute("user", retVal);
 		}
+		
 		return retVal;
 	}
 
