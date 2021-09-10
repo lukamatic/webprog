@@ -52,12 +52,10 @@ public class CommentsController {
 	}
 
 	@POST
-	@Path("")
+	@Path("/create")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Comment create(@Context HttpServletRequest request) {
-		
-		return null;
+	public void create(@Context HttpServletRequest request, Comment comment) {
+		commentsService.create(comment);
 	}
 	
 	@PUT

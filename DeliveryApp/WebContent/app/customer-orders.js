@@ -10,6 +10,14 @@ Vue.component('customer-orders', {
       searchParameters: {  },
       sortOptions: { condition: "", order: "asc" },
       filterOptions: { type: "any", status: "any" },
+      comment: {
+      	id: 0,
+      	customerId: -1,
+      	restaurantId: -1,
+      	text: "",
+      	rating: 5.0, 
+      	status: 'PENDING'
+	  }
     };
   },
   template: ` 
@@ -229,13 +237,46 @@ Vue.component('customer-orders', {
                           <b>Total: {{parseFloat(orderDTO.order.price).toFixed(2)}} RSD</b>
                         </div>
                         <div>
-                            <button v-if="orderDTO.order.orderStatus == 'DELIVERED'"
-                            		v-on:click=""
-                             		class="btn btn-sm btn-outline-primary mt-3">Leave a comment</button>
                             <button v-if="orderDTO.order.orderStatus == 'PROCESSING'"
                             		v-on:click="cancelOrder(orderDTO.order.id)"
                              		class="btn btn-sm btn-outline-secondary mt-3">Cancel order</button>
+                            <button v-if="orderDTO.order.orderStatus == 'DELIVERED'"
+                            		v-on:click=""
+                             		class="btn btn-sm btn-outline-primary mt-3" data-toggle="modal" data-target="#newCommentModal">Leave a comment</button>
                         </div>
+						<!-- Modal -->
+						<div class="modal fade" id="newCommentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+						  <div class="modal-dialog modal-dialog-centered" role="document">
+						    <div class="modal-content">
+						      <div class="modal-header">
+						        <h5 class="modal-title" id="exampleModalLongTitle">{{orderDTO.restaurantName}}</h5>
+						        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						          <span aria-hidden="true">&times;</span>
+						        </button>
+						      </div>
+						      <div class="modal-body d-flex flex-column align-items-center">
+						      	<div class=" d-flex flex-column">
+								  <div>
+								    <label>Rating:</label>
+								    <select v-model="comment.rating">
+								      <option value=5>5</option>
+								      <option value=4>4</option>
+								      <option value=3>3</option>
+								      <option value=2>2</option>
+								      <option value=1>1</option>
+								    </select>
+								  </div>
+								  <div>							
+								    <textarea rows="4" cols="50" placeholder="leave a comment..." v-model="comment.text"></textarea>
+								  </div>
+								  </div>
+						      </div>
+						      <div class="modal-footer">
+						        <button type="button" class="btn btn-primary" v-on:click="leaveComment(orderDTO.order.restaurantId)">Post comment</button>
+						      </div>
+						    </div>
+						  </div>
+						</div>
                     </div>
 
                 </div>
@@ -496,6 +537,17 @@ Vue.component('customer-orders', {
 	    	this.ordersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
 	    	this.allOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
 	    	this.displayedOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
+    	})
+    },
+    leaveComment: function(restaurantId){
+    	this.comment.restaurantId = restaurantId;
+    	this.comment.customerId = this.user.id;
+    	axios.post('/DeliveryApp/rest/comments/create', this.comment).then((response) => {
+	    	this.comment.customerId = -1;
+	    	this.comment.restaurantId = -1;
+	    	this.comment.text = "";
+	    	this.comment.rating = 5.0;
+	    	
     	})
     }
   },

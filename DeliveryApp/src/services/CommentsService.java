@@ -55,4 +55,29 @@ public class CommentsService {
 		
 		return sum / comments.size();
 	}
+	
+	private int calculateId() {
+		ArrayList<Comment> comments = commentRepository.getAll();
+		if (comments.size() == 0) {
+			return 0;
+		}
+		return getMaxId(comments) + 1;
+	}
+	
+	private int getMaxId(ArrayList<Comment> comments) {
+		int maxId = (comments.get(0)).getId();
+		for (Comment comment : comments) {
+			int id = comment.getId();
+			if (id > maxId) {
+				maxId = id;
+			}
+		}
+		return maxId;
+	}
+
+	public void create(Comment comment) {
+		comment.setId(this.calculateId());
+		System.out.println(comment);
+		commentRepository.save(comment);
+	}
 }

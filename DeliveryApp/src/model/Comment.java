@@ -22,7 +22,11 @@ public class Comment {
 		this.rating = rating;
 		this.status = status;
 	}
-	
+	public Comment() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getId() {
 		return id;
 	}

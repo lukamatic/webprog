@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import model.Comment;
 import model.CommentStatus;
 import model.Customer;
+import model.Deliverer;
 import repository.IFileRepository;
 
 public class CommentFileRepository implements ICommentRepository, IFileRepository<Comment> {
@@ -45,8 +46,10 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 	
 	@Override
 	public Comment save(Comment value) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Comment> comments = getAll();
+		comments.add(value);
+		writeToFile(comments);
+		return value;
 	}
 	
 	@Override
