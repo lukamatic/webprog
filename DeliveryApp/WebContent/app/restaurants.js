@@ -249,6 +249,9 @@ Vue.component('restaurants', {
     axios.get('/DeliveryApp/rest/restaurants').then((response) => {
       this.restaurants = response.data;
       this.displayedRestaurants = this.restaurants;
+      this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+        this.sortByOpen(a, b)
+      )
     });
   },
   filters: {
@@ -293,6 +296,9 @@ Vue.component('restaurants', {
         .then((response) => {
           this.restaurants = response.data;
           this.displayedRestaurants = this.restaurants;
+          this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+            this.sortByOpen(a, b)
+      	  )
         });
     },
     sort: function () {
@@ -311,7 +317,15 @@ Vue.component('restaurants', {
         }
       }
     },
-    sortByName: function (a, b, order) {
+    sortByOpen: function(a, b) {
+    	if (a.open && !b.open) {
+          return -1;
+        }
+        else {
+          return 1;
+        }
+    },
+    sortByName: function(a, b, order) {
       const nameA = a.name.toUpperCase();
       const nameB = b.name.toUpperCase();
 
@@ -332,7 +346,7 @@ Vue.component('restaurants', {
       }
       return 0;
     },
-    sortByLocation: function (a, b, order) {
+    sortByLocation: function(a, b, order) {
       const locationA = this.$options.filters
         .formatAddress(a.location.address)
         .toUpperCase();
