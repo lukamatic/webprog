@@ -40,14 +40,20 @@ public class ArticlesService {
 	}
 	
 	public Article create(InputStream fileInputStream, FormDataContentDisposition fileMetaData, Article article, int restaurantId) {
-		article.setId(calculateId());
 		article.setRestaurantId(restaurantId);
 		
-		if (fileMetaData.getFileName() != null) {
-			validateImage(fileMetaData);
-			String imageName = saveImage(fileInputStream, article.getId(), getFileExtension(fileMetaData));
-			article.setImageName(imageName);
+		validateArticle(article);
+		
+		if (fileMetaData.getFileName() == null) {
+			throw new BadRequestException("Image required.");
 		}
+
+		validateImage(fileMetaData);
+		
+		article.setId(calculateId());
+		
+		String imageName = saveImage(fileInputStream, article.getId(), getFileExtension(fileMetaData));
+		article.setImageName(imageName);
 		
 		articlesRepository.save(article);
 		restaurantsService.addArticleToRestaurant(article.getId(), restaurantId);
@@ -55,9 +61,7 @@ public class ArticlesService {
 		return article;
 	}
 	
-	public Article update(InputStream fileInputStream, FormDataContentDisposition fileMetaData, Article article, int restaurantId) {
-		article.setRestaurantId(restaurantId);
-		
+	public Article update(InputStream fileInputStream, FormDataContentDisposition fileMetaData, Article article) {
 		if (fileMetaData.getFileName() != null) {
 			validateImage(fileMetaData);
 			String imageName = saveImage(fileInputStream, article.getId(), getFileExtension(fileMetaData));
@@ -65,9 +69,32 @@ public class ArticlesService {
 		}
 		
 		articlesRepository.update(article);
-		restaurantsService.addArticleToRestaurant(article.getId(), restaurantId);
 		
 		return article;
+	}
+	
+	private void validateArticle(Article article) {
+		if (article.getName() == null || article.getName().equals("")) {
+			throw new BadRequestException("Article name required.");
+		}
+		
+		if (article.getArticleType() == null) {
+			throw new BadRequestException("Article type required.");
+		}
+		
+		if (article.getPrice() < 0) {
+			throw new BadRequestException("Invalid price.");
+		}
+		
+		if (article.getArticleSize().getAmmount() < 0) {
+			throw new BadRequestException("Invalid ammount.");
+		}
+		
+		for (Article a : getAll()) {
+			if (article.getRestaurantId() == a.getRestaurantId() && article.getName().equals(a.getName())) {
+				throw new BadRequestException("Restaurant already contains article with given name");
+			}
+		}
 	}
 	
 	private void validateImage(FormDataContentDisposition fileMetaData) {

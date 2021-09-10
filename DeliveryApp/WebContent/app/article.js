@@ -4,13 +4,13 @@ Vue.component('articleComponent', {
       backupArticle: null,
       article: {
         name: "",
-        articleType: null,
+        articleType: "FOOD",
         restaurantId: null,
         price: null,
         imageName: "",
         articleSize: {
           ammount: null,
-          unit: null
+          unit: "GRAMS"
         }
       },
       file: null,
@@ -225,6 +225,12 @@ Vue.component('articleComponent', {
       this.readonlyModeOn = true;
     },
     validateArticle() {
+    	if (!this.article.name || !this.article.articleType || !this.article.price || !this.file) {
+			this.errorText = "Name, type, price and image are required.";
+			this.isErrorLabelVisible = true;	
+	    	return false;
+    	}
+    
 		this.errorText = "";
 		this.isErrorLabelVisible = false;	
     	return true;

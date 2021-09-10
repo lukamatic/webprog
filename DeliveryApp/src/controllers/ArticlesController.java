@@ -103,7 +103,7 @@ public class ArticlesController {
 		}
 		
 		Article article = new Gson().fromJson(articleJSON, Article.class);
-		return articlesService.update(fileInputStream, fileMetaData, article, manager.getRestaurantId());
+		return articlesService.update(fileInputStream, fileMetaData, article);
 	}
 	
 }

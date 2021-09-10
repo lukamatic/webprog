@@ -123,7 +123,7 @@ Vue.component('restaurant', {
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class=" flex-fill d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ f.name }}</h5>
-                                                            <p><span v-if="f.articleSize">{{f.articleSize.ammount}}{{ f.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
+                                                            <p><span v-if="f.articleSize.ammount > 0">{{f.articleSize.ammount}}{{ f.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-end m-3">
                                                             <h5>{{ parseFloat(f.price).toFixed(2) }} RSD</h5>
@@ -182,7 +182,7 @@ Vue.component('restaurant', {
                                                     <div class="d-flex flex-row justify-content-between">
                                                         <div class="d-flex flex-column align-items-start ">
                                                             <h5 class="pb-0 mb-0">{{ b.name }}</h5>
-                                                            <p><span v-if="b.articleSize">{{b.articleSize.ammount}}{{ b.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
+                                                            <p><span v-if="b.articleSize.ammount > 0">{{b.articleSize.ammount}}{{ b.articleSize.unit == 'GRAMS' ? "g" : "ml" }}</span></p>
                                                         </div>
                                                         <div class="d-flex flex-column align-items-end m-3">
                                                             <h5>{{ parseFloat(b.price).toFixed(2) }} RSD</h5>
