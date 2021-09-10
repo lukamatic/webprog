@@ -196,4 +196,10 @@ public class RestaurantsService {
 		Restaurant restaurant = getById(restaurantId);
 		restaurant.getArticles().add(articleId);
 	}
+	
+	public void refreshRating(int restaurantId, double newRating) {
+		Restaurant restaurant = getById(restaurantId);
+		restaurant.setAverageRating(newRating);
+		restaurantRepository.update(restaurant);
+	}
 }

@@ -39,7 +39,7 @@ Vue.component('restaurant', {
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
                     <h3 class="flex-fill">{{restaurant.name}}</h3>
                     <h5>{{ restaurant.restaurantType }}</h5>
-                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ parseFloat(averageRating).toFixed(2) }}</h6>
+                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ restaurant.averageRating.toFixed(2) }}</h6>
                 </div>
                 <div class="d-flex flex-column align-items-end flex-wrap m-2 mr-4">
                     <h6 class="bg-dark text-white px-4 py-2 rounded mb-5 mt-1"> {{ restaurant.open ? "OPEN" : "CLOSED" }} </h6>

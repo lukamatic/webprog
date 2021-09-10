@@ -239,7 +239,7 @@ Vue.component('restaurants', {
           <h5 style="min-width: 300px">
             Address: {{ restaurant.location.address | formatAddress }}
           </h5>
-           <h5>Average rating: {{ restaurant.averageRating }}</h5>
+           <h5>Average rating: {{ restaurant.averageRating.toFixed(2) }}</h5>
         </div>
       </div>
     </div>
