@@ -225,10 +225,18 @@ Vue.component('articleComponent', {
       this.readonlyModeOn = true;
     },
     validateArticle() {
-    	if (!this.article.name || !this.article.articleType || !this.article.price || !this.file) {
-			this.errorText = "Name, type, price and image are required.";
-			this.isErrorLabelVisible = true;	
-	    	return false;
+    	if (this.article.restaurantId == null) {
+	    	if (!this.article.name || !this.article.articleType || !this.article.price || !this.file) {
+				this.errorText = "Name, type, price and image are required.";
+				this.isErrorLabelVisible = true;	
+		    	return false;
+	    	}
+    	} else {
+	    	if (!this.article.name || !this.article.articleType || !this.article.price) {
+				this.errorText = "Name, type and price and are required.";
+				this.isErrorLabelVisible = true;	
+		    	return false;
+	    	}
     	}
     
 		this.errorText = "";
