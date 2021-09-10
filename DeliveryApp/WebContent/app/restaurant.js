@@ -117,7 +117,6 @@ Vue.component('restaurant', {
                                                 style="min-height: 200px; min-width: 600px; width: 1000px" 
                                                  v-for="f in food" :key="f.id" >
                                                  
-												<a :href="'#article/' + f.id">
                                                 <img :src="f.imagePath" width="190" height="190">
 
                                                 <div class="m-2  pl-3 d-flex flex-column flex-fill">
@@ -134,7 +133,7 @@ Vue.component('restaurant', {
                                                     	<p class="pr-2">{{f.description}}</p>
                                                     </div>
                                                     <div v-if="isManaged" class="d-flex flex-row mt-auto">
-                                                    	<button class="btn btn-outline-secondary px-5 mr-3"> Edit </button>
+                                                    	<a :href="'#/article?id=' + f.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
                                                     	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     </div>
                                                     
@@ -161,7 +160,6 @@ Vue.component('restaurant', {
                                                         </div>
                                                     </div>
                                                 </div>
-                                               </a>
                                             </div>
 
                                             
@@ -191,6 +189,10 @@ Vue.component('restaurant', {
                                                     </div>
                                                     <div >
                                                     	<p class="pr-2">{{b.description}}</p>
+                                                    </div>
+                                                    <div v-if="isManaged" class="d-flex flex-row mt-auto">
+                                                    	<a :href="'#/article?id=' + b.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
+                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
                                                     </div>
                                                     
 

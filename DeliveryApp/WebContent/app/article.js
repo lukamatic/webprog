@@ -14,6 +14,8 @@ Vue.component('articleComponent', {
       },
       file: null,
       readonlyModeOn: false,
+      errorText: "",
+      isErrorLabelVisible: false
     };
   },
   template: ` 
@@ -147,6 +149,9 @@ Vue.component('articleComponent', {
                 />
               </td>
             </tr>
+            <tr>
+            	<td colspan="4"><p v-if="isErrorLabelVisible" class="m-3 px-4 text-danger text-center">{{ errorText }}</p></td>
+            </tr>
             <tr v-if="!readonlyModeOn">
               <td colspan="2" class="text-center">
                 <button
@@ -175,13 +180,14 @@ Vue.component('articleComponent', {
 `,
   mounted() {
   	this.article.id = this.$route.query.id;
-  	if (this.article.id) {
+  	if (this.article.id) {	
   	  this.readonlyModeOn = true;
       axios.get('rest/articles/' + this.article.id)
       .then((response) => {
         this.article = response.data;
         this.$refs['image'].src = "Images/" + this.article.imageName;
-      });
+      })
+      .catch((error) => console.log(error));
   	}
   },
   methods: {
@@ -217,6 +223,33 @@ Vue.component('articleComponent', {
         : "Images/default_article.png";
       this.readonlyModeOn = true;
     },
-    saveArticle: function () {},
+    validateArticle() {
+		this.errorText = "";
+		this.isErrorLabelVisible = false;	
+    	return true;
+    },
+    saveArticle: function () {
+		if (!this.validateArticle()) {
+			return;
+	    }
+    
+		let formData = new FormData();
+	
+	    formData.append('file', this.file);
+	    const articleJSON = JSON.stringify(this.article);
+	    formData.append('articleJSON', articleJSON);
+	    console.log(this.article)
+	    axios.post( '/DeliveryApp/rest/articles/create',
+	        formData,
+	        { headers: { 'Content-Type': 'multipart/form-data' } })
+	    .then((response) => {
+  			console.log(response.data);
+  			//router.push('restaurant');
+        })
+        .catch((error) => {
+	      this.errorText = error.response.data;
+	      this.isErrorLabelVisible = true;	
+        });
+    },
   },
 });
