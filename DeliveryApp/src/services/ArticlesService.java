@@ -156,4 +156,8 @@ public class ArticlesService {
 		
 		return maxId;
 	}
+
+	public void delete(int id) {
+		articlesRepository.delete(id);		
+	}
 }

@@ -7,6 +7,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -52,6 +53,13 @@ public class ArticlesController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Article getById(@PathParam("id") int id) {
 		return articlesService.getById(id);
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void delete(@PathParam("id") int id) {
+		 articlesService.delete(id);
 	}
 	
 	@GET

@@ -58,7 +58,7 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	
 	@Override
 	public Article save(Article value) {
-		ArrayList<Article> articles = getAll();
+		ArrayList<Article> articles = readFromFile();
 		articles.add(value);
 		writeToFile(articles);
 		return value;
@@ -66,7 +66,7 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	
 	@Override
 	public Article update(Article value) {
-		ArrayList<Article> articles = getAll();
+		ArrayList<Article> articles = readFromFile();
 
 		for (int i = 0; i < articles.size(); i++) {
 			if (articles.get(i).getId() == value.getId()) {
@@ -80,7 +80,15 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	
 	@Override
 	public Boolean delete(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Article> articles = readFromFile();
+
+		for (int i = 0; i < articles.size(); i++) {
+			if (articles.get(i).getId() == key) {
+				articles.get(i).setDeleted(true);;
+			}
+		}
+		
+		writeToFile(articles);
 		return null;
 	}
 	

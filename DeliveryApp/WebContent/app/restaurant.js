@@ -127,7 +127,7 @@ Vue.component('restaurant', {
                                         <div class="d-flex flex-wrap ">
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
                                                 style="min-height: 200px; min-width: 600px; width: 1000px"
-                                                 v-for="f in food" :key="f.id" >
+                                                 v-for="f in food" :key="f.id" v-if="!f.isDeleted">
 
                                                 <img :src="'Images/' + f.imageName" width="190" height="190">
 
@@ -187,7 +187,7 @@ Vue.component('restaurant', {
                                         <div class="d-flex flex-wrap ">
                                             <div class="bg-white box-shadow m-1 p-2 d-flex"
                                                 style="min-height: 200px; min-width: 600px; width: 1000px"
-                                                 v-for="b in beverages" :key="b.id" >
+                                                 v-for="b in beverages" :key="b.id"  v-if="!b.isDeleted">
 
                                                 <img :src="'Images/' + b.imageName" width="190" height="190">
 
@@ -884,7 +884,16 @@ Vue.component('restaurant', {
     	})
     },
     deleteArticle(id){
-    	//axios.delete('/DeliveryApp/rest/articles/'+id).then((response);
+    	axios.delete('/DeliveryApp/rest/articles/'+id).then((response) => {
+    		//this.food.find(element => element.id == id).isDeleted = true; 
+    		//this.beverages.find(element => element.id == id).isDeleted = true; 
+    		axios.get('/DeliveryApp/rest/articles/' + this.restaurant.id + '/food').then((response) => {
+		      this.food = response.data;
+		    });
+		    axios.get('/DeliveryApp/rest/articles/' + this.restaurant.id + '/beverages').then((response) => {
+		      this.beverages = response.data;
+		    });
+    	})
     },
     deleteComment(id){
     	//axios.delete('/DeliveryApp/rest/comments/'+id);
