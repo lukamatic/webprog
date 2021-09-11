@@ -413,8 +413,8 @@ Vue.component('orders', {
       return 0;
     },
     sortByDate: function (a, b, order) {
-      const dateA = moment(a.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
-      const dateB = moment(b.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
+      const dateA = moment(a.order.dateTimeCreated).format('yyyy.MM.DD.hh.mm');
+      const dateB = moment(b.order.dateTimeCreated).format('yyyy.MM.DD.hh.mm');
 
       if (order == "asc") {
         if (dateA < dateB) {

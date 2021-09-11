@@ -134,6 +134,30 @@ public class OrdersController {
 	}
 	
 	@PUT
+	@Path("/start-preparation/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void startPreparation(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.startPreparation(id);
+	}
+	
+	@PUT
+	@Path("/finish-preparation/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void finishPreparation(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.finishPreparation(id);
+	}
+	
+	@PUT
+	@Path("/start-delivery/{orderId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public void startDelivery(@Context HttpServletRequest request, @PathParam("orderId") String id) {
+		ordersService.startDelivery(id);
+	}
+	
+	@PUT
 	@Path("/deliver/{orderId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

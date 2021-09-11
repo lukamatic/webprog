@@ -15,29 +15,17 @@ Vue.component('customer-orders', {
       	customerId: -1,
       	restaurantId: -1,
       	text: "",
-      	rating: 5.0, 
+      	rating: 5.0,
       	status: 'PENDING'
 	  }
     };
   },
-  template: ` 
+  template: `
     <div>
       <navbar path="customer-orders"></navbar>
-      
+
       <div class="d-flex flex-column align-items-center bg-light">
-      <div
-        class="
-          d-flex
-          flex-column
-          align-items-center
-          w-50
-          p-4
-          mt-4
-          mb-3
-          bg-white
-          box-shadow
-        "
-      >
+      <div class=" d-flex flex-column align-items-center w-50 p-4 mt-4 mb-3 bg-white box-shadow">
         <button
           class="btn btn-dark w-75 font-weight-bold"
           v-on:click="isSearchDivHidden = false"
@@ -64,42 +52,21 @@ Vue.component('customer-orders', {
                 <label class="pt-3" for="name"><h5>Restaurant name:</h5></label>
               </td>
               <td>
-                <input
-                  class="ml-2"
-                  name="name"
-                  id="name"
-                  placeholder="restaurant name"
-                  v-model="searchParameters.restaurantName"
-                />
+                <input class="ml-2" name="name" id="name" placeholder="restaurant name"
+                		v-model="searchParameters.restaurantName"/>
               </td>
             </tr>
-            
-            
             <tr>
               <td>
                 <label class="pt-3" for="from"><h5>Price:</h5></label>
               </td>
               <td>
                 <label class="ml-4 pt-2" for="from">from:</label>
-                <input
-                  class="ml-2"
-                  name="from"
-                  id="from"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  v-model="searchParameters.priceFrom"
-                />
+                <input class="ml-2" name="from" id="from" type="number" step="0.01" min="0"
+                  		v-model="searchParameters.priceFrom"/>
                 <label class="ml-2 pt-2" for="to">to:</label>
-                <input
-                  class="ml-2"
-                  name="to"
-                  id="to"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  v-model="searchParameters.priceTo"
-                />
+                <input class="ml-2" name="to" id="to" type="number" step="0.01" min="0"
+          				v-model="searchParameters.priceTo"/>
               </td>
             </tr>
             <tr>
@@ -108,28 +75,16 @@ Vue.component('customer-orders', {
               </td>
               <td>
                 <label class="ml-4 pt-2" for="from">from:</label>
-                <input
-                  class="ml-2"
-                  name="from"
-                  type="date"
-                  v-model="searchParameters.dateFrom"
-                />
+                <input class="ml-2" name="from" type="date"
+                  		v-model="searchParameters.dateFrom"/>
                 <label class="ml-2 pt-2" for="to">to:</label>
-                <input
-                  class="ml-2"
-                  name="to"
-                  id="to"
-                  type="date"
-                  v-model="searchParameters.dateTo"
-                />
+                <input class="ml-2" name="to" id="to" type="date"
+                  		v-model="searchParameters.dateTo"/>
               </td>
             </tr>
             <tr>
               <td colspan="2" class="text-center">
-                <button
-                  class="btn btn-dark mx-2 px-3 mt-4"
-                  v-on:click="search(searchParameters)"
-                >
+                <button class="btn btn-dark mx-2 px-3 mt-4" v-on:click="search(searchParameters)">
                   Search
                 </button>
                 <button type="button" class="btn btn-link mx-2 px-3 mt-4" v-on:click="clearSearchParameters()">Clear all</button>
@@ -141,13 +96,7 @@ Vue.component('customer-orders', {
           <div class="mt-4 mx-3">
             <div>
               <label for="condition"><h5>Sort by:</h5></label>
-              <select
-                class="ml-2"
-                name="condition"
-                id="condition"
-                v-on:change="sort"
-                v-model="sortOptions.condition"
-              >
+              <select class="ml-2" name="condition" id="condition" v-on:change="sort" v-model="sortOptions.condition">
                 <option value="name">Restaurant name</option>
                 <option value="price">Price</option>
                 <option value="date">Date created</option>
@@ -155,13 +104,7 @@ Vue.component('customer-orders', {
             </div>
             <div>
               <label for="order"><h5>Sort order:</h5></label>
-              <select
-                class="ml-2"
-                name="order"
-                id="cars"
-                v-on:change="sort"
-                v-model="sortOptions.order"
-              >
+              <select class="ml-2"  name="order" id="order" v-on:change="sort" v-model="sortOptions.order">
                 <option value="asc">Ascending</option>
                 <option value="desc">Descending</option>
               </select>
@@ -169,16 +112,8 @@ Vue.component('customer-orders', {
           </div>
           <div class="mt-4 mx-3">
           <div>
-              <label for="statusFilter"
-                ><h5>Filter by order status:</h5></label
-              >
-              <select
-                class="ml-2"
-                name="statusFilter"
-                id="statusFilter"
-                v-on:change="filter"
-                v-model="filterOptions.status"
-              >
+              <label for="statusFilter"><h5>Filter by order status:</h5></label>
+              <select class="ml-2" name="statusFilter" id="statusFilter" v-on:change="filter" v-model="filterOptions.status">
                 <option value="any">Any</option>
                 <option value="processing">Processing</option>
                 <option value="in-preparation">In preparation</option>
@@ -190,16 +125,8 @@ Vue.component('customer-orders', {
               </select>
             </div>
             <div>
-              <label for="typeFilter"
-                ><h5>Filter by restaurant type:</h5></label
-              >
-              <select
-                class="ml-2"
-                name="typeFilter"
-                id="typeFilter"
-                v-on:change="filter"
-                v-model="filterOptions.type"
-              >
+              <label for="typeFilter"><h5>Filter by restaurant type:</h5></label>
+              <select class="ml-2" name="typeFilter" id="typeFilter" v-on:change="filter" v-model="filterOptions.type">
                 <option value="any">Any</option>
                 <option value="grill">Grill</option>
                 <option value="italian">Italian</option>
@@ -207,14 +134,14 @@ Vue.component('customer-orders', {
                 <option value="vegan">Vegan</option>
               </select>
             </div>
-            
+
           </div>
         </div>
       </div>
-      
+
 <!-- --------NARUDZBINE-------- -->
 	<div class="d-flex flex-column align-items-center bg-light">
-            
+
             <br>
 
             <div class="d-flex flex-column">
@@ -224,7 +151,7 @@ Vue.component('customer-orders', {
                     <div class="d-flex flex-column pl-5">
                     	<h4 class="pt-2">{{orderDTO.restaurantName}}</h4>
                         <ul class="p-0">
-                            <li v-for="item in orderDTO.order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li> 
+                            <li v-for="item in orderDTO.order.items" :key="item.article.id">{{item.count}} x {{item.article.name}}</li>
                         </ul>
                     </div>
                     <div class="d-flex flex-column align-items-start m-2 mr-4">
@@ -266,7 +193,7 @@ Vue.component('customer-orders', {
 								      <option value=1>1</option>
 								    </select>
 								  </div>
-								  <div>							
+								  <div>
 								    <textarea rows="4" cols="50" placeholder="leave a comment..." v-model="comment.text"></textarea>
 								  </div>
 								  </div>
@@ -283,10 +210,10 @@ Vue.component('customer-orders', {
 
             </div>
         </div>
-      
+
       </div>
-      
-    </div>		  
+
+    </div>
 `,
   mounted() {
 
@@ -308,8 +235,6 @@ Vue.component('customer-orders', {
 	          this.ordersDTO.push(odto);
 	          this.allOrdersDTO.push(odto);
 	          this.displayedOrdersDTO.push(odto);
-	          /*this.allOrdersDTO = Array.from(this.ordersDTO);
-              this.displayedOrdersDTO = Array.from(this.ordersDTO);*/
 	        });
           }
         });
@@ -346,7 +271,7 @@ Vue.component('customer-orders', {
       if (searchParameters.dateTo) {
         params = params.concat("&dateTo=" + dateTo);
       }
-      
+
       this.sortOptions.condition = "";
       this.sortOptions.order = "asc";
       this.filterOptions.type = "any";
@@ -354,7 +279,7 @@ Vue.component('customer-orders', {
 
       axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
        let orders = response.data;
-        
+
 	      this.ordersDTO = [];
 	      this.displayedOrdersDTO = [];
         for(let o of this.orders) {
@@ -416,8 +341,8 @@ Vue.component('customer-orders', {
       return 0;
     },
     sortByDate: function (a, b, order) {
-      const dateA = moment(a.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
-      const dateB = moment(b.order.dateTimeCreated).format('yyyy.MM.dd.hh.mm');
+      const dateA = moment(a.order.dateTimeCreated).format('yyyy.MM.DD.hh.mm');
+      const dateB = moment(b.order.dateTimeCreated).format('yyyy.MM.DD.hh.mm');
 
       if (order == "asc") {
         if (dateA < dateB) {
@@ -487,7 +412,7 @@ Vue.component('customer-orders', {
           );
           break;
       }
-      
+
       switch (this.filterOptions.status) {
         case "any":
           this.displayedOrdersDTO.filter((r) =>
@@ -532,7 +457,7 @@ Vue.component('customer-orders', {
 
     },
     cancelOrder: function(id){
-    	
+
     	axios.put('/DeliveryApp/rest/orders/cancel/'+id).then((response) => {
 	    	this.ordersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
 	    	this.allOrdersDTO.find(element => element.order.id == id).order.orderStatus = "CANCELED";
@@ -547,7 +472,7 @@ Vue.component('customer-orders', {
 	    	this.comment.restaurantId = -1;
 	    	this.comment.text = "";
 	    	this.comment.rating = 5.0;
-	    	
+
     	})
     }
   },
