@@ -50,7 +50,7 @@ Vue.component('restaurant', {
                 <div class="d-flex flex-column flex-wrap justify-content-start mr-auto mx-2 mt-2">
                     <h3 class="flex-fill">{{restaurant.name}}</h3>
                     <h5>{{ restaurant.restaurantType }}</h5>
-                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ restaurant.averageRating.toFixed(2) }}</h6>
+                    <h6 class="mt-1"><span style='font-size:18px;' v-on:>&starf; </span>{{ parseFloat(restaurant.averageRating).toFixed(2) }}</h6>
                 </div>
                 <div class="d-flex flex-column align-items-end flex-wrap m-2 mr-4">
                     <h6 class="bg-dark text-white px-4 py-2 rounded mb-5 mt-1"> {{ restaurant.open ? "OPEN" : "CLOSED" }} </h6>
@@ -499,18 +499,12 @@ Vue.component('restaurant', {
 			    }
 			    axios.get(commentsPath).then((response) => {
 			      this.comments = response.data;
-			      let sum = 0;
-			      let c = this.comments.length;
-			      for(comment of this.comments){
-			            sum += comment.rating;
-			      }
-			      this.averageRating = sum/c;
 			    });
 
 			    axios.get('/DeliveryApp/rest/orders/restaurant/' + this.restaurant.id).then((response) => {
           			this.orders = response.data;
           			this.displayedOrders = Array.from(this.orders);
-          			this.addDelivererObjToOrders();
+          			//this.addDelivererObjToOrders();
           			console.log(this.orders);
       			})
 	    	});
@@ -758,7 +752,7 @@ Vue.component('restaurant', {
       axios.get("/DeliveryApp/rest/orders/search?" + params).then((response) => {
 	      this.orders = response.data;
 	      this.displayedOrders = Array.from(this.orders);
-	      this.addDelivererObjToOrders();
+	      //this.addDelivererObjToOrders();
 
       });
     },
