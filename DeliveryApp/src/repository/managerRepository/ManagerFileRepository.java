@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import model.Admin;
+import model.Deliverer;
 import model.Manager;
 import repository.IFileRepository;
 
@@ -40,7 +41,14 @@ public class ManagerFileRepository implements IManagerRepository, IFileRepositor
 	
 	@Override
 	public ArrayList<Manager> getAll() {
-		return readFromFile();
+		ArrayList<Manager> allManagers = readFromFile();
+		ArrayList<Manager> managers = new ArrayList<Manager>();
+		for (int i = 0; i < allManagers.size(); i++) {
+			if (allManagers.get(i).isDeleted() == false) {
+				managers.add(allManagers.get(i));
+			}
+		}
+		return managers;
 	}
 	
 	@Override

@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import model.Admin;
+import model.Comment;
 import model.Deliverer;
 import model.Deliverer;
 import repository.IFileRepository;
@@ -28,7 +29,7 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 
 	@Override
 	public Deliverer getById(Integer key) {
-		ArrayList<Deliverer> deliverers = getAll();
+		ArrayList<Deliverer> deliverers = readFromFile();
 		
 		for (Deliverer deliverer : deliverers) {
 			if (deliverer.getId() == key) {
@@ -41,12 +42,19 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	
 	@Override
 	public ArrayList<Deliverer> getAll() {
-		return readFromFile();
+		ArrayList<Deliverer> allDeliverers = readFromFile();
+		ArrayList<Deliverer> deliverers = new ArrayList<Deliverer>();
+		for (int i = 0; i < allDeliverers.size(); i++) {
+			if (allDeliverers.get(i).isDeleted() == false) {
+				deliverers.add(allDeliverers.get(i));
+			}
+		}
+		return deliverers;
 	}
 	
 	@Override
 	public Deliverer save(Deliverer value) {
-		ArrayList<Deliverer> deliverers = getAll();
+		ArrayList<Deliverer> deliverers = readFromFile();
 		deliverers.add(value);
 		writeToFile(deliverers);
 		return value;
@@ -54,7 +62,7 @@ public class DelivererFileRepository implements IDelivererRepository, IFileRepos
 	
 	@Override
 	public Deliverer update(Deliverer value) {
-		ArrayList<Deliverer> deliverers = getAll();
+		ArrayList<Deliverer> deliverers = readFromFile();
 
 		for (int i = 0; i < deliverers.size(); i++) {
 			if (deliverers.get(i).getId() == value.getId()) {

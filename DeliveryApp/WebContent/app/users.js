@@ -193,6 +193,7 @@ Vue.component('users', {
       <div
         v-for="user in displayedUsers"
         :key="user.id"
+        v-if="!users.isDeleted"
         class="
           d-flex
           flex-row
@@ -247,6 +248,7 @@ Vue.component('users', {
             <button
               class="btn btn-dark mb-2 mr-3"
               style="width: 120px"
+              v-on:click="deleteUser(user.id)"
             >
               Delete
             </button>
@@ -479,6 +481,17 @@ Vue.component('users', {
 	    .catch(function (error) {
 	      console.log(error);
 	    });
+  	}, 
+  	deleteUser(id){
+  		axios.delete('/DeliveryApp/rest/users/'+id).then((response) => {
+		    axios.get('/DeliveryApp/rest/users').then((response) => {
+		      this.users = response.data;
+		      this.displayedUsers = Array.from(this.users);
+		      this.search(this.searchParameters);
+		      this.filter();
+		      this.sort();
+		    });
+    	})
   	}
   }
 });

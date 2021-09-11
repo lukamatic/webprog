@@ -49,7 +49,6 @@ public class CommentsController {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public void delete(@PathParam("id") int id) {
-		System.out.println(id);
 		 commentsService.delete(id);
 	}
 

@@ -23,6 +23,7 @@ import model.ArticleType;
 import model.Cart;
 import model.CartItem;
 import model.Customer;
+import model.Deliverer;
 import model.Manager;
 import model.Unit;
 import model.User;
@@ -35,7 +36,7 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 
 	@Override
 	public Customer getById(Integer key) {
-		ArrayList<Customer> customers = getAll();
+		ArrayList<Customer> customers = readFromFile();
 		
 		for (Customer customer : customers) {
 			if (customer.getId() == key) {
@@ -48,12 +49,19 @@ public class CustomerFileRepository implements ICustomerRepository, IFileReposit
 	
 	@Override
 	public ArrayList<Customer> getAll() {
-		return readFromFile();
+		ArrayList<Customer> allCustomers = readFromFile();
+		ArrayList<Customer> customers = new ArrayList<Customer>();
+		for (int i = 0; i < allCustomers.size(); i++) {
+			if (allCustomers.get(i).isDeleted() == false) {
+				customers.add(allCustomers.get(i));
+			}
+		}
+		return customers;
 	}
 	
 	@Override
 	public Customer save(Customer value) {
-		ArrayList<Customer> customers = getAll();
+		ArrayList<Customer> customers = readFromFile();
 		customers.add(value);
 		writeToFile(customers);
 		return value;

@@ -174,4 +174,29 @@ public class UsersService {
 			return null;
 		}
 	}
+
+	public void delete(int id) {
+		User user = getById(id);
+		switch (user.getRole()) {
+		case MANAGER:
+			Manager manager = managerRepository.getById(id);
+			manager.setDeleted(true);
+			managerRepository.update(manager);
+			return;
+		case DELIVERER:
+			Deliverer deliverer = delivererRepository.getById(id);
+			deliverer.setDeleted(true);
+			delivererRepository.update(deliverer);
+			return;
+		case CUSTOMER:
+			Customer customer = customerRepository.getById(id);
+			customer.setDeleted(true);
+			customerRepository.update(customer);
+			return;
+		default:
+			return;
+		}
+		
+		
+	}
 }
