@@ -288,7 +288,7 @@ Vue.component('restaurants', {
       }
 
       if (searchParameters.to) {
-        params = params.concat('&to=' + searchParameters.from);
+        params = params.concat('&to=' + searchParameters.to);
       }
 
       axios
@@ -299,6 +299,7 @@ Vue.component('restaurants', {
           this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
             this.sortByOpen(a, b)
       	  )
+          this.filter()
         });
     },
     sort: function () {
@@ -312,6 +313,11 @@ Vue.component('restaurants', {
           case 'location':
             this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
               this.sortByLocation(a, b, this.sortOptions.order)
+            );
+            break;
+          case 'rating':
+            this.displayedRestaurants = this.displayedRestaurants.sort((a, b) =>
+              this.sortByRating(a, b, this.sortOptions.order)
             );
             break;
         }
@@ -366,6 +372,24 @@ Vue.component('restaurants', {
           return 1;
         }
         if (locationA > locationB) {
+          return -1;
+        }
+      }
+      return 0;
+    },
+    sortByRating: function(a, b, order) {
+      if (order == 'asc') {
+        if (a.averageRating < b.averageRating) {
+          return -1;
+        }
+        if (a.averageRating > b.averageRating) {
+          return 1;
+        }
+      } else {
+        if (a.averageRating < b.averageRating) {
+          return 1;
+        }
+        if (a.averageRating > b.averageRating) {
           return -1;
         }
       }
