@@ -40,13 +40,19 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 	
 	@Override
 	public ArrayList<Comment> getAll() {
-		
-		return readFromFile();
+		ArrayList<Comment> allComments = readFromFile();
+		ArrayList<Comment> comments = new ArrayList<Comment>();
+		for (int i = 0; i < allComments.size(); i++) {
+			if (allComments.get(i).isDeleted() == false) {
+				comments.add(allComments.get(i));
+			}
+		}
+		return comments;
 	}
 	
 	@Override
 	public Comment save(Comment value) {
-		ArrayList<Comment> comments = getAll();
+		ArrayList<Comment> comments = readFromFile();
 		comments.add(value);
 		writeToFile(comments);
 		return value;
@@ -54,8 +60,7 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 	
 	@Override
 	public Comment update(Comment value) {
-		ArrayList<Comment> comments = getAll();
-
+		ArrayList<Comment> comments = readFromFile();
 		for (int i = 0; i < comments.size(); i++) {
 			if (comments.get(i).getId() == value.getId()) {
 				comments.set(i, value);
@@ -67,8 +72,14 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 	
 	@Override
 	public Boolean delete(Integer key) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Comment> comments = readFromFile();
+
+		for (int i = 0; i < comments.size(); i++) {
+			if (comments.get(i).getId() == key) {
+				comments.get(i).setDeleted(true);
+			}
+		}
+		return writeToFile(comments);
 	}
 
 	@Override

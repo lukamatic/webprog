@@ -12,8 +12,9 @@ public class Comment {
     private String text;
 	private double rating;
 	private CommentStatus status;
+	private boolean isDeleted;
 	
-	public Comment(int id, int customerId, int restaurantId, String text, double rating, CommentStatus status) {
+	public Comment(int id, int customerId, int restaurantId, String text, double rating, CommentStatus status, boolean isDeleted) {
 		super();
 		this.id = id; 
 		this.customerId = customerId;
@@ -21,6 +22,7 @@ public class Comment {
 		this.text = text;
 		this.rating = rating;
 		this.status = status;
+		this.isDeleted = isDeleted;
 	}
 	public Comment() {
 		super();
@@ -74,6 +76,15 @@ public class Comment {
 	public void setStatus(CommentStatus status) {
 		this.status = status;
 	}
+	
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+	
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
 	
 	
 	
