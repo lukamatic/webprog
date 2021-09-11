@@ -288,7 +288,7 @@ Vue.component('restaurants', {
       }
 
       if (searchParameters.to) {
-        params = params.concat('&to=' + searchParameters.from);
+        params = params.concat('&to=' + searchParameters.to);
       }
 
       axios

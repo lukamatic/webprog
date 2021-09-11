@@ -163,7 +163,12 @@ public class RestaurantsService {
 	}
 	
 	public ArrayList<Restaurant> filterByAverageRating(ArrayList<Restaurant> restaurants, double from, double to) {
-		// TODO
+		for (int i = 0; i < restaurants.size(); i++) {
+			if (restaurants.get(i).getAverageRating() < from || restaurants.get(i).getAverageRating() > to) {
+				restaurants.remove(i);
+				i--;
+			}
+		}
 		
 		return restaurants;
 	}
