@@ -458,7 +458,7 @@ Vue.component('users', {
   	},
   	block: function(id) {
     	const vm = this;
-	  	axios.patch('/DeliveryApp/rest/users/' + id + '/block')
+	  	axios.put('/DeliveryApp/rest/users/' + id + '/block')
 	    .then(function (response) {
 			const index = vm.displayedUsers.findIndex((u) => u.id == id);
 			vm.displayedUsers[index].blocked = true;
@@ -470,7 +470,7 @@ Vue.component('users', {
   	},
   	unblock: function(id) {
     	const vm = this;
-	  	axios.patch('/DeliveryApp/rest/users/' + id + '/unblock')
+	  	axios.put('/DeliveryApp/rest/users/' + id + '/unblock')
 	    .then(function (response) {
 			const index = vm.displayedUsers.findIndex((u) => u.id == id);
 			vm.displayedUsers[index].blocked = false;

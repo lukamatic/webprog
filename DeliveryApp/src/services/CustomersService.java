@@ -23,6 +23,10 @@ public class CustomersService {
 		ordersService = new OrdersService();
 	}
 	
+	public Customer getById(int id) {
+		return customerRepository.getById(id);
+	}
+	
 	public ArrayList<Customer> getAll() {
 		return customerRepository.getAll();
 	}
@@ -113,5 +117,11 @@ public class CustomersService {
 		}
 		
 		return customers;
+	}
+	
+	public void markAsSuspicious(int customerId) {
+		Customer customer = getById(customerId);
+		customer.setSuspicious(true);
+		customerRepository.update(customer);
 	}
 }

@@ -113,6 +113,28 @@ private IOrderRepository orderRepository;
 		double points = -1 * order.getPrice() * 133 * 4 / 1000;
 		CustomersService cs = new CustomersService();
 		cs.updatePoints(order.getCustomerId(), points);
+		markIfSuspicious(order.getCustomerId());
+	}
+	
+	public void markIfSuspicious(int customerId) {
+		int counter = 0;
+		
+		for (Order order : getAll()) {
+			if (order.getOrderStatus().equals(OrderStatus.CANCELED) && order.getCustomerId() == customerId) {
+				System.out.println("created:" + order.getDateTimeCreated());
+				System.out.println("now:" + System.currentTimeMillis());
+				System.out.println("a month ago:" + (System.currentTimeMillis() - 2678400000L));
+				if (order.getDateTimeCreated() > System.currentTimeMillis() - 2678400000L) {
+					counter++;
+				}
+			}
+		}
+		System.out.println("counter = " + counter );
+		
+		if (counter >= 5) {
+			CustomersService cs = new CustomersService();
+			cs.markAsSuspicious(customerId);
+		}
 	}
 
 	public ArrayList<Order> getByDeliverer(int id) {
