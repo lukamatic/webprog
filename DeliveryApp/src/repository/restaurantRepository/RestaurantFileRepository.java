@@ -28,7 +28,7 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 
 	@Override
 	public Restaurant getById(Integer key) {
-		ArrayList<Restaurant> restaurants = this.getAll();
+		ArrayList<Restaurant> restaurants = this.readFromFile();
 		for(Restaurant r : restaurants) {
 			if(r.getId() == key) {
 				return r;

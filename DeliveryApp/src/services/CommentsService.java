@@ -80,4 +80,11 @@ public class CommentsService {
 		System.out.println(comment);
 		commentRepository.save(comment);
 	}
+
+	public void delete(int id) {
+		commentRepository.delete(id);
+		Comment comment = commentRepository.getById(id);
+		double newRating = calculateRating(comment.getRestaurantId());
+		restaurantsService.refreshRating(comment.getRestaurantId(), newRating);
+	}
 }

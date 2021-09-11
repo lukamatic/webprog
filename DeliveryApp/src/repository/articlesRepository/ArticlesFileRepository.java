@@ -31,7 +31,7 @@ public class ArticlesFileRepository implements IArticlesRepository, IFileReposit
 	
 	@Override
 	public Article getById(Integer key) {
-		ArrayList<Article> articles = getAll();
+		ArrayList<Article> articles = readFromFile();
 		
 		for (Article article : articles) {
 			if (article.getId() == key) {

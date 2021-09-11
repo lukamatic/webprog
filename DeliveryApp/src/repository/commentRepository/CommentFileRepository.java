@@ -28,7 +28,7 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 
 	@Override
 	public Comment getById(Integer key) {
-		ArrayList<Comment> comments = getAll();
+		ArrayList<Comment> comments = readFromFile();
 		
 		for (Comment comment : comments) {
 			if (comment.getId() == key) {
@@ -137,7 +137,7 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 		allComments.add(c5);
 		this.writeToFile(allComments);
 		*/
-		ArrayList<Comment> allComments = this.readFromFile();
+		ArrayList<Comment> allComments = this.getAll();
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		for (Comment c : allComments) {
 			if (c.getRestaurantId() == restaurantId)
@@ -148,7 +148,7 @@ public class CommentFileRepository implements ICommentRepository, IFileRepositor
 
 	@Override
 	public ArrayList<Comment> getApprovedByRestaurantId(int restaurantId) {
-		ArrayList<Comment> allComments = this.readFromFile();
+		ArrayList<Comment> allComments = this.getAll();
 		ArrayList<Comment> comments = new ArrayList<Comment>();
 		for (Comment c : allComments) {
 			if (c.getRestaurantId() == restaurantId && c.getStatus() == CommentStatus.APPROVED)

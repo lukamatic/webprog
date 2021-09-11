@@ -267,7 +267,7 @@ Vue.component('restaurant', {
                                 <div class="d-flex flex-wrap ">
                                     <div class="bg-white box-shadow m-1 p-2 d-flex"
                                         style="min-height: 150px; min-width: 600px; width: 900px"
-                                        v-for="comment in comments" :key="comment.id">
+                                        v-for="comment in comments" :key="comment.id"  v-if="!comment.isDeleted">
                                         <div class="m-2  pl-3 d-flex flex-column  flex-fill">
                                             <div class="d-flex flex-row justify-content-between ">
                                                 <div class="d-flex flex-column align-items-start ">
@@ -885,8 +885,6 @@ Vue.component('restaurant', {
     },
     deleteArticle(id){
     	axios.delete('/DeliveryApp/rest/articles/'+id).then((response) => {
-    		//this.food.find(element => element.id == id).isDeleted = true; 
-    		//this.beverages.find(element => element.id == id).isDeleted = true; 
     		axios.get('/DeliveryApp/rest/articles/' + this.restaurant.id + '/food').then((response) => {
 		      this.food = response.data;
 		    });
@@ -896,7 +894,11 @@ Vue.component('restaurant', {
     	})
     },
     deleteComment(id){
-    	//axios.delete('/DeliveryApp/rest/comments/'+id);
+    	axios.delete('/DeliveryApp/rest/comments/'+id).then((response) => {
+		    axios.get(commentsPath = '/DeliveryApp/rest/comments/' + this.restaurant.id).then((response) => {
+		      this.comments = response.data;
+		    });
+    	})
     },
     
   },

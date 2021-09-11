@@ -6,6 +6,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -42,6 +43,14 @@ public class CommentsController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Comment> getAllByRestaurantId(@PathParam("id") int id) {
 		return commentsService.getAllByRestaurantId(id);
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public void delete(@PathParam("id") int id) {
+		System.out.println(id);
+		 commentsService.delete(id);
 	}
 
 	@GET
