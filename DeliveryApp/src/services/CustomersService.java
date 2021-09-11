@@ -34,6 +34,7 @@ public class CustomersService {
 	public Customer create(Customer customer) {
 		usersService.validateUsername(customer.getUsername());
 		customer.setId(usersService.calculateId());
+		customer.setCart(new Cart(customer.getId()));
 		return customerRepository.save(customer);
 	}
 
