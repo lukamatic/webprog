@@ -20,6 +20,7 @@ public class Restaurant {
 	private Location location;
 
 	public Restaurant() {
+		this.articles = new ArrayList<Integer>();
 	}
 
 	public Restaurant(int id, String name, RestaurantType restaurantType, ArrayList<Integer> articles, boolean isOpen,
