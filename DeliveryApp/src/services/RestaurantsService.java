@@ -202,4 +202,8 @@ public class RestaurantsService {
 		restaurant.setAverageRating(newRating);
 		restaurantRepository.update(restaurant);
 	}
+
+	public void delete(int id) {
+		restaurantRepository.delete(id);
+	}
 }

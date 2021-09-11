@@ -15,6 +15,7 @@ public class Restaurant {
 	private boolean isOpen;
 	private String logoImageName;
 	private double averageRating;
+	private boolean isDeleted;
 
 	private Location location;
 
@@ -22,7 +23,7 @@ public class Restaurant {
 	}
 
 	public Restaurant(int id, String name, RestaurantType restaurantType, ArrayList<Integer> articles, boolean isOpen,
-			String logoImageName, double averageRating, Location location) {
+			String logoImageName, double averageRating, Location location, boolean isDeleted) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -32,6 +33,7 @@ public class Restaurant {
 		this.logoImageName = logoImageName;
 		this.averageRating = averageRating;
 		this.location = location;
+		this.isDeleted = isDeleted;
 	}
 
 	public int getId() {
@@ -97,4 +99,15 @@ public class Restaurant {
 	public void setAverageRating(double averageRating) {
 		this.averageRating = averageRating;
 	}
+
+	public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
+	
+	
+	
 }

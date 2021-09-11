@@ -54,7 +54,9 @@ Vue.component('restaurant', {
                 </div>
                 <div class="d-flex flex-column align-items-end flex-wrap m-2 mr-4">
                     <h6 class="bg-dark text-white px-4 py-2 rounded mb-5 mt-1"> {{ restaurant.open ? "OPEN" : "CLOSED" }} </h6>
-
+					<button  v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger" v-on:click="deleteRestaurant(restaurant.id)"> 
+						Delete restaurant 
+					</button>
 
                 </div>
             </div>
@@ -145,8 +147,12 @@ Vue.component('restaurant', {
                                                     <div v-if="isManaged" class="d-flex flex-row mt-auto">
                                                     	<a :href="'#/article?id=' + f.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
                                                     </div>
-
-                                                	<button v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
+													<div v-if="$cookies.get('role') == 'ADMIN'" class="d-flex flex-row mt-auto">
+                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5" v-on:click="deleteArticle(f.id)">
+                                                    	  Delete
+                                                    	</button>
+													</div>
+                                          
 
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
@@ -201,9 +207,11 @@ Vue.component('restaurant', {
                                                     <div v-if="isManaged" class="d-flex flex-row mt-auto">
                                                     	<a :href="'#/article?id=' + b.id"><button class="btn btn-outline-secondary px-5 mr-3"> Edit </button></a>
                                                     </div>
-
-                                                    <button v-if="$cookies.get('role') == 'ADMIN'" type="button" class="btn btn-outline-danger ml-1 px-5">  Delete</button>
-
+													<div v-if="$cookies.get('role') == 'ADMIN'" class="d-flex flex-row mt-auto">
+                                                    	<button type="button" class="btn btn-outline-danger ml-1 px-5"  v-on:click="deleteArticle(b.id)">
+                                                    	  Delete
+                                                    	</button>
+													</div>
 
 
                                                     <div class="d-flex flex-row mt-auto align-items-center">
@@ -267,18 +275,23 @@ Vue.component('restaurant', {
                                                     <p class="mt-0">{{ comment.rating }}<span style='font-size:18px;'>&starf;</span></p>
                                                     <p class="pr-2">{{ comment.text }}</p>
                                                 </div>
-                                                <div v-if="isManaged" class="m-2 pl-3 ml-auto d-flex flex-column align-items-end">
+                                                <div v-if="isManaged || $cookies.get('role') == 'ADMIN'" class="m-1 pl-3 ml-auto d-flex flex-column align-items-end">
                                                 	<b class="m-2">{{comment.status}}</b>
                                                 	<button v-if="comment.status == 'PENDING'"
                                                 			v-on:click="approveComment(comment.id)"
-                                                			type="button" class="btn btn-outline-secondary m-2">
+                                                			type="button" class="btn btn-outline-secondary m-1">
                                                 		Approve
                                                 	</button>
 													<button v-if="comment.status == 'PENDING'"
 															v-on:click="declineComment(comment.id)"
-															type="button" class="btn btn-outline-danger m-2 px-3">
+															type="button" class="btn btn-outline-danger m-1 px-3">
 														Decline
 													</button>
+													<button v-if="$cookies.get('role') == 'ADMIN'"
+															v-on:click="deleteComment(comment.id)"
+															type="button" class="btn btn-outline-danger m-1 px-3">
+															Delete
+														</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -865,5 +878,17 @@ Vue.component('restaurant', {
       }
 
     },
+    deleteRestaurant(id){
+    	axios.delete('/DeliveryApp/rest/restaurants/'+id).then((response) => {
+	  		router.push("restaurants");
+    	})
+    },
+    deleteArticle(id){
+    	//axios.delete('/DeliveryApp/rest/articles/'+id).then((response);
+    },
+    deleteComment(id){
+    	//axios.delete('/DeliveryApp/rest/comments/'+id);
+    },
+    
   },
 });

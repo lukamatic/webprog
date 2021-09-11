@@ -39,12 +39,19 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 	
 	@Override
 	public ArrayList<Restaurant> getAll() {
-		return readFromFile();
+		ArrayList<Restaurant> allRestaurants = readFromFile();
+		ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+		for (int i = 0; i < allRestaurants.size(); i++) {
+			if (allRestaurants.get(i).isDeleted() == false) {
+				restaurants.add(allRestaurants.get(i));
+			}
+		}
+		return restaurants;
 	}
 	
 	@Override
 	public Restaurant save(Restaurant value) {
-		ArrayList<Restaurant> restaurants = getAll();
+		ArrayList<Restaurant> restaurants = readFromFile();
 		restaurants.add(value);
 		writeToFile(restaurants);
 		return value;
@@ -52,7 +59,7 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 	
 	@Override
 	public Restaurant update(Restaurant value) {
-		ArrayList<Restaurant> restaurants = getAll();
+		ArrayList<Restaurant> restaurants = readFromFile();
 
 		for (int i = 0; i < restaurants.size(); i++) {
 			if (restaurants.get(i).getId() == value.getId()) {
@@ -66,7 +73,16 @@ public class RestaurantFileRepository implements IRestaurantRepository, IFileRep
 	
 	@Override
 	public Boolean delete(Integer key) {
-		// TODO Auto-generated method stub
+		ArrayList<Restaurant> restaurants = readFromFile();
+
+		for (int i = 0; i < restaurants.size(); i++) {
+			if (restaurants.get(i).getId() == key) {
+				restaurants.get(i).setDeleted(true);
+			}
+		}
+		
+		writeToFile(restaurants);
+		
 		return null;
 	}
 	
